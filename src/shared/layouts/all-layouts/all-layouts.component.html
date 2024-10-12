@@ -1,0 +1,9 @@
+<ng-container>
+  @switch ($currLayout()) {
+    @case (LAYOUT_ENUMS.default) {
+      <app-default-layout>
+        <ng-content></ng-content>
+      </app-default-layout>
+    }
+  }
+</ng-container>
