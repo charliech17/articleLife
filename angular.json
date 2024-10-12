@@ -29,10 +29,14 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/i18n",
+              "src/content"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/content/scss/global.scss",
+              "src/content/scss/vendor.scss"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
