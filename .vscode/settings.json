@@ -3,5 +3,9 @@
         "activityBar.background": "#362D00",
         "titleBar.activeBackground": "#4B3F00",
         "titleBar.activeForeground": "#FFFAE3"
-    }
+    },
+    "cSpell.words": [
+        "curr"
+    ],
+    "editor.formatOnSave": true
 }

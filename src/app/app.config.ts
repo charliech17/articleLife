@@ -5,21 +5,24 @@ import { provideRouter, TitleStrategy } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, Title } from '@angular/platform-browser';
 import { NgbDateDayjsAdapter } from '../config/datepicker-adapter';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptorsFromDi } from '@angular/common/http';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
-import { TranslationModule } from '../shared/language/translation.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslation } from '../shared/language/translation.module';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
     provideClientHydration(),
+    importProvidersFrom([TranslateModule.forRoot(provideTranslation())]),
     // importProvidersFrom(TranslationModule),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch()),
     Title,
     { provide: LOCALE_ID, useValue: 'zh-Hant' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     // httpInterceptorProviders,
-    // { provide: TitleStrategy, useClass: AppPageTitleStrategy },
+    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ]
 };
