@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "ng": "ng",
     "serve:ssr:articleLife": "node dist/article-life/server/server.mjs",
     "start": "ng serve",
