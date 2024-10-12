@@ -40,3 +40,7 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# generated i18n files
+/src/i18n/en.json
+/src/i18n/zh-tw.json
