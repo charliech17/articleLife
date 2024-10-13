@@ -38,3 +38,6 @@
   Eaque, sed cum.
 </p>
 <div jhiTranslate="global.title"></div>
+@if (editor && config) {
+  <ckeditor ngSkipHydration [editor]="editor" [config]="config" data="<p>Hello, world!</p>"></ckeditor>
+}
