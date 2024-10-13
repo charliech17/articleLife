@@ -33,6 +33,9 @@
               "src/content"
             ],
             "styles": ["src/styles.scss", "src/content/scss/global.scss", "src/content/scss/vendor.scss"],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/content/scss"]
+            },
             "server": "src/main.server.ts",
             "prerender": true,
             "ssr": {

@@ -34,3 +34,12 @@ $font-size-base: 1rem;
 
 $dropdown-link-hover-color: white;
 $dropdown-link-hover-bg: #343a40;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 552px,
+  md: 727px,
+  lg: 903px,
+  xl: 1079px,
+  xxl: 1400px,
+);

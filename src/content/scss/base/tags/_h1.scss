@@ -1,0 +1,33 @@
+@import 'shared';
+
+$lh-xs: 2.4rem;
+$fs-xs: 2rem;
+$lh-m: 3.25rem;
+$fs-m: 2.6rem;
+
+h1 {
+  @include media-breakpoint-down(sm) {
+    line-height: $lh-xs;
+    font-size: $fs-xs;
+  }
+
+  @include media-breakpoint-between(sm, md) {
+    line-height: $lh-xs;
+    font-size: $fs-xs;
+  }
+
+  @include media-breakpoint-between(md, lg) {
+    line-height: $lh-xs;
+    font-size: $fs-xs;
+  }
+
+  @include media-breakpoint-between(lg, xl) {
+    line-height: $lh-m;
+    font-size: $fs-m;
+  }
+
+  @include media-breakpoint-up(xl) {
+    line-height: $lh-m;
+    font-size: $fs-m;
+  }
+}
