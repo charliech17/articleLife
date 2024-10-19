@@ -1,0 +1,13 @@
+@import 'shared.scss';
+@import 'base/tags/tags.scss';
+
+$cus-gray: #ccc;
+
+.cus-divider {
+  width: 200px;
+}
+
+.cus-edit-container {
+  margin-top: map-get($spacers, 5);
+  padding: map-get($spacers, 2);
+}

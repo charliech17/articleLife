@@ -1,0 +1,10 @@
+<app-edit-title [iptEditTitle]="{ title: $iptTextarea().placeholder, isHide: !textControl.value }"></app-edit-title>
+
+<textarea
+  #textarea
+  [class]="$cptTextareaClass()"
+  [placeholder]="$iptTextarea().placeholder"
+  (input)="handleInput()"
+  [formControl]="textControl"
+  cdkTextareaAutosize
+></textarea>

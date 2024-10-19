@@ -1,0 +1,16 @@
+<div class="cus-edit-container">
+  <app-textarea
+    [iptTextarea]="{ headerType: 'h1', placeholder: '文章標題', text: '測試1' }"
+    (optUpdateText)="handleUpdateTitle($event)"
+  ></app-textarea>
+  <div class="mt-4">
+    <app-textarea
+      [iptTextarea]="{ headerType: 'h2', placeholder: '前言: 前30個字，將顯示在文章瀏覽頁面。', text: '測試2' }"
+      (optUpdateText)="handleUpdateIntro($event)"
+    ></app-textarea>
+  </div>
+  <hr class="mt-3 cus-divider" />
+  <div class="mt-6">
+    <app-editor class="al-ckeditor"></app-editor>
+  </div>
+</div>

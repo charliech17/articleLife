@@ -1,0 +1,33 @@
+@import 'shared.scss';
+@import 'base/tags/tags.scss';
+
+$cus-gray: #ccc;
+
+.cus-edit_base-input {
+  display: block;
+  border: none;
+  font-weight: 400;
+  max-width: none;
+  width: 100%;
+  resize: none; // 禁止調整大小
+  overflow: hidden; // 隱藏滾動條
+}
+
+// ** 這裡若重新命名，需要同步在component.ts中重新命名 **
+.cus-edit_h1-title {
+  @extend h1;
+  @extend .cus-edit_base-input;
+
+  &::placeholder {
+    color: $cus-gray;
+  }
+}
+
+.cus-edit_h2-title {
+  @extend h2;
+  @extend .cus-edit_base-input;
+
+  &::placeholder {
+    color: $cus-gray;
+  }
+}

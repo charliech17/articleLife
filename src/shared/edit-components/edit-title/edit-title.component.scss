@@ -1,0 +1,11 @@
+.cus-textarea__top-placeholder {
+  @keyframes moveTopPlaceholder {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+  animation: moveTopPlaceholder 1s forwards;
+}
