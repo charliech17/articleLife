@@ -5,7 +5,7 @@ put Sass variables here:
 eg $input-color: red;
 ****************************/
 // Override Bootstrap variables
-@import 'ui-bootstrap/index';
+@import './third-party-UIs/bootstrap/index.scss';
 
 /* jhipster-needle-scss-add-vendor JHipster will add new css style */
 @import 'ckeditor5/ckeditor5.css';
