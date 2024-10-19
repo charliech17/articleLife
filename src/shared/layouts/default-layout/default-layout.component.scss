@@ -1,3 +1,5 @@
+@import 'shared';
 .cus-default-layout-container {
-  margin: 8px;
+  margin: auto;
+  max-width: map-get($grid-breakpoints, xxl);
 }
