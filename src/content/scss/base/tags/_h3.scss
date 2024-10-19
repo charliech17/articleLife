@@ -1,11 +1,11 @@
 @import 'shared';
 
-$lh-xs: 2.88rem;
-$fs-xs: 2.5rem;
-$lh-m: 3.4rem;
-$fs-m: 3rem;
+$lh-xs: 1.5rem;
+$fs-xs: 1.25rem;
+$lh-m: 1.85rem;
+$fs-m: 1.5rem;
 
-h1 {
+h3 {
   @include media-breakpoint-down(sm) {
     line-height: $lh-xs;
     font-size: $fs-xs;

@@ -1,9 +1,9 @@
 @import 'shared';
 
-$lh-xs: 1.5rem;
-$fs-xs: 1.25rem;
-$lh-m: 1.85rem;
-$fs-m: 1.5rem;
+$lh-xs: 2.16rem;
+$fs-xs: 1.88rem;
+$lh-m: 3rem;
+$fs-m: 2.12rem;
 
 h2 {
   @include media-breakpoint-down(sm) {

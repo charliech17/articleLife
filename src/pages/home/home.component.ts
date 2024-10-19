@@ -28,7 +28,8 @@ export class HomeComponent {
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
-          { model: 'heading1', view: 'h2', title: '區塊title', class: 'ck-heading_heading1' },
+          { model: 'heading1', view: 'h2', title: '主要title', class: 'ck-heading_heading1' },
+          { model: 'heading2', view: 'h3', title: '次級title', class: 'ck-heading_heading2' },
         ],
       },
     };
