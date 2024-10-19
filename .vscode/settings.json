@@ -5,7 +5,8 @@
         "titleBar.activeForeground": "#FFFAE3"
     },
     "cSpell.words": [
-        "curr"
+        "curr",
+        "ckeditor"
     ],
     "editor.formatOnSave": true
 }

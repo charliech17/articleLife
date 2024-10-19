@@ -1,0 +1,19 @@
+@import 'shared';
+
+$al-ckeditor-toolbar-bg: rgba(0, 0, 0, 0.1);
+$al-ckeditor-main-content-bg: white;
+
+.al-ckeditor {
+  .ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+    border: 0;
+    box-shadow: 1px 1px 3px 5px $al-ckeditor-toolbar-bg;
+    margin-bottom: map-get($spacers, 2);
+  }
+
+  .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused),
+  .ck-rounded-corners .ck.ck-editor__main > .ck-editor__editable,
+  .ck.ck-editor__main > .ck-editor__editable.ck-rounded-corners {
+    border-color: $al-ckeditor-main-content-bg;
+    box-shadow: none;
+  }
+}
