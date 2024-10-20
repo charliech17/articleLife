@@ -1,0 +1,9 @@
+.cus-article__container {
+  box-shadow: 0 0 3px 5px inset rgba(0, 0, 0, 0.1);
+  padding: 48px;
+
+  // Apply margin-top to all elements except the first one
+  &:not(:first-child) {
+    margin-top: 24px;
+  }
+}

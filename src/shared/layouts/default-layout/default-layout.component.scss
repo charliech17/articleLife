@@ -2,4 +2,14 @@
 .cus-default-layout-container {
   margin: auto;
   max-width: map-get($grid-breakpoints, xxl);
+
+  @include media-breakpoint-up(md) {
+    display: flex;
+  }
+
+  .cus-side-nav-container {
+    @include media-breakpoint-up(md) {
+      width: 300px;
+    }
+  }
 }

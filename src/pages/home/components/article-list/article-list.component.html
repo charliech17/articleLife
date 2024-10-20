@@ -1,0 +1,12 @@
+@for (article of $iptArticleList().articleList; track $index) {
+  <div class="cus-article__container text-break">
+    <div>
+      <h2 class="text-center">{{ article.title }}</h2>
+      <div class="text-center">
+        <span>分類: </span>
+        <span>時間: {{ article.lastModifyTime ?? article.createdTime }}</span>
+      </div>
+    </div>
+    <p class="mt-2">{{ article.intro }}</p>
+  </div>
+}
