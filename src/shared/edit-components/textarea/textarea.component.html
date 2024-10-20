@@ -1,4 +1,6 @@
-<app-edit-title [iptEditTitle]="{ title: $iptTextarea().placeholder, isHide: !textControl.value }"></app-edit-title>
+<app-edit-title
+  [iptEditTitle]="{ title: $iptTextarea().placeholder, isHide: !textControl.value, color: $iptTextarea().titleColor }"
+></app-edit-title>
 
 <textarea
   #textarea
@@ -6,5 +8,5 @@
   [placeholder]="$iptTextarea().placeholder"
   (input)="handleInput()"
   [formControl]="textControl"
-  cdkTextareaAutosize
+  rows="1"
 ></textarea>

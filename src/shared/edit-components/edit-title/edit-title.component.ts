@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'app-edit-title',
@@ -9,9 +9,14 @@ import { Component, input } from '@angular/core';
 })
 export class EditTitleComponent {
   $iptEditTitle = input.required<IEditTitleInput>({ alias: 'iptEditTitle' });
+  $cptTitleColor = computed(() => {
+    const color = this.$iptEditTitle().color ?? 'black';
+    return `cus-edit-title__color-${color}`;
+  });
 }
 
-interface IEditTitleInput {
+export interface IEditTitleInput {
   title: string;
   isHide: boolean;
+  color?: 'blue' | 'red' | 'green' | 'black';
 }

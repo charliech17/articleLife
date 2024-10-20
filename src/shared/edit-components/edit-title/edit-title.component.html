@@ -1,1 +1,3 @@
-<div class="cus-textarea__top-placeholder" [class]="{ 'd-none': $iptEditTitle().isHide }">{{ $iptEditTitle().title }}</div>
+<div class="cus-edit-title__top-placeholder {{ $iptEditTitle().isHide ? 'd-none' : '' }} {{ $cptTitleColor() }}">
+  {{ $iptEditTitle().title }}
+</div>

@@ -1,4 +1,4 @@
-.cus-textarea__top-placeholder {
+.cus-edit-title__top-placeholder {
   @keyframes moveTopPlaceholder {
     0% {
       transform: translateY(100%);
@@ -8,4 +8,20 @@
     }
   }
   animation: moveTopPlaceholder 1s forwards;
+}
+
+$colors: (
+  'black': #000000,
+  'blue': #007bff,
+  'red': #ff0000,
+  'green': #28a745,
+);
+
+@for $i from 1 through length($colors) {
+  $name: nth(map-keys($colors), $i);
+  $color: map-get($colors, $name);
+
+  .cus-edit-title__color-#{$name} {
+    color: $color;
+  }
 }

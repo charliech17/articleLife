@@ -1,5 +1,5 @@
-import { afterNextRender, ChangeDetectorRef, Component } from '@angular/core';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { afterNextRender, ChangeDetectorRef, Component, output } from '@angular/core';
+import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
 
 @Component({
@@ -10,6 +10,8 @@ import { ClassicEditor } from 'ckeditor5';
   styleUrl: './editor.component.scss',
 })
 export class EditorComponent {
+  optEditorChange = output<string>();
+
   editor: typeof ClassicEditor | null = null;
   config: typeof ClassicEditor.defaultConfig | null = null;
 
@@ -20,10 +22,23 @@ export class EditorComponent {
   }
 
   async loadCkEditor() {
-    const { Bold, Essentials, Italic, Mention, Paragraph, Undo, ClassicEditor, Heading } = await import('ckeditor5');
+    const {
+      Bold,
+      Essentials,
+      Italic,
+      Mention,
+      Paragraph,
+      Undo,
+      ClassicEditor,
+      Heading,
+      Image,
+      ImageInsert,
+      ImageResizeEditing,
+      ImageResizeHandles,
+    } = await import('ckeditor5');
     this.config = {
       toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading'],
-      plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading],
+      plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading, Image, ImageInsert, ImageResizeEditing, ImageResizeHandles],
       placeholder: 'Type here...',
       heading: {
         options: [
@@ -35,5 +50,10 @@ export class EditorComponent {
     };
     this.editor = ClassicEditor;
     this.cdr.detectChanges();
+  }
+
+  onEditorChange({ editor }: ChangeEvent): void {
+    const data = editor.getData();
+    this.optEditorChange.emit(data);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, computed, ElementRef, input, OnInit, output, signal, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
-import { EditTitleComponent } from '../edit-title/edit-title.component';
+import { EditTitleComponent, IEditTitleInput } from '../edit-title/edit-title.component';
 
 @Component({
   selector: 'app-textarea',
@@ -43,4 +43,5 @@ interface ITextareaInput {
   headerType: 'h1' | 'h2';
   placeholder: string;
   text: string;
+  titleColor?: IEditTitleInput['color'];
 }
