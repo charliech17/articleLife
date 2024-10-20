@@ -5,10 +5,11 @@ import { provideRouter, TitleStrategy } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, Title } from '@angular/platform-browser';
 import { NgbDateDayjsAdapter } from '../config/datepicker-adapter';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslation } from '../shared/language/translation.module';
+import { httpInterceptorProviders } from '../shared/interceptor/api/http-interceptor.providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -17,11 +18,10 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     importProvidersFrom([TranslateModule.forRoot(provideTranslation())]),
     // importProvidersFrom(TranslationModule),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors(httpInterceptorProviders)),
     Title,
     { provide: LOCALE_ID, useValue: 'zh-Hant' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
-    // httpInterceptorProviders,
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
 };
