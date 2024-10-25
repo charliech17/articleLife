@@ -1,19 +1,32 @@
 <div class="cus-edit-container">
-  <app-action-section (optSave)="submitArticle()"></app-action-section>
-  <app-textarea
-    [iptTextarea]="{ headerType: 'h1', placeholder: '文章標題', text: '測試1', titleColor: 'blue' }"
-    (optUpdateText)="handleUpdateTitle($event)"
-  ></app-textarea>
-  <div class="mt-4">
+  @if (isLoading) {
+    載入中...
+  } @else {
+    <app-action-section (optSave)="saveArticle()" (optPublish)="submitArticle()"></app-action-section>
     <app-textarea
-      [iptTextarea]="{ headerType: 'h2', placeholder: '前言: 前30個字，將顯示在文章瀏覽頁面。', text: '測試2', titleColor: 'blue' }"
-      (optUpdateText)="handleUpdateIntro($event)"
+      [iptTextarea]="{ headerType: 'h1', placeholder: '文章標題', initText: $$currentArticleDetails().title, titleColor: 'blue' }"
+      (optUpdateText)="handleUpdateTitle($event)"
     ></app-textarea>
-  </div>
-  <div class="mt-4">
-    <app-edit-title [iptEditTitle]="{ title: '文章內容', isHide: false, color: 'blue' }"></app-edit-title>
-  </div>
-  <div class="mt-3">
-    <app-editor class="al-ckeditor" (optEditorChange)="handleUpdateEditor($event)"></app-editor>
-  </div>
+    <div class="mt-4">
+      <app-textarea
+        [iptTextarea]="{
+          headerType: 'h2',
+          placeholder: '前言: 前30個字，將顯示在文章瀏覽頁面。',
+          initText: $$currentArticleDetails().intro,
+          titleColor: 'blue',
+        }"
+        (optUpdateText)="handleUpdateIntro($event)"
+      ></app-textarea>
+    </div>
+    <div class="mt-4">
+      <app-edit-title [iptEditTitle]="{ title: '文章內容', isHide: false, color: 'blue' }"></app-edit-title>
+    </div>
+    <div class="mt-3">
+      <app-editor
+        class="al-ckeditor"
+        (optEditorChange)="handleUpdateEditor($event)"
+        [inputEditor]="{ initContent: $$currentArticleDetails().articleContent }"
+      ></app-editor>
+    </div>
+  }
 </div>

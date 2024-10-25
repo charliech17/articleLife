@@ -6,6 +6,7 @@ import { EditArticleComponent } from '../pages/edit-article/edit-article.compone
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'edit-article', component: EditArticleComponent },
+  { path: 'add-article', component: EditArticleComponent },
+  { path: 'edit-article/:id', component: EditArticleComponent },
   { path: 'poc', component: PocComponent },
 ];

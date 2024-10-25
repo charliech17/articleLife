@@ -20,7 +20,7 @@ export class TextareaComponent implements OnInit {
   textControl = new FormControl('', { nonNullable: true });
 
   ngOnInit(): void {
-    this.textControl.setValue(this.$iptTextarea().text);
+    this.textControl.setValue(this.$iptTextarea().initText);
   }
 
   handleInput(): void {
@@ -42,6 +42,6 @@ export class TextareaComponent implements OnInit {
 interface ITextareaInput {
   headerType: 'h1' | 'h2';
   placeholder: string;
-  text: string;
+  initText: string;
   titleColor?: IEditTitleInput['color'];
 }

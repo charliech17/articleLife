@@ -20,4 +20,14 @@ export class ApiArticleService {
   getAllArticles(): Observable<any> {
     return this.#http.get(`${this.apiUrl}`);
   }
+
+  // 獲取單篇文章
+  getArticle(id: string): Observable<any> {
+    return this.#http.get(`${this.apiUrl}/${id}`);
+  }
+
+  // 更新文章
+  updateArticle(articleDetail: any): Observable<any> {
+    return this.#http.put(`${this.apiUrl}/${articleDetail.id}`, articleDetail);
+  }
 }

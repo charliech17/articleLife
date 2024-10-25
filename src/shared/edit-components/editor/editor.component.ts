@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectorRef, Component, output } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, input, output } from '@angular/core';
 import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
 
@@ -10,6 +10,7 @@ import { ClassicEditor } from 'ckeditor5';
   styleUrl: './editor.component.scss',
 })
 export class EditorComponent {
+  $inputEditor = input.required<IEditorInput>({ alias: 'inputEditor' });
   optEditorChange = output<string>();
 
   editor: typeof ClassicEditor | null = null;
@@ -37,9 +38,10 @@ export class EditorComponent {
       ImageResizeHandles,
     } = await import('ckeditor5');
     this.config = {
-      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading'],
+      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage'],
       plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading, Image, ImageInsert, ImageResizeEditing, ImageResizeHandles],
       placeholder: 'Type here...',
+      initialData: this.$inputEditor().initContent,
       heading: {
         options: [
           { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
@@ -56,4 +58,8 @@ export class EditorComponent {
     const data = editor.getData();
     this.optEditorChange.emit(data);
   }
+}
+
+interface IEditorInput {
+  initContent: string;
 }

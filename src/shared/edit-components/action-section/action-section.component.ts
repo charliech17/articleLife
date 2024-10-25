@@ -10,8 +10,13 @@ import { EditSaveButtonComponent } from '../edit-save-button/edit-save-button.co
 })
 export class ActionSectionComponent {
   optSave = output<void>();
+  optPublish = output<void>();
 
   receiveDoSave(): void {
     this.optSave.emit();
+  }
+
+  receiveDoPublish(): void {
+    this.optPublish.emit();
   }
 }

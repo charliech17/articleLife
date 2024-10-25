@@ -1,7 +1,8 @@
-import { afterNextRender, ChangeDetectorRef, Component } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { TranslateDirective } from '../../shared/language';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-poc',
@@ -13,6 +14,9 @@ import { ClassicEditor } from 'ckeditor5';
 export class PocComponent {
   editor: typeof ClassicEditor | null = null;
   config: typeof ClassicEditor.defaultConfig | null = null;
+  preparedFile: File | null = null;
+
+  #http = inject(HttpClient);
 
   constructor(private cdr: ChangeDetectorRef) {
     afterNextRender(() => {
@@ -35,5 +39,29 @@ export class PocComponent {
     };
     this.editor = ClassicEditor;
     this.cdr.detectChanges();
+  }
+
+  handleFileInput(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
+    if (!files) {
+      return;
+    }
+
+    const file = files.item(0);
+    if (file) {
+      this.preparedFile = file;
+    }
+  }
+
+  handleUpload() {
+    if (this.preparedFile) {
+      const formData = new FormData();
+      formData.append('file', this.preparedFile);
+      formData.append('articleId', '1');
+      this.#http.post('api/files/upload', formData).subscribe(res => {
+        console.log(res);
+      });
+    }
   }
 }
