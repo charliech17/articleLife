@@ -25,7 +25,7 @@
       <app-editor
         class="al-ckeditor"
         (optEditorChange)="handleUpdateEditor($event)"
-        [inputEditor]="{ initContent: $$currentArticleDetails().articleContent }"
+        [inputEditor]="{ initContent: $$currentArticleDetails().articleContent, uploadId: $$currentArticleDetails().id }"
       ></app-editor>
     </div>
   }

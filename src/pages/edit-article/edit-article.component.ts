@@ -17,7 +17,7 @@ export class EditArticleComponent {
   #apiArticleService = inject(ApiArticleService);
   #route = inject(ActivatedRoute);
 
-  $$currentArticleDetails = signal<IArticleDetails>({ title: '', intro: '', articleContent: '', authorId: 'josh' });
+  $$currentArticleDetails = signal<IArticleDetails>({ id: -1, title: '', intro: '', articleContent: '', authorId: 'josh' });
   isLoading = true;
 
   constructor() {
@@ -83,6 +83,7 @@ export class EditArticleComponent {
 }
 
 interface IArticleDetails {
+  id: number;
   title: string;
   intro: string;
   articleContent: string;

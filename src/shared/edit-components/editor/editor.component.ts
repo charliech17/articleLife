@@ -1,6 +1,7 @@
 import { afterNextRender, ChangeDetectorRef, Component, input, output } from '@angular/core';
 import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
+import { uploadAdapterPluginFactory } from './editor-upload.adapter';
 
 @Component({
   selector: 'app-editor',
@@ -14,7 +15,7 @@ export class EditorComponent {
   optEditorChange = output<string>();
 
   editor: typeof ClassicEditor | null = null;
-  config: typeof ClassicEditor.defaultConfig | null = null;
+  config: IEditorConfig | null = null;
 
   constructor(private cdr: ChangeDetectorRef) {
     afterNextRender(() => {
@@ -39,7 +40,20 @@ export class EditorComponent {
     } = await import('ckeditor5');
     this.config = {
       toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage'],
-      plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading, Image, ImageInsert, ImageResizeEditing, ImageResizeHandles],
+      plugins: [
+        Bold,
+        Essentials,
+        Italic,
+        Mention,
+        Paragraph,
+        Undo,
+        Heading,
+        Image,
+        ImageInsert,
+        ImageResizeEditing,
+        ImageResizeHandles,
+        uploadAdapterPluginFactory,
+      ],
       placeholder: 'Type here...',
       initialData: this.$inputEditor().initContent,
       heading: {
@@ -49,6 +63,7 @@ export class EditorComponent {
           { model: 'heading2', view: 'h3', title: '次級title', class: 'ck-heading_heading2' },
         ],
       },
+      articleId: this.$inputEditor().uploadId,
     };
     this.editor = ClassicEditor;
     this.cdr.detectChanges();
@@ -62,4 +77,11 @@ export class EditorComponent {
 
 interface IEditorInput {
   initContent: string;
+  uploadId: number;
+}
+
+type IEditorConfig = typeof ClassicEditor.defaultConfig & ICustomEditorConfig;
+
+export interface ICustomEditorConfig {
+  articleId: number;
 }
