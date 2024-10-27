@@ -5,6 +5,7 @@ import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit
 import { ActionSectionComponent } from '../../shared/edit-components/action-section/action-section.component';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ActivatedRoute } from '@angular/router';
+import { IArticleDetailsResponse } from '../../shared/models/article.models';
 
 @Component({
   selector: 'app-edit-article',
@@ -88,15 +89,4 @@ interface IArticleDetails {
   intro: string;
   articleContent: string;
   authorId: string;
-}
-
-interface IArticleDetailsResponse {
-  id: number;
-  title: string;
-  intro: string;
-  articleContent: string;
-  authorId: string;
-  createdTime: string;
-  lastModifyTime: string;
-  viewTimes: number;
 }
