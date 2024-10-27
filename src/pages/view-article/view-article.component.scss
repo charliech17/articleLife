@@ -1,0 +1,40 @@
+@import './shared';
+
+.cus-view-article-container {
+  // Add padding to the container
+  padding: map-get($spacers, 4);
+  margin: map-get($spacers, 3);
+  height: auto;
+
+  // 用陰影和背景色來強調文章容器
+  box-shadow:
+    0 8px 16px 0 rgba(0, 0, 0, 0.3),
+    0 12px 24px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 16px;
+
+  .cus-article-category {
+    border-left: 5px solid #4682b4;
+  }
+
+  .cus-article-intro {
+    // add background color to the intro
+    background-color: #694d4d;
+    color: white;
+    padding: map-get($spacers, 3);
+    border-radius: map-get($spacers, 3);
+  }
+
+  .cus-article-content {
+  }
+
+  .cus-divider {
+    width: 50%; // Adjust the width as needed
+    height: 10px; // Make the line thicker
+    background-color: #694d4d;
+    border: none;
+  }
+
+  .cus-user-response-container {
+    padding: map-get($spacers, 3);
+  }
+}

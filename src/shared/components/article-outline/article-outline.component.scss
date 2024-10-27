@@ -1,0 +1,8 @@
+// 醒目的颜色
+$cus-article-outline__active-color: #1890ff;
+
+.cus-article-outline__container {
+  &.active {
+    color: $cus-article-outline__active-color;
+  }
+}

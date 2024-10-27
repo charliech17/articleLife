@@ -1,8 +1,13 @@
-<div class="p-3">
-  <app-logo></app-logo>
+<div class="p-3 position-sticky top-0">
+  <div (click)="goBackHome()" class="al-pointer-cursor">
+    <app-logo></app-logo>
+  </div>
   <div class="mt-1 text-center">歡迎來到Josh的文章彙整網站🔗</div>
   <div class="mt-1 text-center">⭐ 技術、經驗、有趣 ⭐</div>
   <div class="mt-6">
     <app-profile></app-profile>
+  </div>
+  <div class="mt-6">
+    <app-article-outline></app-article-outline>
   </div>
 </div>

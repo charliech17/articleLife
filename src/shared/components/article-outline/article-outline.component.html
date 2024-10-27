@@ -1,0 +1,9 @@
+@for (item of $articleOutline(); track $index) {
+  <div
+    class="mt-2 cus-article-outline__container al-pointer-cursor"
+    [class.active]="item.id === $activeHeaderId()"
+    (click)="goToTitle(item.id)"
+  >
+    <a class="cus-article-outline__link">{{ item.title }}</a>
+  </div>
+}
