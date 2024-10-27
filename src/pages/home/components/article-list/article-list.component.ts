@@ -1,5 +1,6 @@
-import { Component, input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { IArticleDetail } from '../../home.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-list',
@@ -9,9 +10,13 @@ import { IArticleDetail } from '../../home.component';
   styleUrl: './article-list.component.scss',
 })
 export class ArticleListComponent {
+  #router = inject(Router);
+
   $iptArticleList = input.required<IIptArticleList>({ alias: 'iptArticleList' });
 
-  constructor() {}
+  viewArticleDetail(articleId: string | number) {
+    this.#router.navigate(['/view-article', articleId]);
+  }
 }
 
 interface IIptArticleList {

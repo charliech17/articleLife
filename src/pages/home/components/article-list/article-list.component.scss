@@ -1,9 +1,21 @@
 .cus-article__container {
-  box-shadow: 0 0 3px 5px inset rgba(0, 0, 0, 0.1);
+  width: 80%;
+  border-left: 10px solid #694d4d;
+  border-right: 10px solid #694d4d;
+  border-top: 1px solid #4d4d69;
+  border-bottom: 1px solid #4d4d69;
+  border-radius: 5px;
   padding: 48px;
 
   // Apply margin-top to all elements except the first one
   &:not(:first-child) {
     margin-top: 24px;
+  }
+
+  &:hover {
+    box-shadow:
+      0 4px 8px 0 rgba(0, 0, 0, 0.2),
+      0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: #f1f1f1;
   }
 }

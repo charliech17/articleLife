@@ -1,5 +1,5 @@
 @for (article of $iptArticleList().articleList; track $index) {
-  <div class="cus-article__container text-break">
+  <div class="cus-article__container text-break al-pointer-cursor" (click)="viewArticleDetail(article.id)">
     <div>
       <h2 class="text-center">{{ article.title }}</h2>
       <div class="text-center">
