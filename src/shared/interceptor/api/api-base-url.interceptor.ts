@@ -1,8 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { EnvService } from '../../services/env.service';
 
 export const ApiBaseUrlInterceptor: HttpInterceptorFn = (req, next) => {
+  const envService = inject(EnvService);
+
   if (req.url.startsWith('api/')) {
-    const apiReq = req.clone({ url: `http://localhost:8080/${req.url}` });
+    const apiReq = req.clone({ url: `${envService.baseApiUrl}/${req.url}` });
     return next(apiReq);
   }
 

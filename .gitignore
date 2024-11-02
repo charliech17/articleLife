@@ -45,3 +45,6 @@ Thumbs.db
 /src/i18n/en.json
 /src/i18n/zh-tw.json
 todos.txt
+
+# .env file
+.env.*

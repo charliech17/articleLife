@@ -20,7 +20,6 @@ const mergeJsonPlugin = {
         const mergedData = {};
 
         files.forEach((file: any) => {
-          console.log('file' + JSON.stringify(file));
           const content = JSON.parse(fs.readFileSync(file, 'utf8'));
           Object.assign(mergedData, content);
         });

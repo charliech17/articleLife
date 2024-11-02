@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-builders/custom-esbuild:application",
           "options": {
-            "plugins": ["./esbuild/merge-json-plugin.ts"],
+            "plugins": ["./esbuild/merge-json-plugin.ts", "./esbuild/read-env-plugin.ts"],
             "outputPath": "dist/article-life",
             "index": "src/index.html",
             "browser": "src/main.ts",
