@@ -5,6 +5,7 @@ import { IArticleDetailsResponse } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
+import hljs from 'highlight.js';
 
 @Component({
   selector: 'app-view-article',
@@ -81,6 +82,7 @@ export class ViewArticleComponent implements OnDestroy {
         if (this.$$articleDetails().articleContent) {
           setTimeout(() => {
             this.observeHeaderPositions();
+            this.highlightCodeBlock();
           }, 0);
         }
       },
@@ -121,6 +123,10 @@ export class ViewArticleComponent implements OnDestroy {
 
   private _checkIsWantedHeader(element: HTMLElement) {
     return element.tagName === 'H2' && !element.closest('pre');
+  }
+
+  highlightCodeBlock(): void {
+    hljs.highlightAll();
   }
 }
 

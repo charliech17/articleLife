@@ -1,5 +1,16 @@
 @import './shared';
 
+$view-article-container-box-shadow:
+  0 8px 16px 0 rgba(0, 0, 0, 0.3),
+  0 12px 24px 0 rgba(0, 0, 0, 0.25);
+$view-article-code-block: white;
+$view-article-code-block-shadow:
+  0 8px 16px 0 rgba(0, 0, 0, 0.3),
+  0 12px 24px 0 rgba(0, 0, 0, 0.25);
+$view-article-intro-background-color: #694d4d;
+$view-article-intro-color: white;
+$view-article-divider-color: #694d4d;
+
 .cus-view-article-container {
   // Add padding to the container
   padding: map-get($spacers, 4);
@@ -7,9 +18,7 @@
   height: auto;
 
   // 用陰影和背景色來強調文章容器
-  box-shadow:
-    0 8px 16px 0 rgba(0, 0, 0, 0.3),
-    0 12px 24px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: $view-article-container-box-shadow;
   border-radius: 16px;
 
   .cus-article-category {
@@ -18,8 +27,8 @@
 
   .cus-article-intro {
     // add background color to the intro
-    background-color: #694d4d;
-    color: white;
+    background-color: $view-article-intro-background-color;
+    color: $view-article-intro-color;
     padding: map-get($spacers, 3);
     border-radius: map-get($spacers, 3);
   }
@@ -30,11 +39,22 @@
   .cus-divider {
     width: 50%; // Adjust the width as needed
     height: 10px; // Make the line thicker
-    background-color: #694d4d;
+    background-color: $view-article-divider-color;
     border: none;
   }
 
   .cus-user-response-container {
     padding: map-get($spacers, 3);
+  }
+
+  .ck-content ::ng-deep pre {
+    margin-top: map-get($spacers, 2);
+    background-color: $view-article-code-block;
+    border-radius: map-get($spacers, 3);
+    border-color: $view-article-code-block;
+    box-shadow: $view-article-code-block-shadow;
+    line-height: 1.5rem;
+    letter-spacing: 0.1rem;
+    font-family: 'Fira Code', monospace; /* 或使用其他字體 */
   }
 }

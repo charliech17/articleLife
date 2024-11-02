@@ -37,9 +37,10 @@ export class EditorComponent {
       ImageInsert,
       ImageResizeEditing,
       ImageResizeHandles,
+      CodeBlock,
     } = await import('ckeditor5');
     this.config = {
-      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage'],
+      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage', 'codeBlock'],
       plugins: [
         Bold,
         Essentials,
@@ -53,6 +54,7 @@ export class EditorComponent {
         ImageResizeEditing,
         ImageResizeHandles,
         uploadAdapterPluginFactory,
+        CodeBlock,
       ],
       placeholder: 'Type here...',
       initialData: this.$inputEditor().initContent,
