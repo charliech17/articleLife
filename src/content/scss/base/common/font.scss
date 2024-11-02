@@ -1,0 +1,11 @@
+@font-face {
+  font-family: 'zen-old-mincho';
+  src: url('/content/font/ZenOldMincho-Medium.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: 'zen-old-mincho', sans-serif;
+}
