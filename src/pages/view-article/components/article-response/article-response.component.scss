@@ -1,0 +1,21 @@
+@import 'shared';
+.cus-user-response-container {
+  padding: map-get($spacers, 3);
+
+  .cus-user-response__item {
+    padding: map-get($spacers, 3);
+    margin-top: map-get($spacers, 3);
+
+    .cus-user-info {
+      padding-bottom: 4px;
+      border-bottom: 5px solid #d3d3d3;
+      width: fit-content;
+    }
+
+    .cus-badge {
+      background-color: $secondary;
+      color: #d3d3d3;
+      border-radius: 8px;
+    }
+  }
+}

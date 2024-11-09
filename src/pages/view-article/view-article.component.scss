@@ -43,10 +43,6 @@ $view-article-divider-color: #694d4d;
     border: none;
   }
 
-  .cus-user-response-container {
-    padding: map-get($spacers, 3);
-  }
-
   .ck-content ::ng-deep pre {
     margin-top: map-get($spacers, 2);
     background-color: $view-article-code-block;

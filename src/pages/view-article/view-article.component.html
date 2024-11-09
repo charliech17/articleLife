@@ -7,11 +7,8 @@
   <p class="mt-6 ps-3 cus-article-intro">{{ $$articleDetails().intro }}</p>
   <div #contentContainer class="mt-6 ck ck-content cus-article-content" [innerHTML]="$articleContent()"></div>
   <div class="mt-6 mx-auto cus-divider"></div>
-  <div class="cus-user-response-container">
-    <h2 class="cus-user-response__title">留言, 討論</h2>
-    <div class="d-flex justify-content-center align-items-top gap-2">
-      <textarea class="cus-user-response__input" cols="50" rows="5"></textarea>
-      <button class="cus-user-response__btn">送出</button>
-    </div>
-  </div>
+  <app-article-response
+    [inputArticleListInfo]="{ articleDetails: $$articleDetails(), articleResponses: $$articleResponses() }"
+    (outputAddResponse)="addResponse($event)"
+  ></app-article-response>
 </div>

@@ -1,0 +1,32 @@
+@switch ($inputUser().type) {
+  @case (eFaUser.Default) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUser"></fa-icon>
+  }
+  @case (eFaUser.Tie) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUserTie"></fa-icon>
+  }
+  @case (eFaUser.Ninja) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUserNinja"></fa-icon>
+  }
+  @case (eFaUser.Nurse) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUserNurse"></fa-icon>
+  }
+  @case (eFaUser.Graduate) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUserGraduate"></fa-icon>
+  }
+  @case (eFaUser.Astronaut) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faUserAstronaut"></fa-icon>
+  }
+  @case (eFaUser.Dress) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faPersonDress"></fa-icon>
+  }
+  @case (eFaUser.Swimming) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faPersonSwimming"></fa-icon>
+  }
+  @case (eFaUser.Rifle) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faPersonRifle"></fa-icon>
+  }
+  @case (eFaUser.Running) {
+    <fa-icon [size]="$iconSize()" [icon]="faUserIcons.faPersonRunning"></fa-icon>
+  }
+}

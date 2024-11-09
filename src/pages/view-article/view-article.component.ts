@@ -5,12 +5,14 @@ import { IArticleDetailsResponse } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
+import { ApiArticleResponseService } from '../../shared/services/api/api-article-response/api-article-response.service';
 import hljs from 'highlight.js';
+import { ArticleResponseComponent } from './components/article-response/article-response.component';
 
 @Component({
   selector: 'app-view-article',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, ArticleResponseComponent],
   templateUrl: './view-article.component.html',
   styleUrl: './view-article.component.scss',
 })
@@ -18,21 +20,23 @@ export class ViewArticleComponent implements OnDestroy {
   #sanitizer = inject(DomSanitizer);
   #route = inject(ActivatedRoute);
   #apiArticleService = inject(ApiArticleService);
+  #apiArticleResponseService = inject(ApiArticleResponseService);
   #articleOutlineService = inject(ArticleOutlineService);
   #platformId = inject(PLATFORM_ID);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
   private _observer: IntersectionObserver | null = null;
 
-  $$articleDetails = signal<IArticleDetails>({
+  $$articleDetails = signal<IArticleListDetails>({
     id: -1,
     title: '',
     intro: '',
     articleContent: '',
-    authorId: 'josh', // todo: 待串接使用者資料
+    authorId: '',
     lastModifyTime: '',
     createdTime: '',
   });
+  $$articleResponses = signal<IArticleResponses[]>([]);
 
   $articleContent = computed(() => this.getInnerHtml(this.$$articleDetails().articleContent));
   $articleCreateTime = computed(() => {
@@ -58,6 +62,7 @@ export class ViewArticleComponent implements OnDestroy {
       const id = params.get('id');
       if (id) {
         this.apiGetArticle(id);
+        this.apiGetArticleResponses(id);
       }
     });
   }
@@ -65,6 +70,14 @@ export class ViewArticleComponent implements OnDestroy {
   apiGetArticle(id: string): void {
     this.#apiArticleService.getArticle(id).subscribe((response: IArticleDetailsResponse) => {
       this.$$articleDetails.set(response);
+    });
+  }
+
+  apiGetArticleResponses(id: string): void {
+    this.#apiArticleResponseService.getArticleResponses(id).subscribe({
+      next: (response: IArticleResponses[]) => {
+        this.$$articleResponses.set(response);
+      },
     });
   }
 
@@ -128,9 +141,13 @@ export class ViewArticleComponent implements OnDestroy {
   highlightCodeBlock(): void {
     hljs.highlightAll();
   }
+
+  addResponse(newResponse: IArticleResponses): void {
+    this.$$articleResponses.update(prev => [...prev, newResponse]);
+  }
 }
 
-interface IArticleDetails {
+export interface IArticleListDetails {
   id: number;
   title: string;
   intro: string;
@@ -138,4 +155,15 @@ interface IArticleDetails {
   authorId: string;
   lastModifyTime: string;
   createdTime: string;
+}
+
+export interface IArticleResponses {
+  responseText: string;
+  articleId: number;
+  userId: number;
+  userName: string;
+  profileImage: string;
+  createdTime: string;
+  lastModifyTime: string;
+  ext1: number;
 }
