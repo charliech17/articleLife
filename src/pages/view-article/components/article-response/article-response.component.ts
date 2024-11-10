@@ -22,8 +22,6 @@ export class ArticleResponseComponent {
   eInputFaUser = EInputFaUser;
 
   addResponse(): void {
-    this.responseControl.reset();
-
     const reqBody = {
       articleId: this.$inputArticleListInfo().articleDetails.id,
       userId: -1,
@@ -31,6 +29,7 @@ export class ArticleResponseComponent {
     };
     this.#apiArticleResponseService.createArticleResponse(reqBody).subscribe({
       next: createdArticle => {
+        this.responseControl.reset();
         this.outputAddResponse.emit(createdArticle.responseData);
       },
     });
