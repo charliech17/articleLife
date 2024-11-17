@@ -1,7 +1,7 @@
 <div class="cus-view-article-container text-break">
   <h1 class="cus-article-title">{{ $$articleDetails().title }}</h1>
   <div class="mt-3 ps-3 cus-article-category">
-    <span class="me-3">分類: java</span>
+    <span class="me-3">分類: {{ $$articleDetails().categories | categories }}</span>
     <span>時間: {{ $articleCreateTime() | date: 'YYYY-MM-dd hh:mm' }}</span>
   </div>
   <p class="mt-6 ps-3 cus-article-intro">{{ $$articleDetails().intro }}</p>

@@ -8,11 +8,13 @@ import { ArticleOutlineService, IArticleOutline } from '../../shared/services/ar
 import { ApiArticleResponseService } from '../../shared/services/api/api-article-response/api-article-response.service';
 import hljs from 'highlight.js';
 import { ArticleResponseComponent } from './components/article-response/article-response.component';
+import { IArticleDetails } from '../edit-article/edit-article.component';
+import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 
 @Component({
   selector: 'app-view-article',
   standalone: true,
-  imports: [DatePipe, ArticleResponseComponent],
+  imports: [DatePipe, ArticleResponseComponent, CategoriesPipe],
   templateUrl: './view-article.component.html',
   styleUrl: './view-article.component.scss',
 })
@@ -27,7 +29,7 @@ export class ViewArticleComponent implements OnDestroy {
   @ViewChild('contentContainer') contentContainer!: ElementRef;
   private _observer: IntersectionObserver | null = null;
 
-  $$articleDetails = signal<IArticleListDetails>({
+  $$articleDetails = signal<IArticleDetails>({
     id: -1,
     title: '',
     intro: '',
@@ -35,6 +37,7 @@ export class ViewArticleComponent implements OnDestroy {
     authorId: '',
     lastModifyTime: '',
     createdTime: '',
+    categories: '',
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
 
@@ -145,16 +148,6 @@ export class ViewArticleComponent implements OnDestroy {
   addResponse(newResponse: IArticleResponses): void {
     this.$$articleResponses.update(prev => [...prev, newResponse]);
   }
-}
-
-export interface IArticleListDetails {
-  id: number;
-  title: string;
-  intro: string;
-  articleContent: string;
-  authorId: string;
-  lastModifyTime: string;
-  createdTime: string;
 }
 
 export interface IArticleResponses {

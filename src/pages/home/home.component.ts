@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
+import { IArticleDetails } from '../edit-article/edit-article.component';
 
 @Component({
   selector: 'app-home',
@@ -12,17 +13,17 @@ import { ArticleListComponent } from './components/article-list/article-list.com
 export class HomeComponent {
   #apiArticleService = inject(ApiArticleService);
 
-  $$allArticles = signal<IArticleDetail[]>([]);
+  $$allArticles = signal<IArticleDetails[]>([]);
 
   constructor() {
-    this.#apiArticleService.getAllArticles().subscribe((res: IArticleDetail[]) => {
+    this.#apiArticleService.getAllArticles().subscribe((res: IArticleDetails[]) => {
       // sort res by modified time
       this.sortByLastModifyTime(res);
       this.$$allArticles.set(res);
     });
   }
 
-  private sortByLastModifyTime(source: IArticleDetail[]): void {
+  private sortByLastModifyTime(source: IArticleDetails[]): void {
     source.sort((a, b) => {
       if (a.lastModifyTime && b.lastModifyTime) {
         return new Date(b.lastModifyTime).getTime() - new Date(a.lastModifyTime).getTime();
@@ -30,14 +31,4 @@ export class HomeComponent {
       return new Date(b.createdTime).getTime() - new Date(a.createdTime).getTime();
     });
   }
-}
-
-export interface IArticleDetail {
-  id: number;
-  title: string;
-  intro: string;
-  articleContent: string;
-  createdTime: string;
-  lastModifyTime: string | null;
-  viewTimes: number;
 }

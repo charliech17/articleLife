@@ -2,8 +2,9 @@ import { Component, inject, input, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EInputFaUser, FaUsersComponent } from '../../../../shared/components/fa-icons/fa-users/fa-users.component';
 import { DatePipe } from '@angular/common';
-import { IArticleListDetails, IArticleResponses } from '../../view-article.component';
+import { IArticleResponses } from '../../view-article.component';
 import { ApiArticleResponseService } from '../../../../shared/services/api/api-article-response/api-article-response.service';
+import { IArticleDetails } from '../../../edit-article/edit-article.component';
 
 @Component({
   selector: 'app-article-response',
@@ -37,6 +38,6 @@ export class ArticleResponseComponent {
 }
 
 interface IInputArticleListInfo {
-  articleDetails: IArticleListDetails;
+  articleDetails: IArticleDetails;
   articleResponses: IArticleResponses[];
 }

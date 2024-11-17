@@ -1,11 +1,13 @@
 import { Component, inject, input } from '@angular/core';
-import { IArticleDetail } from '../../home.component';
 import { Router } from '@angular/router';
+import { CategoriesPipe } from '../../../../shared/filters/categories.pipe';
+import { DatePipe } from '@angular/common';
+import { IArticleDetails } from '../../../edit-article/edit-article.component';
 
 @Component({
   selector: 'app-article-list',
   standalone: true,
-  imports: [],
+  imports: [CategoriesPipe, DatePipe],
   templateUrl: './article-list.component.html',
   styleUrl: './article-list.component.scss',
 })
@@ -20,5 +22,5 @@ export class ArticleListComponent {
 }
 
 interface IIptArticleList {
-  articleList: IArticleDetail[];
+  articleList: IArticleDetails[];
 }

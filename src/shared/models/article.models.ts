@@ -7,4 +7,5 @@ export interface IArticleDetailsResponse {
   createdTime: string;
   lastModifyTime: string;
   viewTimes: number;
+  categories: string | null;
 }

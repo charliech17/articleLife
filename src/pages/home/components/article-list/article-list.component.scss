@@ -1,9 +1,9 @@
 .cus-article__container {
   width: 80%;
-  border-left: 10px solid #694d4d;
-  border-right: 10px solid #694d4d;
-  border-top: 1px solid #4d4d69;
-  border-bottom: 1px solid #4d4d69;
+  // border-left: 10px solid #694d4d;
+  // border-right: 10px solid #694d4d;
+  // border-top: 1px solid #4d4d69;
+  // border-bottom: 1px solid #4d4d69;
   border-radius: 5px;
   padding: 48px;
 
@@ -17,5 +17,15 @@
       0 4px 8px 0 rgba(0, 0, 0, 0.2),
       0 6px 20px 0 rgba(0, 0, 0, 0.19);
     background-color: #f1f1f1;
+  }
+
+  // border-right even elements
+  &:nth-child(even) {
+    border-right: 10px solid #694d4d;
+  }
+
+  // border-left odd elements
+  &:nth-child(odd) {
+    border-left: 10px solid #694d4d;
   }
 }
