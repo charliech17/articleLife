@@ -1,4 +1,12 @@
 <div class="text-end">
-  <app-edit-save-button [iptEditSaveButton]="{ buttonText: 'publish' }" (optSave)="receiveDoPublish()"></app-edit-save-button>
-  <app-edit-save-button [iptEditSaveButton]="{ buttonText: 'save' }" (optSave)="receiveDoSave()"></app-edit-save-button>
+  @if ($inputAction().isEdit) {
+    <app-edit-save-button
+      class="me-2"
+      [iptEditSaveButton]="{ buttonText: 'categories' }"
+      (optSave)="receiveEditCategories()"
+    ></app-edit-save-button>
+    <app-edit-save-button [iptEditSaveButton]="{ buttonText: 'save' }" (optSave)="receiveDoSave()"></app-edit-save-button>
+  } @else {
+    <app-edit-save-button [iptEditSaveButton]="{ buttonText: 'publish' }" (optSave)="receiveDoPublish()"></app-edit-save-button>
+  }
 </div>

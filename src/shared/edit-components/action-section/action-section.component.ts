@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { EditSaveButtonComponent } from '../edit-save-button/edit-save-button.component';
 
 @Component({
@@ -9,8 +9,10 @@ import { EditSaveButtonComponent } from '../edit-save-button/edit-save-button.co
   styleUrl: './action-section.component.scss',
 })
 export class ActionSectionComponent {
+  $inputAction = input.required<IInputAction>({ alias: 'inputAction' });
   optSave = output<void>();
   optPublish = output<void>();
+  optEditCategories = output<void>();
 
   receiveDoSave(): void {
     this.optSave.emit();
@@ -19,4 +21,12 @@ export class ActionSectionComponent {
   receiveDoPublish(): void {
     this.optPublish.emit();
   }
+
+  receiveEditCategories(): void {
+    this.optEditCategories.emit();
+  }
+}
+
+interface IInputAction {
+  isEdit: boolean;
 }

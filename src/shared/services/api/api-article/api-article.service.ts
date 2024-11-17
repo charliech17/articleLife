@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IArticleDetails } from '../../../../pages/edit-article/edit-article.component';
 
 @Injectable({
   providedIn: 'root',
@@ -12,8 +13,8 @@ export class ApiArticleService {
   constructor() {}
 
   // 創建文章
-  createArticle(articleDetail: any): Observable<any> {
-    return this.#http.post(`${this.apiUrl}/create`, articleDetail);
+  createArticle(articleDetail: IArticleDetails): Observable<{ responseData: IArticleDetails }> {
+    return this.#http.post<{ responseData: IArticleDetails }>(`${this.apiUrl}/create`, articleDetail);
   }
 
   // 獲取所有文章
@@ -28,6 +29,11 @@ export class ApiArticleService {
 
   // 更新文章
   updateArticle(articleDetail: any): Observable<any> {
-    return this.#http.put(`${this.apiUrl}/${articleDetail.id}`, articleDetail);
+    return this.#http.put(`${this.apiUrl}/${articleDetail.id}`, articleDetail, { responseType: 'text' });
+  }
+
+  // 更新文章類別
+  updateArticleCategories(articleId: number, categories: string): Observable<string> {
+    return this.#http.put<string>(`${this.apiUrl}/${articleId}/categories`, { categories });
   }
 }

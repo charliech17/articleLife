@@ -2,7 +2,12 @@
   @if (isLoading) {
     載入中...
   } @else {
-    <app-action-section (optSave)="saveArticle()" (optPublish)="submitArticle()"></app-action-section>
+    <app-action-section
+      [inputAction]="{ isEdit: $isEditArticle() }"
+      (optSave)="saveArticle()"
+      (optPublish)="submitArticle()"
+      (optEditCategories)="editCategories()"
+    ></app-action-section>
     <app-textarea
       [iptTextarea]="{ headerType: 'h1', placeholder: '文章標題', initText: $$currentArticleDetails().title, titleColor: 'blue' }"
       (optUpdateText)="handleUpdateTitle($event)"
