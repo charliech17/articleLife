@@ -6,7 +6,8 @@
   #textarea
   [class]="$cptTextareaClass()"
   [placeholder]="$iptTextarea().placeholder"
-  (input)="handleInput()"
+  (input)="handleInputEvent()"
+  (change)="handleChangeEvent()"
   [formControl]="textControl"
   rows="1"
 ></textarea>

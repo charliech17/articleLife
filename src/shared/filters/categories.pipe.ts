@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class CategoriesPipe implements PipeTransform {
   transform(categories: string | null, joinSymbol: string = ', '): string {
-    if (!categories) {
+    if (!categories || JSON.parse(categories).length === 0) {
       return '未分類';
     }
 

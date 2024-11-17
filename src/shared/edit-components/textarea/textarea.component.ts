@@ -23,8 +23,11 @@ export class TextareaComponent implements OnInit {
     this.textControl.setValue(this.$iptTextarea().initText);
   }
 
-  handleInput(): void {
+  handleInputEvent(): void {
     this.resizeTextarea();
+  }
+
+  handleChangeEvent(): void {
     this.emitToParent(this.textControl.value);
   }
 
