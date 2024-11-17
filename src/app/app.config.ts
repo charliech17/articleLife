@@ -10,6 +10,7 @@ import { AppPageTitleStrategy } from './app-page-title-strategy';
 import { TranslateModule } from '@ngx-translate/core';
 import { provideTranslation } from '../shared/language/translation.module';
 import { httpInterceptorProviders } from '../shared/interceptor/api/http-interceptor.providers';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,5 +24,6 @@ export const appConfig: ApplicationConfig = {
     { provide: LOCALE_ID, useValue: 'en' },
     { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
+    provideAnimations(),
   ],
 };
