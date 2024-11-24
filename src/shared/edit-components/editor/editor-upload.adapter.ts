@@ -22,9 +22,10 @@ class UploadAdapterImpl implements UploadAdapter {
     return this.loader.file.then(
       (file: File) =>
         new Promise((resolve, reject) => {
+          const processedFile = this._doProcessFile(file);
           this._initRequest();
-          this._initListeners(resolve, reject, file);
-          this._sendRequest(file);
+          this._initListeners(resolve, reject, processedFile);
+          this._sendRequest(processedFile);
         }),
     );
   }
@@ -44,7 +45,7 @@ class UploadAdapterImpl implements UploadAdapter {
     // integration to choose the right communication channel. This example uses
     // a POST request with JSON as a data structure but your configuration
     // could be different.
-    xhr.open('POST', 'http://localhost:8080/api/files/upload', true);
+    xhr.open('POST', `${this.editor.config.get('baseApiUrl')}/api/files/upload`, true);
     xhr.responseType = 'json';
   }
 
@@ -103,7 +104,6 @@ class UploadAdapterImpl implements UploadAdapter {
     // Prepare the form data.
     const data = new FormData();
     data.append('articleId', this.editor.config.get('articleId') as string);
-
     data.append('file', file);
 
     // Important note: This is the right place to implement security mechanisms
@@ -113,5 +113,12 @@ class UploadAdapterImpl implements UploadAdapter {
 
     // Send the request.
     this.xhr.send(data);
+  }
+
+  _doProcessFile(file: File) {
+    const namedFile = new File([file], file.name + ' ' + new Date().toISOString(), {
+      type: file.type,
+    });
+    return namedFile;
   }
 }

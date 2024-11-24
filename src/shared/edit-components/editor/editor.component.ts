@@ -1,7 +1,8 @@
-import { afterNextRender, ChangeDetectorRef, Component, input, output } from '@angular/core';
+import { afterNextRender, ChangeDetectorRef, Component, inject, input, output } from '@angular/core';
 import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
 import { uploadAdapterPluginFactory } from './editor-upload.adapter';
+import { EnvService } from '../../services/env.service';
 
 @Component({
   selector: 'app-editor',
@@ -12,6 +13,7 @@ import { uploadAdapterPluginFactory } from './editor-upload.adapter';
 })
 export class EditorComponent {
   $inputEditor = input.required<IEditorInput>({ alias: 'inputEditor' });
+  #envService = inject(EnvService);
   optEditorChange = output<string>();
 
   editor: typeof ClassicEditor | null = null;
@@ -66,6 +68,7 @@ export class EditorComponent {
         ],
       },
       articleId: this.$inputEditor().uploadId,
+      baseApiUrl: this.#envService.baseApiUrl,
     };
     this.editor = ClassicEditor;
     this.cdr.detectChanges();
@@ -86,4 +89,5 @@ type IEditorConfig = typeof ClassicEditor.defaultConfig & ICustomEditorConfig;
 
 export interface ICustomEditorConfig {
   articleId: number;
+  baseApiUrl: string;
 }
