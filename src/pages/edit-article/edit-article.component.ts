@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, Host, HostListener, inject, signal } from '@angular/core';
 import { TextareaComponent } from '../../shared/edit-components/textarea/textarea.component';
 import { EditorComponent } from '../../shared/edit-components/editor/editor.component';
 import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit-title.component';
@@ -14,6 +14,7 @@ import {
 } from './components/article-meta-data-setting-dialog/article-meta-data-setting-dialog.component';
 import { ApiArticleCategoriesService } from '../../shared/services/api/api-article-categories/api-article-categories.service';
 import { of, switchMap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-edit-article',
@@ -28,6 +29,7 @@ export class EditArticleComponent {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #matDialog = inject(MatDialog);
+  #snackBar = inject(MatSnackBar);
 
   $$currentArticleDetails = signal<IArticleDetails>({
     id: -1,
@@ -44,6 +46,18 @@ export class EditArticleComponent {
   $$currSelectedCategories = signal<IArticleCategory[]>([]);
   $isEditArticle = signal<boolean>(false);
   isLoading = true;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 's' && (event.ctrlKey || event.metaKey)) {
+      event.preventDefault();
+      if (this.$isEditArticle()) {
+        this.saveArticle();
+      } else {
+        this.submitArticle();
+      }
+    }
+  }
 
   constructor() {
     this.initPage();
@@ -99,6 +113,7 @@ export class EditArticleComponent {
   saveArticle(): void {
     this.#apiArticleService.updateArticle(this.$$currentArticleDetails()).subscribe({
       next: (res: any) => {
+        this.#snackBar.open(`Article saved successfully at ${new Date().toString()}`, 'Close', { duration: 2500 });
         console.log('Article updated successfully');
       },
       error: err => {
