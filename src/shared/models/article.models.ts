@@ -9,3 +9,14 @@ export interface IArticleDetailsResponse {
   viewTimes: number;
   categories: string | null;
 }
+
+export interface IArticleFile {
+  id: number;
+  articleId: number;
+  fileName: string;
+  fileUrl: string;
+  fileType: string;
+  fileSize: number;
+  createdTime: string;
+  article: IArticleDetailsResponse;
+}

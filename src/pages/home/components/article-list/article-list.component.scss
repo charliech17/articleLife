@@ -1,11 +1,8 @@
 .cus-article__container {
   width: 80%;
-  // border-left: 10px solid #694d4d;
-  // border-right: 10px solid #694d4d;
-  // border-top: 1px solid #4d4d69;
-  // border-bottom: 1px solid #4d4d69;
   border-radius: 5px;
   padding: 48px;
+  transition: 0.3s ease-in-out;
 
   // Apply margin-top to all elements except the first one
   &:not(:first-child) {
@@ -27,5 +24,9 @@
   // border-left odd elements
   &:nth-child(odd) {
     border-left: 10px solid #694d4d;
+  }
+
+  .cus-article-media-height {
+    height: 600px;
   }
 }

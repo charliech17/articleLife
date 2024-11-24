@@ -8,5 +8,23 @@
       </div>
     </div>
     <p class="mt-2">{{ article.intro }}</p>
+    @if ($iptArticleList().articleIdMapFile.get(article.id)) {
+      <div class="text-center mt-3">
+        @let randomIndex = $randomArticleFilesIndex().get(article.id)!;
+        @let articleFile = $iptArticleList().articleIdMapFile.get(article.id)![randomIndex];
+        @let fileType = articleFile.fileType;
+
+        @switch (fileType) {
+          @case (fileType.includes('image') ? fileType : '') {
+            <img class="cus-article-media-height" [src]="articleFile.fileUrl" alt="" />
+          }
+          @case (fileType.includes('video') ? fileType : '') {
+            <div class="w-100">
+              <video class="w-100 cus-article-media-height" (click)="$event.stopPropagation()" [src]="articleFile.fileUrl" controls></video>
+            </div>
+          }
+        }
+      </div>
+    }
   </div>
 }

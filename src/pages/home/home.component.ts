@@ -2,6 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { IArticleDetails } from '../edit-article/edit-article.component';
+import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
+import { IArticleFile } from '../../shared/models/article.models';
 
 @Component({
   selector: 'app-home',
@@ -12,14 +14,28 @@ import { IArticleDetails } from '../edit-article/edit-article.component';
 })
 export class HomeComponent {
   #apiArticleService = inject(ApiArticleService);
+  #apiArticleFilesService = inject(ApiArticleFilesService);
 
   $$allArticles = signal<IArticleDetails[]>([]);
+  $$allArticleFiles = signal<IArticleFile[]>([]);
+  articleIdMapFile: Map<number, IArticleFile[]> = new Map();
 
   constructor() {
     this.#apiArticleService.getAllArticles().subscribe((res: IArticleDetails[]) => {
       // sort res by modified time
       this.sortByLastModifyTime(res);
       this.$$allArticles.set(res);
+    });
+
+    this.#apiArticleFilesService.getAllArticleFiles().subscribe(res => {
+      this.$$allArticleFiles.set(res);
+      res.forEach(file => {
+        if (this.articleIdMapFile.has(file.article.id)) {
+          this.articleIdMapFile.get(file.article.id)!.push(file);
+        } else {
+          this.articleIdMapFile.set(file.article.id, [file]);
+        }
+      });
     });
   }
 
