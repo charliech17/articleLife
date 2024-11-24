@@ -41,8 +41,10 @@ export class EditorComponent {
       ImageResizeHandles,
       CodeBlock,
     } = await import('ckeditor5');
+    const { CustomVideoPlugin } = await import('./custom-video-plugin.class');
+
     this.config = {
-      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage', 'codeBlock'],
+      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage', 'codeBlock', 'videoUpload'],
       plugins: [
         Bold,
         Essentials,
@@ -57,6 +59,7 @@ export class EditorComponent {
         ImageResizeHandles,
         uploadAdapterPluginFactory,
         CodeBlock,
+        CustomVideoPlugin,
       ],
       placeholder: 'Type here...',
       initialData: this.$inputEditor().initContent,

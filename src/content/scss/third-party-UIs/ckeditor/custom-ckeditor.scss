@@ -17,3 +17,22 @@ $al-ckeditor-main-content-bg: white;
     box-shadow: none;
   }
 }
+
+.al-ckeditor-video-container {
+  text-align: center;
+  margin-top: map-get($spacers, 3);
+
+  .al-ckeditor-video-landscape {
+    // 橫向
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      width: 90%;
+    }
+  }
+
+  .al-ckeditor-video-portrait {
+    // 縱向
+    max-height: 600px;
+  }
+}
