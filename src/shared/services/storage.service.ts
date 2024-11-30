@@ -1,37 +1,60 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
+  #platformId = inject(PLATFORM_ID);
+
   setLocalItem(key: string, value: any) {
-    localStorage.setItem(key, value);
+    if (isPlatformBrowser(this.#platformId)) {
+      localStorage.setItem(key, value);
+    }
   }
 
   getLocalItem(key: string) {
-    return localStorage.getItem(key);
+    if (isPlatformBrowser(this.#platformId)) {
+      return localStorage.getItem(key);
+    }
+
+    return null;
   }
 
   removeLocalItem(key: string) {
-    localStorage.removeItem(key);
+    if (isPlatformBrowser(this.#platformId)) {
+      localStorage.removeItem(key);
+    }
   }
 
   clearLocal() {
-    localStorage.clear();
+    if (isPlatformBrowser(this.#platformId)) {
+      localStorage.clear();
+    }
   }
 
   setSessionItem(key: ESessionStorageItems, value: any) {
-    sessionStorage.setItem(key, value);
+    if (isPlatformBrowser(this.#platformId)) {
+      sessionStorage.setItem(key, value);
+    }
   }
 
   getSessionItem(key: ESessionStorageItems) {
-    return sessionStorage.getItem(key);
+    if (isPlatformBrowser(this.#platformId)) {
+      return sessionStorage.getItem(key);
+    }
+
+    return null;
   }
 
   removeSessionItem(key: ESessionStorageItems) {
-    sessionStorage.removeItem(key);
+    if (isPlatformBrowser(this.#platformId)) {
+      sessionStorage.removeItem(key);
+    }
   }
 
   clearSession() {
-    sessionStorage.clear();
+    if (isPlatformBrowser(this.#platformId)) {
+      sessionStorage.clear();
+    }
   }
 }
 

@@ -1,18 +1,27 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class ScrollService {
+  #platformId = inject(PLATFORM_ID);
+
   constructor() {}
 
   scrollToElement(element: HTMLElement, behavior: ScrollBehavior = 'smooth'): void {
-    element.scrollIntoView({ behavior });
+    if (isPlatformBrowser(this.#platformId)) {
+      element.scrollIntoView({ behavior });
+    }
   }
 
   scrollToTop(): void {
-    window.scrollTo(0, 0);
+    if (isPlatformBrowser(this.#platformId)) {
+      window.scrollTo(0, 0);
+    }
   }
 
   scrollToYPosition(position: number): void {
-    window.scrollTo(0, position);
+    if (isPlatformBrowser(this.#platformId)) {
+      window.scrollTo(0, position);
+    }
   }
 }

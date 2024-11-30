@@ -1,22 +1,24 @@
-import { isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class StateStorageService {
+  #platformId = inject(PLATFORM_ID);
+
   private previousUrlKey = 'previousUrl';
   private authenticationKey = 'jhi-authenticationToken';
   private localeKey = 'locale';
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+  constructor() {}
 
   storeUrl(url: string): void {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       sessionStorage.setItem(this.previousUrlKey, JSON.stringify(url));
     }
   }
 
   getUrl(): string | null {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       const previousUrl = sessionStorage.getItem(this.previousUrlKey);
       return previousUrl ? (JSON.parse(previousUrl) as string | null) : previousUrl;
     }
@@ -24,7 +26,7 @@ export class StateStorageService {
   }
 
   clearUrl(): void {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       sessionStorage.removeItem(this.previousUrlKey);
     }
   }
@@ -40,7 +42,7 @@ export class StateStorageService {
   }
 
   getAuthenticationToken(): string | null {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       const authenticationToken = localStorage.getItem(this.authenticationKey) ?? sessionStorage.getItem(this.authenticationKey);
       return authenticationToken ? (JSON.parse(authenticationToken) as string | null) : authenticationToken;
     }
@@ -48,27 +50,27 @@ export class StateStorageService {
   }
 
   clearAuthenticationToken(): void {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       sessionStorage.removeItem(this.authenticationKey);
       localStorage.removeItem(this.authenticationKey);
     }
   }
 
   storeLocale(locale: string): void {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       sessionStorage.setItem(this.localeKey, locale);
     }
   }
 
   getLocale(): string | null {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       return sessionStorage.getItem(this.localeKey);
     }
     return '';
   }
 
   clearLocale(): void {
-    if (!isPlatformServer(this.platformId)) {
+    if (isPlatformBrowser(this.#platformId)) {
       sessionStorage.removeItem(this.localeKey);
     }
   }
