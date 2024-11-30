@@ -1,9 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoriesPipe } from '../../../../shared/filters/categories.pipe';
 import { DatePipe } from '@angular/common';
 import { IArticleDetails } from '../../../edit-article/edit-article.component';
 import { IArticleFile } from '../../../../shared/models/article.models';
+import { ESessionStorageItems, StorageService } from '../../../../shared/services/storage.service';
+import { ScrollService } from '../../../../shared/services/scroll.service';
 
 @Component({
   selector: 'app-article-list',
@@ -12,8 +14,10 @@ import { IArticleFile } from '../../../../shared/models/article.models';
   templateUrl: './article-list.component.html',
   styleUrl: './article-list.component.scss',
 })
-export class ArticleListComponent {
+export class ArticleListComponent implements AfterViewInit {
   #router = inject(Router);
+  #storageService = inject(StorageService);
+  #scrollService = inject(ScrollService);
 
   $iptArticleList = input.required<IIptArticleList>({ alias: 'iptArticleList' });
 
@@ -26,7 +30,12 @@ export class ArticleListComponent {
     return randomIndexMap;
   });
 
+  ngAfterViewInit(): void {
+    this.scrollToArticleListPosition();
+  }
+
   viewArticleDetail(articleId: string | number) {
+    this.#storageService.setSessionItem(ESessionStorageItems.articleYPosition, window.scrollY.toString());
     this.#router.navigate(['/view-article', articleId]);
   }
 
@@ -35,6 +44,16 @@ export class ArticleListComponent {
     const max = this.$iptArticleList().articleIdMapFile.get(articleId)?.length ?? 1;
     const randomIndex = Math.floor(Math.random() * (max - min) + min);
     return randomIndex - 1;
+  }
+
+  private scrollToArticleListPosition() {
+    const lastYPosition = this.#storageService.getSessionItem(ESessionStorageItems.articleYPosition);
+    if (lastYPosition) {
+      setTimeout(() => {
+        this.#scrollService.scrollToYPosition(Number(lastYPosition));
+        this.#storageService.removeSessionItem(ESessionStorageItems.articleYPosition);
+      }, 100);
+    }
   }
 }
 

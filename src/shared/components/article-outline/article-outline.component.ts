@@ -1,5 +1,6 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { ArticleOutlineService } from '../../services/article-outline.service';
+import { ScrollService } from '../../services/scroll.service';
 
 @Component({
   selector: 'app-article-outline',
@@ -9,6 +10,8 @@ import { ArticleOutlineService } from '../../services/article-outline.service';
   styleUrl: './article-outline.component.scss',
 })
 export class ArticleOutlineComponent {
+  #scrollService = inject(ScrollService);
+
   #articleOutlineService = inject(ArticleOutlineService);
   $articleOutline = this.#articleOutlineService.$outlineContent;
   $activeHeaderId = this.#articleOutlineService.$activeHeaderId;
@@ -16,7 +19,7 @@ export class ArticleOutlineComponent {
   goToTitle(titleId: string): void {
     const element = document.getElementById(titleId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      this.#scrollService.scrollToElement(element);
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { IArticleDetailsResponse } from '../../shared/models/article.models';
@@ -10,6 +10,7 @@ import hljs from 'highlight.js';
 import { ArticleResponseComponent } from './components/article-response/article-response.component';
 import { IArticleDetails } from '../edit-article/edit-article.component';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
+import { ScrollService } from '../../shared/services/scroll.service';
 
 @Component({
   selector: 'app-view-article',
@@ -18,12 +19,13 @@ import { CategoriesPipe } from '../../shared/filters/categories.pipe';
   templateUrl: './view-article.component.html',
   styleUrl: './view-article.component.scss',
 })
-export class ViewArticleComponent implements OnDestroy {
+export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #sanitizer = inject(DomSanitizer);
   #route = inject(ActivatedRoute);
   #apiArticleService = inject(ApiArticleService);
   #apiArticleResponseService = inject(ApiArticleResponseService);
   #articleOutlineService = inject(ArticleOutlineService);
+  #scrollService = inject(ScrollService);
   #platformId = inject(PLATFORM_ID);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
@@ -50,6 +52,10 @@ export class ViewArticleComponent implements OnDestroy {
   constructor() {
     this.getArticleContents();
     this.setupOutline();
+  }
+
+  ngAfterViewInit(): void {
+    this.windowScrollToTop();
   }
 
   ngOnDestroy(): void {
@@ -147,6 +153,10 @@ export class ViewArticleComponent implements OnDestroy {
 
   addResponse(newResponse: IArticleResponses): void {
     this.$$articleResponses.update(prev => [...prev, newResponse]);
+  }
+
+  private windowScrollToTop() {
+    this.#scrollService.scrollToTop();
   }
 }
 
