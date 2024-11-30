@@ -1,30 +1,36 @@
-@for (article of $iptArticleList().articleList; track $index) {
-  <div class="cus-article__container text-break al-pointer-cursor" (click)="viewArticleDetail(article.id)">
-    <div>
-      <h2 class="text-center">{{ article.title }}</h2>
-      <div class="text-center">
-        <span class="me-2">分類: {{ article.categories | categories }}</span>
-        <span>時間: {{ article.lastModifyTime ?? article.createdTime | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
-      </div>
-    </div>
-    <p class="mt-2">{{ article.intro }}</p>
-    @if ($iptArticleList().articleIdMapFile.get(article.id)) {
-      <div class="text-center mt-3">
-        @let randomIndex = $randomArticleFilesIndex().get(article.id)!;
-        @let articleFile = $iptArticleList().articleIdMapFile.get(article.id)![randomIndex];
-        @let fileType = articleFile.fileType;
+<div class="d-flex flex-column justify-content-center align-items-center">
+  @for (article of $iptArticleList().articleList; track $index) {
+    @let hasMedia = $iptArticleList().articleIdMapFile.get(article.id);
 
-        @switch (fileType) {
-          @case (fileType.includes('image') ? fileType : '') {
-            <img class="cus-article-media-height" [src]="articleFile.fileUrl" alt="" />
-          }
-          @case (fileType.includes('video') ? fileType : '') {
-            <div class="w-100">
-              <video class="w-100 cus-article-media-height" (click)="$event.stopPropagation()" [src]="articleFile.fileUrl" controls></video>
-            </div>
-          }
-        }
+    <div class="cus-article__container text-break al-pointer-cursor" (click)="viewArticleDetail(article.id)">
+      <div>
+        <div>
+          <h2 class="text-center">{{ article.title }}</h2>
+          <div class="text-center mt-2 al-text-blue">
+            <span class="me-2">分類: {{ article.categories | categories }}</span>
+            <span>時間: {{ article.lastModifyTime ?? article.createdTime | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
+          </div>
+        </div>
+        <p class="mt-2 text-primary" [class]="{ 'text-center': !hasMedia }">{{ article.intro }}</p>
       </div>
-    }
-  </div>
-}
+      @if (hasMedia) {
+        <div class="text-center mt-3">
+          @let randomIndex = $randomArticleFilesIndex().get(article.id)!;
+          @let articleFile = $iptArticleList().articleIdMapFile.get(article.id)![randomIndex];
+          @let fileType = articleFile.fileType;
+
+          @switch (fileType) {
+            @case (fileType.includes('image') ? fileType : '') {
+              <img class="cus-article-media" [src]="articleFile.fileUrl" alt="" />
+            }
+            @case (fileType.includes('video') ? fileType : '') {
+              <div class="w-100">
+                <video class="cus-article-media" (click)="$event.stopPropagation()" [src]="articleFile.fileUrl" controls></video>
+              </div>
+            }
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

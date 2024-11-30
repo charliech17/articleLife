@@ -1,8 +1,7 @@
-// 醒目的颜色
-$cus-article-outline__active-color: #1890ff;
+@import 'shared';
 
 .cus-article-outline__container {
   &.active {
-    color: $cus-article-outline__active-color;
+    color: $al-color-blue;
   }
 }

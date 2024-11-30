@@ -14,14 +14,14 @@ $view-article-divider-color: #694d4d;
 .cus-view-article-container {
   // Add padding to the container
   padding: map-get($spacers, 4);
-  margin: map-get($spacers, 3);
   height: auto;
 
   // 用陰影和背景色來強調文章容器
-  box-shadow: $view-article-container-box-shadow;
   border-radius: 16px;
 
   @include media-breakpoint-up(md) {
+    box-shadow: $view-article-container-box-shadow;
+    margin: map-get($spacers, 3);
     padding: map-get($spacers, 6);
   }
 

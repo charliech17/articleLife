@@ -1,11 +1,11 @@
 <div class="cus-user-response-container">
   <h2 class="cus-user-response__title">留言, 討論</h2>
-  <div class="mt-2 d-flex justify-content-center align-items-center gap-5">
-    <div class="text-center">
+  <div class="mt-2 d-flex flex-column flex-md-row justify-content-center align-items-left align-items-md-center gap-5">
+    <div class="mt-2 text-center d-flex gap-3 align-items-center justify-content-between d-md-block">
       <div class="mb-2">新增留言</div>
       <app-fa-users [inputUser]="{ type: eInputFaUser.Default, size: '2xl' }"></app-fa-users>
     </div>
-    <textarea class="cus-user-response__input" cols="60" rows="10" [formControl]="responseControl"></textarea>
+    <textarea class="cus-user-response__input" [formControl]="responseControl"></textarea>
     <button class="cus-user-response__btn btn btn-primary" (click)="addResponse()">送出</button>
   </div>
   @for (eachResponse of $inputArticleListInfo().articleResponses; track $index) {

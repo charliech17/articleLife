@@ -2,6 +2,16 @@
 .cus-user-response-container {
   padding: map-get($spacers, 3);
 
+  .cus-user-response__input {
+    width: 300px;
+    height: 100px;
+
+    @include media-breakpoint-up(md) {
+      width: 500px;
+      height: 200px;
+    }
+  }
+
   .cus-user-response__item {
     padding: map-get($spacers, 3);
     margin-top: map-get($spacers, 3);
