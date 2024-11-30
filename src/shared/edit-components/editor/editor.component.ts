@@ -3,6 +3,7 @@ import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
 import { uploadAdapterPluginFactory } from './editor-upload.adapter';
 import { EnvService } from '../../services/env.service';
+// import { initializeEditor } from './editor-plugins';
 
 @Component({
   selector: 'app-editor',
@@ -40,11 +41,25 @@ export class EditorComponent {
       ImageResizeEditing,
       ImageResizeHandles,
       CodeBlock,
+      List,
+      Autoformat,
     } = await import('ckeditor5');
     const { CustomVideoPlugin } = await import('./custom-video-plugin.class');
 
     this.config = {
-      toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading', 'insertImage', 'codeBlock', 'videoUpload'],
+      toolbar: [
+        'undo',
+        'redo',
+        '|',
+        'bold',
+        'italic',
+        'Heading',
+        'insertImage',
+        'codeBlock',
+        'videoUpload',
+        'bulletedList',
+        'numberedList',
+      ],
       plugins: [
         Bold,
         Essentials,
@@ -57,8 +72,10 @@ export class EditorComponent {
         ImageInsert,
         ImageResizeEditing,
         ImageResizeHandles,
-        uploadAdapterPluginFactory,
         CodeBlock,
+        List,
+        Autoformat,
+        uploadAdapterPluginFactory,
         CustomVideoPlugin,
       ],
       placeholder: 'Type here...',
@@ -69,6 +86,13 @@ export class EditorComponent {
           { model: 'heading1', view: 'h2', title: '主要title', class: 'ck-heading_heading1' },
           { model: 'heading2', view: 'h3', title: '次級title', class: 'ck-heading_heading2' },
         ],
+      },
+      list: {
+        properties: {
+          styles: true,
+          startIndex: true,
+          reversed: true,
+        },
       },
       articleId: this.$inputEditor().uploadId,
       baseApiUrl: this.#envService.baseApiUrl,

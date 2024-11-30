@@ -1,0 +1,5 @@
+@import 'shared';
+
+ol {
+  padding-left: map-get($spacers, 5);
+}

@@ -1,6 +1,22 @@
 @import 'ckeditor5/ckeditor5.css';
 @import './custom-ckeditor.scss';
+@import 'shared';
 
 .ck.ck-balloon-panel.ck-balloon-panel_visible {
   display: none;
+}
+
+.ck.ck-content {
+  * {
+    margin-top: map-get($spacers, 4);
+
+    @include media-breakpoint-up(md) {
+      margin-top: map-get($spacers, 2);
+    }
+  }
+
+  p {
+    margin-top: map-get($spacers, 3);
+    letter-spacing: 0.1rem;
+  }
 }
