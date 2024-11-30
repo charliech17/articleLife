@@ -34,5 +34,10 @@ $al-ckeditor-main-content-bg: white;
   .al-ckeditor-video-portrait {
     // 縱向
     max-height: 600px;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      width: auto;
+    }
   }
 }
