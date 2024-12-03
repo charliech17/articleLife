@@ -14,7 +14,7 @@ export class ApiAuthService {
     const data = `loginId=${encodeURIComponent(reqBody.loginId)}` + `&password=${encodeURIComponent(reqBody.password)}`;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    return this.#http.post<{ token: string }>(`api/login`, data, { headers, withCredentials: true });
+    return this.#http.post<{ token: string }>(`${this.apiUrl}/login`, data, { headers, withCredentials: true });
   }
 }
 
