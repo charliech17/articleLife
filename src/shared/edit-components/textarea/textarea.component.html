@@ -8,6 +8,7 @@
   [placeholder]="$iptTextarea().placeholder"
   (input)="handleInputEvent()"
   (change)="handleChangeEvent()"
+  (focus)="resizeTextarea()"
   [formControl]="textControl"
   rows="1"
 ></textarea>
