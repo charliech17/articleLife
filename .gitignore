@@ -48,3 +48,4 @@ todos.txt
 
 # .env file
 .env.*
+/src/shared/env/env.*.ts
