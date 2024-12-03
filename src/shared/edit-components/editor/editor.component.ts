@@ -41,6 +41,7 @@ export class EditorComponent {
       ImageResizeEditing,
       ImageResizeHandles,
       CodeBlock,
+      Code,
       List,
       Autoformat,
     } = await import('ckeditor5');
@@ -59,6 +60,7 @@ export class EditorComponent {
         'videoUpload',
         'bulletedList',
         'numberedList',
+        'code',
       ],
       plugins: [
         Bold,
@@ -73,6 +75,7 @@ export class EditorComponent {
         ImageResizeEditing,
         ImageResizeHandles,
         CodeBlock,
+        Code,
         List,
         Autoformat,
         uploadAdapterPluginFactory,
