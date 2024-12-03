@@ -9,7 +9,7 @@ export class ApiArticleCategoriesService {
   private apiUrl = 'api/categories';
 
   getAllArticleCategories(): Observable<IArticleCategory[] | null> {
-    return this.#http.get<IArticleCategory[] | null>(this.apiUrl);
+    return this.#http.get<IArticleCategory[] | null>(this.apiUrl, { withCredentials: true });
   }
 
   getArticleRelatedCategories(articleId: number): Observable<IArticleCategory[]> {

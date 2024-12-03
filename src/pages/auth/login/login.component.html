@@ -1,0 +1,19 @@
+<div class="h-100 d-flex flex-column justify-content-center align-items-center">
+  <h1>登入頁</h1>
+  <div class="mt-6">
+    <form>
+      <div>
+        <label class="me-3" for="account">帳號</label>
+        <input type="text" id="account" [formControl]="acctControl" placeholder="請輸入帳號" />
+      </div>
+      <div class="mt-2">
+        <label class="me-3" for="password">密碼</label>
+        <input type="password" id="password" [formControl]="pwdControl" placeholder="請輸入密碼" />
+      </div>
+      <div class="mt-3">
+        <button class="w-100 btn btn-primary" (click)="$event.preventDefault(); handleLogin()">登入</button>
+        <button class="w-100 btn btn-primary mt-2" (click)="$event.preventDefault(); goRegisterPage()">前往註冊</button>
+      </div>
+    </form>
+  </div>
+</div>
