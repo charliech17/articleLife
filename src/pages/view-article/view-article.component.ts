@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { IArticleDetailsResponse } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -22,6 +22,7 @@ import { ScrollService } from '../../shared/services/scroll.service';
 export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #sanitizer = inject(DomSanitizer);
   #route = inject(ActivatedRoute);
+  #router = inject(Router);
   #apiArticleService = inject(ApiArticleService);
   #apiArticleResponseService = inject(ApiArticleResponseService);
   #articleOutlineService = inject(ArticleOutlineService);
@@ -77,8 +78,14 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   }
 
   apiGetArticle(id: string): void {
-    this.#apiArticleService.getArticle(id).subscribe((response: IArticleDetailsResponse) => {
-      this.$$articleDetails.set(response);
+    this.#apiArticleService.getArticle(id).subscribe({
+      next: (response: IArticleDetailsResponse) => {
+        this.$$articleDetails.set(response);
+      },
+      error: (error: any) => {
+        console.error(error);
+        this.#router.navigate(['/home']);
+      },
     });
   }
 
