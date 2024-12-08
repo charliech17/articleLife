@@ -36,4 +36,9 @@ export class ApiArticleService {
   updateArticleCategories(articleId: number, categories: string): Observable<string> {
     return this.#http.put<string>(`${this.apiUrl}/${articleId}/categories`, { categories });
   }
+
+  // 是否可以編輯文章
+  checkCanEditArticle(articleId: string, userLoginId: string): Observable<boolean> {
+    return this.#http.post<boolean>(`${this.apiUrl}/canEdit`, { articleId, userLoginId });
+  }
 }

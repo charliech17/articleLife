@@ -1,4 +1,4 @@
-import { Component, Host, HostListener, inject, signal } from '@angular/core';
+import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { TextareaComponent } from '../../shared/edit-components/textarea/textarea.component';
 import { EditorComponent } from '../../shared/edit-components/editor/editor.component';
 import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit-title.component';
@@ -13,8 +13,9 @@ import {
   IConfirmCategories,
 } from './components/article-meta-data-setting-dialog/article-meta-data-setting-dialog.component';
 import { ApiArticleCategoriesService } from '../../shared/services/api/api-article-categories/api-article-categories.service';
-import { of, switchMap } from 'rxjs';
+import { of, switchMap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { GlobalStore } from '../../shared/stores/global.store';
 
 @Component({
   selector: 'app-edit-article',
@@ -26,6 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class EditArticleComponent {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleCategoriesService = inject(ApiArticleCategoriesService);
+  #globalStore = inject(GlobalStore);
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #matDialog = inject(MatDialog);
@@ -36,7 +38,7 @@ export class EditArticleComponent {
     title: '',
     intro: '',
     articleContent: '',
-    authorId: 'josh',
+    authorId: '',
     categories: '',
     lastModifyTime: '',
     createdTime: '',
@@ -60,23 +62,61 @@ export class EditArticleComponent {
   }
 
   constructor() {
-    this.initPage();
+    this.watchCanInitPage();
   }
 
-  initPage(): void {
+  private watchCanInitPage(): void {
+    const effectRef = effect(
+      () => {
+        if (this.#globalStore.hasStoreFinishedInit()) {
+          this.initPage();
+          effectRef.destroy(); // only run once
+        }
+      },
+      { allowSignalWrites: true, manualCleanup: true },
+    );
+  }
+
+  private initPage(): void {
     this.#route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.$isEditArticle.set(true);
-        this.apiLoadArticle(id);
-      } else {
-        this.isLoading = false;
-        this.apiGetAllCategories(null);
-      }
+      const articleId = params.get('id');
+      this.checkIsValidAuthor(articleId ?? '').subscribe({
+        next: _res => {
+          this.goAddOrEditArticle(articleId);
+        },
+        error: err => {
+          console.error('You cannot edit the article', err);
+          this.#router.navigate([`/view-article/${articleId}`]);
+        },
+      });
     });
   }
 
-  apiLoadArticle(id: string): void {
+  private checkIsValidAuthor(articleId: string) {
+    const userId = this.#globalStore.userInfo().loginId ?? '';
+    if (!userId) {
+      return throwError(() => new Error('User is not logged in'));
+    }
+
+    if (!articleId) {
+      return of(true);
+    }
+
+    return this.#apiArticleService.checkCanEditArticle(articleId, userId);
+  }
+
+  private goAddOrEditArticle(articleId: string | null): void {
+    if (articleId) {
+      this.$isEditArticle.set(true);
+      this.apiLoadArticle(articleId);
+    } else {
+      this.isLoading = false;
+      this.apiGetAllCategories(null);
+      this.setAuthorId();
+    }
+  }
+
+  private apiLoadArticle(id: string): void {
     this.#apiArticleService.getArticle(id).subscribe({
       next: (res: IArticleDetailsResponse) => {
         this.$$currentArticleDetails.update(prev => ({ ...prev, ...res }));
@@ -89,13 +129,18 @@ export class EditArticleComponent {
     });
   }
 
-  apiGetAllCategories(articleDetailRes: IArticleDetailsResponse | null): void {
+  private apiGetAllCategories(articleDetailRes: IArticleDetailsResponse | null): void {
     this.#apiArticleCategoriesService.getAllArticleCategories().subscribe(categoriesRes => {
       this.$$allCategories.set(categoriesRes || []);
 
       if (!articleDetailRes) return;
       this.$$currSelectedCategories.set((categoriesRes || []).filter(c => (articleDetailRes.categories ?? '').includes(c.categoryName)));
     });
+  }
+
+  private setAuthorId(): void {
+    const authorLoginId = this.#globalStore.userInfo().loginId ?? '';
+    this.$$currentArticleDetails.update(prev => ({ ...prev, authorId: authorLoginId }));
   }
 
   handleUpdateTitle(newTitle: string): void {
