@@ -1,3 +1,4 @@
+import { GlobalService } from './../../../shared/services/global.service';
 import { Component, inject } from '@angular/core';
 
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.servi
 export class LoginComponent {
   #apiAuthService = inject(ApiAuthService);
   #router = inject(Router);
+  #globalService = inject(GlobalService);
 
   acctControl = new FormControl('', { nonNullable: true });
   pwdControl = new FormControl('', { nonNullable: true });
@@ -23,6 +25,7 @@ export class LoginComponent {
     this.#apiAuthService.login({ loginId: this.acctControl.value, password: this.pwdControl.value }).subscribe({
       next: res => {
         alert('Login success');
+        this.#globalService.callApiWhenReloadOrLogin();
         this.#router.navigate(['/']);
       },
       error: err => {

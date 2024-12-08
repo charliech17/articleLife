@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AllLayoutsComponent } from '../shared/layouts/all-layouts/all-layouts.component';
+import { GlobalService } from '../shared/services/global.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,5 @@ import { AllLayoutsComponent } from '../shared/layouts/all-layouts/all-layouts.c
 })
 export class AppComponent {
   title = 'articleLife';
+  #globalService = inject(GlobalService);
 }
