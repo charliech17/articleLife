@@ -116,7 +116,7 @@ class UploadAdapterImpl implements UploadAdapter {
   }
 
   _doProcessFile(file: File) {
-    const namedFile = new File([file], file.name + ' ' + new Date().toISOString(), {
+    const namedFile = new File([file], new Date().toISOString() + ' ' + file.name, {
       type: file.type,
     });
     return namedFile;
