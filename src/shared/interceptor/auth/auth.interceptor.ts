@@ -17,7 +17,8 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
 
         // show whether go to login dialog
       }
-      return throwError(() => new Error(err));
+
+      return throwError(() => err);
     }),
   );
 };
