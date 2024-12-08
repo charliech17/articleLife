@@ -24,6 +24,14 @@ export class ApiAuthService {
 
     return this.#http.post<{ token: string }>(`${this.apiUrl}/login`, data, { headers, withCredentials: true });
   }
+
+  logout() {
+    return this.#http.post(`${this.apiUrl}/logout`, null).pipe(
+      tap(() => {
+        this.#globalStore.clearUserInfo();
+      }),
+    );
+  }
 }
 
 interface IBasicAuth {
