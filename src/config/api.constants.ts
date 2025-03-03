@@ -1,0 +1,4 @@
+export const API_CONSTANTS = {
+  XSRF_TOKEN: 'XSRF-TOKEN',
+  X_XSRF_TOKEN: 'X-XSRF-TOKEN',
+};
