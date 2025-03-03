@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.service';
@@ -10,13 +10,20 @@ import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.servi
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   #router = inject(Router);
   #apiAuthService = inject(ApiAuthService);
 
   acctControl = new FormControl('', { nonNullable: true });
   pwdControl = new FormControl('', { nonNullable: true });
   confirmPwdControl = new FormControl('', { nonNullable: true });
+  canRegister = false;
+
+  ngOnInit(): void {
+    this.#apiAuthService.checkCanRegister().subscribe(res => {
+      this.canRegister = res.responseData;
+    });
+  }
 
   handleRegister(): void {
     this.doValidationOrThrowError();
