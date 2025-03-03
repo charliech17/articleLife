@@ -37,13 +37,11 @@
               "includePaths": ["src/content/scss"]
             },
             "server": "src/main.server.ts",
-            "prerender": {
-              "discoverRoutes": false,
-              "routesFile": "routes.txt"
-            },
+            "prerender": false,
             "ssr": {
               "entry": "server.ts"
-            }
+            },
+            "baseHref": "/articleLife/"
           },
           "configurations": {
             "production": {
