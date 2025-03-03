@@ -1,4 +1,6 @@
 import { ButtonView, Editor, Locale, Plugin } from 'ckeditor5';
+import { AppUtil } from '../../utils/app.util';
+import { API_CONSTANTS } from '../../../config/api.constants';
 
 export class CustomVideoPlugin extends Plugin {
   init() {
@@ -95,6 +97,10 @@ export class CustomVideoPlugin extends Plugin {
     fetch(`${editor.config.get('baseApiUrl')}/api/files/upload`, {
       method: 'POST',
       body: formData,
+      credentials: 'include',
+      headers: {
+        [API_CONSTANTS.X_XSRF_TOKEN]: AppUtil.getCookie(API_CONSTANTS.XSRF_TOKEN) || '',
+      },
     })
       .then(response => response.json())
       .then(data => this.checkVideoLandScapeOrPortrait(data.fileUrl))

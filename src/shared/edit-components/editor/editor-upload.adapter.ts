@@ -1,4 +1,6 @@
 import { Editor, FileLoader, UploadAdapter } from 'ckeditor5';
+import { AppUtil } from '../../utils/app.util';
+import { API_CONSTANTS } from '../../../config/api.constants';
 
 export function uploadAdapterPluginFactory(editor: Editor) {
   editor.plugins.get('FileRepository').createUploadAdapter = loader => {
@@ -46,7 +48,13 @@ class UploadAdapterImpl implements UploadAdapter {
     // a POST request with JSON as a data structure but your configuration
     // could be different.
     xhr.open('POST', `${this.editor.config.get('baseApiUrl')}/api/files/upload`, true);
+    xhr.withCredentials = true;
     xhr.responseType = 'json';
+    const xsrfToken = AppUtil.getCookie(API_CONSTANTS.XSRF_TOKEN);
+    if (xsrfToken) {
+      // 設置到 header 中
+      xhr.setRequestHeader(API_CONSTANTS.X_XSRF_TOKEN, xsrfToken);
+    }
   }
 
   // Initializes XMLHttpRequest listeners.
@@ -116,7 +124,8 @@ class UploadAdapterImpl implements UploadAdapter {
   }
 
   _doProcessFile(file: File) {
-    const namedFile = new File([file], new Date().toISOString() + ' ' + file.name, {
+    const dateStr = new Date().toISOString().replaceAll(":", "_").replaceAll(".", "_");
+    const namedFile = new File([file], dateStr + '_' + file.name, {
       type: file.type,
     });
     return namedFile;
