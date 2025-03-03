@@ -3,8 +3,8 @@
     @if ($userInfo().id === -1) {
       <img src="content/img/anonymous.jpg" alt="" />
     } @else {
-      @if ($userInfo().profileImage) {
-        <img [src]="$userInfo().profileImage" alt="" />
+      @if ($userProfileImage()) {
+        <img [src]="$userProfileImage()" alt="" />
       } @else {
         <img src="content/img/user_man.png" alt="" />
       }
@@ -15,7 +15,14 @@
   } @else {
     <h3 class="text-center mt-1">{{ $userInfo().displayName }}</h3>
   }
-  <div class="mt-5">讓天下沒有難學的技術</div>
+  <div>
+    <div class="mt-5">
+      <h4 class="">{{ $$mottoText()?.motto }}</h4>
+      @if ($$mottoText()?.reference) {
+        <h5 class="text-end display-6">from {{ $$mottoText()?.reference }}</h5>
+      }
+    </div>
+  </div>
   @if ($userInfo().id >= 1) {
     <button (click)="logoutUser()">登出</button>
   }
