@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../env/env.dev';
+import { environment } from '../env/env';
 
 @Injectable({ providedIn: 'root' })
 export class EnvService {
