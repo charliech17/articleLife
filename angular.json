@@ -32,6 +32,7 @@
               "src/i18n",
               "src/content"
             ],
+            "externalDependencies": ["content/*"],
             "styles": ["src/styles.scss", "src/content/scss/global.scss", "src/content/scss/vendor.scss"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/content/scss"]
