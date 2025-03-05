@@ -26,7 +26,6 @@ export function app(): express.Express {
     `${basePath}`,
     express.static(browserDistFolder, {
       maxAge: '1y',
-      index: 'index.html',
     }),
   );
 
@@ -38,7 +37,7 @@ export function app(): express.Express {
       .render({
         bootstrap,
         documentFilePath: indexHtml,
-        url: `${protocol}://${headers.host}${originalUrl}`,
+        url: `${protocol}://${headers.host}${originalUrl.replace(basePath, '')}`,
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })

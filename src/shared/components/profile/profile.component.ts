@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
   #apiMottoService = inject(ApiMottoService);
 
   $userInfo = computed(() => this.#globalStore.userInfo());
-  $userProfileImage = computed(() => this.$userInfo() ?  environment.apiPath + this.$userInfo().profileImage : '');
+  $userProfileImage = computed(() => (this.$userInfo() ? environment.apiPath + this.$userInfo().profileImage : ''));
   #router = inject(Router);
 
   $$mottoText = signal<IMotto | null>(null);
@@ -31,7 +31,6 @@ export class ProfileComponent implements OnInit {
   getRandomMotto(): void {
     this.#apiMottoService.getRandomMotto().subscribe({
       next: res => {
-        console.log(res);
         this.$$mottoText.set(res);
       },
       error: err => {
