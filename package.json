@@ -70,5 +70,8 @@
     "prettier-plugin-packagejson": "2.5.2",
     "typescript": "~5.5.2",
     "typescript-eslint": "8.6.0"
+  },
+  "volta": {
+    "node": "22.14.0"
   }
 }
