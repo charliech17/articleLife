@@ -15,4 +15,8 @@ export class ApiArticleFilesService {
   getAllArticleFiles() {
     return this.#http.get<IArticleFile[]>(this.apiUrl);
   }
+
+  getFileAndArticleByArticleId(articleId: string) {
+    return this.#http.get<IArticleFile | null>(`${this.apiUrl}/${articleId}`);
+  }
 }

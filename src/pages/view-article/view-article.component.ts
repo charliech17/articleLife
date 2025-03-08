@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
-import { IArticleDetailsResponse } from '../../shared/models/article.models';
+import { IArticleDetailsResponse, IArticleFile } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
@@ -11,6 +11,9 @@ import { ArticleResponseComponent } from './components/article-response/article-
 import { IArticleDetails } from '../edit-article/edit-article.component';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 import { ScrollService } from '../../shared/services/scroll.service';
+import { SEOService } from '../../shared/services/seo.service';
+import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-view-article',
@@ -24,10 +27,12 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #apiArticleService = inject(ApiArticleService);
+  #apiArticleFilesService = inject(ApiArticleFilesService);
   #apiArticleResponseService = inject(ApiArticleResponseService);
   #articleOutlineService = inject(ArticleOutlineService);
   #scrollService = inject(ScrollService);
   #platformId = inject(PLATFORM_ID);
+  #seoService = inject(SEOService);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
   private _observer: IntersectionObserver | null = null;
@@ -43,6 +48,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     categories: '',
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
+  $$fileFirstImageUrl = signal<string | null>(null);
 
   $articleContent = computed(() => this.getInnerHtml(this.$$articleDetails().articleContent));
   $articleCreateTime = computed(() => {
@@ -71,29 +77,45 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     this.#route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.apiGetArticle(id);
-        this.apiGetArticleResponses(id);
+        this.apiGetArticleContents(id);
       }
     });
   }
 
-  apiGetArticle(id: string): void {
-    this.#apiArticleService.getArticle(id).subscribe({
-      next: (response: IArticleDetailsResponse) => {
-        this.$$articleDetails.set(response);
+  apiGetArticleContents(id: string): void {
+    // 使用forkJoin '同時' 打兩支 API
+    forkJoin({
+      articleAndFile: this.#apiArticleFilesService.getFileAndArticleByArticleId(id),
+      articleResponses: this.#apiArticleResponseService.getArticleResponses(id),
+    }).subscribe({
+      next: ({ articleAndFile, articleResponses }) => {
+        this.updateArticleContents(articleAndFile, articleResponses);
       },
-      error: (error: any) => {
+      error: error => {
         console.error(error);
         this.#router.navigate(['/home']);
       },
     });
   }
 
-  apiGetArticleResponses(id: string): void {
-    this.#apiArticleResponseService.getArticleResponses(id).subscribe({
-      next: (response: IArticleResponses[]) => {
-        this.$$articleResponses.set(response);
-      },
+  updateArticleContents(articleAndFile: IArticleFile | null, articleResponses: IArticleResponses[]) {
+    if (articleAndFile) {
+      this.$$articleDetails.set(articleAndFile.article);
+      this.$$fileFirstImageUrl.set(articleAndFile.fileUrl);
+      this.updateSeoMetaTags();
+    }
+    this.$$articleResponses.set(articleResponses);
+  }
+
+  updateSeoMetaTags() {
+    const { title, intro, categories } = this.$$articleDetails();
+    this.#seoService.updateMetaTags({
+      title,
+      description: intro,
+      keywords: categories || '',
+      ogTitle: title,
+      ogDescription: intro,
+      ogImage: this.$$fileFirstImageUrl() || '',
     });
   }
 
