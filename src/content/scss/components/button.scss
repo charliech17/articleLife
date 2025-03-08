@@ -1,0 +1,16 @@
+@import 'shared.scss';
+
+.al-btn-sm {
+  background-color: $darker-primary;
+  color: #fff;
+  border: 1px solid $darker-primary;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  &:hover {
+    background-color: $primary;
+    border-color: $primary;
+  }
+}
