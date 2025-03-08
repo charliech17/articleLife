@@ -13,7 +13,7 @@ $view-article-divider-color: #694d4d;
 
 .cus-view-article-container {
   // Add padding to the container
-  padding: map-get($spacers, 4);
+  padding: 0 map-get($spacers, 4);
   height: auto;
 
   // 用陰影和背景色來強調文章容器
