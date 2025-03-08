@@ -51,8 +51,13 @@ export class LoginComponent {
       });
   }
 
-  sendAuthCode(event: Event): void {
-    if (!this.pressedCtrl || !this.acctControl.value) {
+  sendAuthCode(event: MouseEvent): void {
+    if(!(event.screenX && event.screenX != 0 && event.screenY && event.screenY != 0)) {
+      alert('請滿足條件才能發送驗證碼');
+      return;
+    }
+
+    if (!this.acctControl.value) {
       alert('請輸入帳號並滿足條件才能發送驗證碼');
       return;
     }
