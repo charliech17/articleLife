@@ -6,3 +6,10 @@ arrowParens: avoid
 bracketSameLine: false
 plugins:
   - prettier-plugin-packagejson
+overrides:
+  # - files: '*.html'
+  #     options:
+  #         parser: html
+  - files: '*.component.html'
+    options:
+      parser: angular
