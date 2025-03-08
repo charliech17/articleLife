@@ -1,19 +1,18 @@
-import { provideServerRendering } from '@angular/platform-server';
 import { Routes } from '@angular/router';
-import { PocComponent } from '../pages/poc/poc.component';
-import { HomeComponent } from '../pages/home/home.component';
-import { EditArticleComponent } from '../pages/edit-article/edit-article.component';
-import { ViewArticleComponent } from '../pages/view-article/view-article.component';
-import { LoginComponent } from '../pages/auth/login/login.component';
-import { RegisterComponent } from '../pages/auth/register/register.component';
 
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent },
+  { path: 'home', loadComponent: () => import('../pages/home/home.component').then(m => m.HomeComponent) },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'add-article', component: EditArticleComponent },
-  { path: 'edit-article/:id', component: EditArticleComponent },
-  { path: 'view-article/:id', component: ViewArticleComponent },
-  { path: 'poc', component: PocComponent },
+  { path: 'login', loadComponent: () => import('../pages/auth/login/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('../pages/auth/register/register.component').then(m => m.RegisterComponent) },
+  { path: 'add-article', loadComponent: () => import('../pages/edit-article/edit-article.component').then(m => m.EditArticleComponent) },
+  {
+    path: 'edit-article/:id',
+    loadComponent: () => import('../pages/edit-article/edit-article.component').then(m => m.EditArticleComponent),
+  },
+  {
+    path: 'view-article/:id',
+    loadComponent: () => import('../pages/view-article/view-article.component').then(m => m.ViewArticleComponent),
+  },
+  { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];
