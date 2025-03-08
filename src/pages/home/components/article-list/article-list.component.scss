@@ -32,12 +32,12 @@
 
   // border-right even elements
   &:nth-child(even) {
-    border-right: 10px solid #694d4d;
+    border-right: 10px solid $primary;
   }
 
   // border-left odd elements
   &:nth-child(odd) {
-    border-left: 10px solid #694d4d;
+    border-left: 10px solid $primary;
   }
 
   .cus-article-media {
