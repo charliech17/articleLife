@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
   $userInfo = computed(() => this.#globalStore.userInfo());
   $userProfileImage = computed(() => (this.$userInfo() ? environment.apiPath + this.$userInfo().profileImage : ''));
   #router = inject(Router);
+  $router = computed(() => this.#router);
 
   $$mottoText = signal<IMotto | null>(null);
 
@@ -49,5 +50,13 @@ export class ProfileComponent implements OnInit {
         alert('Logout failed');
       },
     });
+  }
+
+  goToLogin(): void {
+    this.#router.navigate(['/login']);
+  }
+
+  goToHome(): void {
+    this.#router.navigate(['/']);
   }
 }

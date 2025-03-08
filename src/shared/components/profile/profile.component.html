@@ -23,7 +23,15 @@
       }
     </div>
   </div>
-  @if ($userInfo().id >= 1) {
-    <button (click)="logoutUser()">登出</button>
-  }
+  <div class="mt-3">
+    @if ($userInfo().id >= 1) {
+      <button class="al-btn-sm" (click)="logoutUser()">登出</button>
+    } @else {
+      @if ($router().url === '/login') {
+        <button class="al-btn-sm" (click)="goToHome()">返回首頁</button>
+      } @else {
+        <button class="al-btn-sm" (click)="goToLogin()">登入</button>
+      }
+    }
+  </div>
 </div>
