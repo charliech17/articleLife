@@ -55,8 +55,6 @@ function run(): void {
   // Start up the Node server
   const server = app();
   server.set('trust proxy', true);
-  // workaround for UNABLE_TO_VERIFY_LEAF_SIGNATURE
-  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
   server.listen(port, () => {
     console.log(`Node Express server listening on http://localhost:${port}${basePath}`);
