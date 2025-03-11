@@ -1,5 +1,5 @@
 import { GlobalStore } from './../../../stores/global.store';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IUserAuthInfo } from '../../../models/user.modes';
 import { tap } from 'rxjs';
@@ -42,6 +42,19 @@ export class ApiAuthService {
 
   sendAuthCode(email: string) {
     return this.#http.post<{ responseData: boolean }>(`api/twoFactorAuth/getAuthCode`, { email });
+  }
+
+  sendResetPasswordEmail(email: string) {
+    const params = new HttpParams().set('email', email);
+    return this.#http.post<{ responseData: string }>(`${this.apiUrl}/confirmResetPassword`, null, { params });
+  }
+
+  checkIsResetPasswordTokenValid(token: string) {
+    return this.#http.get<{ responseData: string }>(`${this.apiUrl}/checkResetPasswordToken`, { params: { token } });
+  }
+
+  confirmResetPassword(token: string, password: string) {
+    return this.#http.post(`${this.apiUrl}/resetPassword`, { token, password });
   }
 }
 

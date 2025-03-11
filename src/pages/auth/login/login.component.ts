@@ -51,8 +51,12 @@ export class LoginComponent {
       });
   }
 
+  goForgetPassword() {
+    this.#router.navigate(['/forget-password']);
+  }
+
   sendAuthCode(event: MouseEvent): void {
-    if(!(event.screenX && event.screenX != 0 && event.screenY && event.screenY != 0)) {
+    if (!(event.screenX && event.screenX != 0 && event.screenY && event.screenY != 0)) {
       alert('請滿足條件才能發送驗證碼');
       return;
     }
