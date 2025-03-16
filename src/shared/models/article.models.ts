@@ -1,11 +1,11 @@
-export interface IArticleDetailsResponse {
+export interface IArticleDetails {
   id: number;
   title: string;
   intro: string;
   articleContent: string;
   authorId: string;
   createdTime: string;
-  lastModifyTime: string;
+  lastModifyTime: string | null;
   viewTimes: number;
   categories: string | null;
 }
@@ -18,5 +18,15 @@ export interface IArticleFile {
   fileType: string;
   fileSize: number;
   createdTime: string;
-  article: IArticleDetailsResponse;
+}
+
+export interface IArticleResponses {
+  responseText: string;
+  articleId: number;
+  userId: number;
+  userName: string;
+  profileImage: string;
+  createdTime: string;
+  lastModifyTime: string;
+  ext1: number;
 }

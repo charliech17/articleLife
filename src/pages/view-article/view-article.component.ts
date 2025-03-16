@@ -1,14 +1,13 @@
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
-import { IArticleDetailsResponse, IArticleFile } from '../../shared/models/article.models';
+import { IArticleDetails, IArticleFile, IArticleResponses } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
 import { ApiArticleResponseService } from '../../shared/services/api/api-article-response/api-article-response.service';
 import hljs from 'highlight.js';
 import { ArticleResponseComponent } from './components/article-response/article-response.component';
-import { IArticleDetails } from '../edit-article/edit-article.component';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 import { ScrollService } from '../../shared/services/scroll.service';
 import { SEOService } from '../../shared/services/seo.service';
@@ -46,6 +45,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     lastModifyTime: '',
     createdTime: '',
     categories: '',
+    viewTimes: 0,
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
   $$fileFirstImageUrl = signal<string | null>(null);
@@ -85,11 +85,12 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   apiGetArticleContents(id: string): void {
     // 使用forkJoin '同時' 打兩支 API
     forkJoin({
+      articleContent: this.#apiArticleService.getArticle(id),
       articleAndFile: this.#apiArticleFilesService.getFileAndArticleByArticleId(id),
       articleResponses: this.#apiArticleResponseService.getArticleResponses(id),
     }).subscribe({
-      next: ({ articleAndFile, articleResponses }) => {
-        this.updateArticleContents(articleAndFile, articleResponses);
+      next: ({ articleContent, articleAndFile, articleResponses }) => {
+        this.updateArticleContents(articleContent, articleAndFile, articleResponses);
       },
       error: error => {
         console.error(error);
@@ -98,12 +99,10 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  updateArticleContents(articleAndFile: IArticleFile | null, articleResponses: IArticleResponses[]) {
-    if (articleAndFile) {
-      this.$$articleDetails.set(articleAndFile.article);
-      this.$$fileFirstImageUrl.set(articleAndFile.fileUrl);
-      this.updateSeoMetaTags();
-    }
+  updateArticleContents(articleContent: IArticleDetails, articleAndFile: IArticleFile | null, articleResponses: IArticleResponses[]) {
+    this.$$articleDetails.set(articleContent);
+    this.$$fileFirstImageUrl.set(articleAndFile?.fileUrl || null);
+    this.updateSeoMetaTags();
     this.$$articleResponses.set(articleResponses);
   }
 
@@ -187,15 +186,4 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   private windowScrollToTop() {
     this.#scrollService.scrollToTop();
   }
-}
-
-export interface IArticleResponses {
-  responseText: string;
-  articleId: number;
-  userId: number;
-  userName: string;
-  profileImage: string;
-  createdTime: string;
-  lastModifyTime: string;
-  ext1: number;
 }
