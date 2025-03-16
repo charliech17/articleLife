@@ -1,6 +1,6 @@
 @import 'shared.scss';
 
-.al-btn-sm {
+@mixin al-btn-base {
   background-color: $darker-primary;
   color: #fff;
   border: 1px solid $darker-primary;
@@ -13,4 +13,8 @@
     background-color: $primary;
     border-color: $primary;
   }
+}
+
+.al-btn-sm {
+  @include al-btn-base;
 }
