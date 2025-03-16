@@ -2,8 +2,7 @@ import { AfterViewInit, Component, computed, inject, input } from '@angular/core
 import { Router } from '@angular/router';
 import { CategoriesPipe } from '../../../../shared/filters/categories.pipe';
 import { DatePipe } from '@angular/common';
-import { IArticleDetails } from '../../../edit-article/edit-article.component';
-import { IArticleFile } from '../../../../shared/models/article.models';
+import { IArticleDetails, IArticleFile } from '../../../../shared/models/article.models';
 import { ESessionStorageItems, StorageService } from '../../../../shared/services/storage.service';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 

@@ -2,9 +2,8 @@ import { Component, inject, input, output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EInputFaUser, FaUsersComponent } from '../../../../shared/components/fa-icons/fa-users/fa-users.component';
 import { DatePipe } from '@angular/common';
-import { IArticleResponses } from '../../view-article.component';
 import { ApiArticleResponseService } from '../../../../shared/services/api/api-article-response/api-article-response.service';
-import { IArticleDetails } from '../../../edit-article/edit-article.component';
+import { IArticleDetails, IArticleResponses } from '../../../../shared/models/article.models';
 
 @Component({
   selector: 'app-article-response',

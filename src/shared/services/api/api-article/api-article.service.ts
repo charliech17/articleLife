@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IArticleDetails } from '../../../../pages/edit-article/edit-article.component';
+import { IArticleDetails } from '../../../models/article.models';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +23,8 @@ export class ApiArticleService {
   }
 
   // 獲取單篇文章
-  getArticle(id: string): Observable<any> {
-    return this.#http.get(`${this.apiUrl}/${id}`);
+  getArticle(id: string): Observable<IArticleDetails> {
+    return this.#http.get<IArticleDetails>(`${this.apiUrl}/${id}`);
   }
 
   // 更新文章

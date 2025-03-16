@@ -5,7 +5,7 @@ import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit
 import { ActionSectionComponent } from '../../shared/edit-components/action-section/action-section.component';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IArticleDetailsResponse } from '../../shared/models/article.models';
+import { IArticleDetails } from '../../shared/models/article.models';
 import { MatDialog } from '@angular/material/dialog';
 import {
   ArticleMetaDataSettingDialogComponent,
@@ -42,6 +42,7 @@ export class EditArticleComponent {
     categories: '',
     lastModifyTime: '',
     createdTime: '',
+    viewTimes: 0,
   });
 
   $$allCategories = signal<IArticleCategory[]>([]);
@@ -118,7 +119,7 @@ export class EditArticleComponent {
 
   private apiLoadArticle(id: string): void {
     this.#apiArticleService.getArticle(id).subscribe({
-      next: (res: IArticleDetailsResponse) => {
+      next: (res: IArticleDetails) => {
         this.$$currentArticleDetails.update(prev => ({ ...prev, ...res }));
         this.isLoading = false;
         this.apiGetAllCategories(res);
@@ -129,7 +130,7 @@ export class EditArticleComponent {
     });
   }
 
-  private apiGetAllCategories(articleDetailRes: IArticleDetailsResponse | null): void {
+  private apiGetAllCategories(articleDetailRes: IArticleDetails | null): void {
     this.#apiArticleCategoriesService.getAllArticleCategories().subscribe(categoriesRes => {
       this.$$allCategories.set(categoriesRes || []);
 
@@ -250,15 +251,4 @@ export class EditArticleComponent {
         },
       });
   }
-}
-
-export interface IArticleDetails {
-  id: number;
-  title: string;
-  intro: string;
-  articleContent: string;
-  authorId: string;
-  categories: string | null;
-  lastModifyTime: string | null;
-  createdTime: string;
 }

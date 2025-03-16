@@ -1,9 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
-import { IArticleDetails } from '../edit-article/edit-article.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
-import { IArticleFile } from '../../shared/models/article.models';
+import { IArticleDetails, IArticleFile } from '../../shared/models/article.models';
 
 @Component({
   selector: 'app-home',
@@ -30,10 +29,10 @@ export class HomeComponent {
     this.#apiArticleFilesService.getAllArticleFiles().subscribe(res => {
       this.$$allArticleFiles.set(res);
       res.forEach(file => {
-        if (this.articleIdMapFile.has(file.article.id)) {
-          this.articleIdMapFile.get(file.article.id)!.push(file);
+        if (this.articleIdMapFile.has(file.articleId)) {
+          this.articleIdMapFile.get(file.articleId)!.push(file);
         } else {
-          this.articleIdMapFile.set(file.article.id, [file]);
+          this.articleIdMapFile.set(file.articleId, [file]);
         }
       });
     });

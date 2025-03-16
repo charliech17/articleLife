@@ -10,7 +10,7 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { IArticleDetails } from '../../edit-article.component';
+import { IArticleDetails } from '../../../../shared/models/article.models';
 
 @Component({
   selector: 'app-article-meta-data-setting-dialog',
