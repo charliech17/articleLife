@@ -1,13 +1,16 @@
 import { Injectable, signal } from '@angular/core';
 import { IUserAuthInfo } from '../models/user.modes';
+import { ICurrentViewArticle } from '../models/article.models';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalStore {
   private _userInfo = signal<IUserAuthInfo>(this.getInitialUserInfo());
   private _hasStoreFinishedInit = signal<boolean>(false);
+  private _currentArticleInfo = signal<ICurrentViewArticle | null>(null);
 
   userInfo = this._userInfo.asReadonly();
   hasStoreFinishedInit = this._hasStoreFinishedInit.asReadonly();
+  currentArticleInfo = this._currentArticleInfo.asReadonly();
 
   getInitialUserInfo(): IUserAuthInfo {
     return {
@@ -33,5 +36,9 @@ export class GlobalStore {
 
   setStoreFinishedInit() {
     this._hasStoreFinishedInit.set(true);
+  }
+
+  setCurrentArticleInfo(newState: ICurrentViewArticle | null) {
+    this._currentArticleInfo.set(newState);
   }
 }

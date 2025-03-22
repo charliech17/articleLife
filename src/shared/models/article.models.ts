@@ -10,6 +10,11 @@ export interface IArticleDetails {
   categories: string | null;
 }
 
+export interface ICurrentViewArticle {
+  id: IArticleDetails['id'];
+  authorId: IArticleDetails['authorId'];
+}
+
 export interface IArticleFile {
   id: number;
   articleId: number;
