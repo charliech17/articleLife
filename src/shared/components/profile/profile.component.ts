@@ -19,9 +19,11 @@ export class ProfileComponent implements OnInit {
   #apiMottoService = inject(ApiMottoService);
 
   $userInfo = computed(() => this.#globalStore.userInfo());
+  $currentArticleInfo = computed(() => this.#globalStore.currentArticleInfo());
   $userProfileImage = computed(() => (this.$userInfo() ? environment.apiPath + this.$userInfo().profileImage : ''));
   #router = inject(Router);
   $router = computed(() => this.#router);
+  $isViewSelfArticle = computed(() => this.$userInfo().loginId === this.$currentArticleInfo()?.authorId);
 
   $$mottoText = signal<IMotto | null>(null);
 
@@ -54,6 +56,18 @@ export class ProfileComponent implements OnInit {
 
   goToLogin(): void {
     this.#router.navigate(['/login']);
+  }
+
+  goAddNewArticle(): void {
+    this.#router.navigate(['/add-article']);
+  }
+
+  goToEditArticle(): void {
+    if (!this.$currentArticleInfo()) {
+      alert('No article is selected');
+      throw new Error('No article is selected');
+    }
+    this.#router.navigate([`/edit-article/${this.$currentArticleInfo()?.id}`]);
   }
 
   goToHome(): void {
