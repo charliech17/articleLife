@@ -73,7 +73,7 @@ function setResHeaders(
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
   res.setHeader('Access-Control-Allow-Headers', 'X-XSRF-TOKEN Content-Type');
 
-  // Set ip address headerss
+  // Set ip address headers
   const xRealIp = req.headers['x-real-ip'];
   const xForwardedFor = req.headers['x-forwarded-for'];
   res.setHeader('X-Real-IP', xRealIp || '');
