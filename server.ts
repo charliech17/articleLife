@@ -9,6 +9,13 @@ import { Request, Response } from 'express-serve-static-core';
 import QueryString from 'qs';
 
 const basePath = environment.baseHref || '/';
+const CSP =
+  "default-src 'self';" +
+  "script-src 'self' 'unsafe-inline';" +
+  "frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com;" +
+  "img-src * data: blob: 'unsafe-inline';" +
+  "connect-src http: https:; style-src 'self' 'unsafe-inline';" +
+  "frame-ancestors 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/;object-src 'none'";
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -60,10 +67,7 @@ function setResHeaders(
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), geolocation=(), microphone=(), payment=() ');
-  res.setHeader(
-    'Content-Security-Policy',
-    "default-src 'self'; script-src 'self' 'unsafe-inline'; frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com; img-src * data: blob: 'unsafe-inline'; connect-src http: https:; style-src 'self' 'unsafe-inline'; frame-ancestors 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/;object-src 'none'",
-  );
+  res.setHeader('Content-Security-Policy', CSP);
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
