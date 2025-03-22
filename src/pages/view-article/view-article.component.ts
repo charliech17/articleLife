@@ -1,3 +1,4 @@
+import { GlobalStore } from './../../shared/stores/global.store';
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
@@ -30,6 +31,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #apiArticleResponseService = inject(ApiArticleResponseService);
   #articleOutlineService = inject(ArticleOutlineService);
   #scrollService = inject(ScrollService);
+  #globalStore = inject(GlobalStore);
   #platformId = inject(PLATFORM_ID);
   #seoService = inject(SEOService);
 
@@ -56,6 +58,9 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     return createdTime ? new Date(createdTime) : new Date();
   });
 
+  $userInfo = computed(() => this.#globalStore.userInfo());
+  $isSameUser = computed(() => this.$userInfo().loginId === this.$$articleDetails().authorId);
+
   constructor() {
     this.getArticleContents();
     this.setupOutline();
@@ -68,6 +73,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.#articleOutlineService.setOutlineContent([]);
     this.#articleOutlineService.setActiveHeaderId(null);
+    this.#globalStore.setCurrentArticleInfo(null);
     if (this._observer) {
       this._observer.disconnect();
     }
@@ -91,6 +97,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     }).subscribe({
       next: ({ articleContent, articleAndFile, articleResponses }) => {
         this.updateArticleContents(articleContent, articleAndFile, articleResponses);
+        this.#globalStore.setCurrentArticleInfo({ id: articleContent.id, authorId: articleContent.authorId });
       },
       error: error => {
         console.error(error);
