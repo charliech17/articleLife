@@ -186,7 +186,10 @@ export class EditArticleComponent {
     });
 
     dialogRef.afterClosed().subscribe((categories: IConfirmCategories) => {
-      if (!categories) return;
+      if (!categories.selectedCategories.length) {
+        alert('selected categories is null, cannot proceed');
+        return;
+      }
 
       this.$$currSelectedCategories.set(categories.selectedCategories);
       this.updateMetaDataOrCreateArticle(categories);
