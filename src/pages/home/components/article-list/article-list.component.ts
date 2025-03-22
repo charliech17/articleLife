@@ -2,7 +2,7 @@ import { AfterViewInit, Component, computed, inject, input } from '@angular/core
 import { Router } from '@angular/router';
 import { CategoriesPipe } from '../../../../shared/filters/categories.pipe';
 import { DatePipe } from '@angular/common';
-import { IArticleDetails, IArticleFile } from '../../../../shared/models/article.models';
+import { IArticleFile, IArticleInfo } from '../../../../shared/models/article.models';
 import { ESessionStorageItems, StorageService } from '../../../../shared/services/storage.service';
 import { ScrollService } from '../../../../shared/services/scroll.service';
 
@@ -57,6 +57,6 @@ export class ArticleListComponent implements AfterViewInit {
 }
 
 interface IIptArticleList {
-  articleList: IArticleDetails[];
+  articleList: IArticleInfo[];
   articleIdMapFile: Map<number, IArticleFile[]>;
 }

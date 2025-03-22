@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IArticleDetails } from '../../../models/article.models';
+import { IArticleDetails, IArticleInfo } from '../../../models/article.models';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,10 @@ export class ApiArticleService {
   // 獲取所有文章
   getAllArticles(): Observable<any> {
     return this.#http.get(`${this.apiUrl}`);
+  }
+
+  getAllArticleInfo(): Observable<IArticleInfo[]> {
+    return this.#http.get<IArticleInfo[]>(`${this.apiUrl}/allInfo`);
   }
 
   // 獲取單篇文章

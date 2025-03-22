@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
-import { IArticleDetails, IArticleFile } from '../../shared/models/article.models';
+import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 
 @Component({
   selector: 'app-home',
@@ -15,12 +15,12 @@ export class HomeComponent {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleFilesService = inject(ApiArticleFilesService);
 
-  $$allArticles = signal<IArticleDetails[]>([]);
+  $$allArticles = signal<IArticleInfo[]>([]);
   $$allArticleFiles = signal<IArticleFile[]>([]);
   articleIdMapFile: Map<number, IArticleFile[]> = new Map();
 
   constructor() {
-    this.#apiArticleService.getAllArticles().subscribe((res: IArticleDetails[]) => {
+    this.#apiArticleService.getAllArticleInfo().subscribe((res: IArticleInfo[]) => {
       // sort res by modified time
       this.sortByLastModifyTime(res);
       this.$$allArticles.set(res);
@@ -38,7 +38,7 @@ export class HomeComponent {
     });
   }
 
-  private sortByLastModifyTime(source: IArticleDetails[]): void {
+  private sortByLastModifyTime(source: IArticleInfo[]): void {
     source.sort((a, b) => {
       if (a.lastModifyTime && b.lastModifyTime) {
         return new Date(b.lastModifyTime).getTime() - new Date(a.lastModifyTime).getTime();

@@ -10,6 +10,8 @@ export interface IArticleDetails {
   categories: string | null;
 }
 
+export type IArticleInfo = Omit<IArticleDetails, 'articleContent'>;
+
 export interface ICurrentViewArticle {
   id: IArticleDetails['id'];
   authorId: IArticleDetails['authorId'];
