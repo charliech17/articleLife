@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
@@ -17,6 +17,7 @@ const CSP =
   "connect-src http: https:; style-src 'self' 'unsafe-inline';" +
   "frame-ancestors 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/;object-src 'none'";
 // The Express app is exported so that it can be used by serverless Functions.
+
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
