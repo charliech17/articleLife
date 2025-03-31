@@ -1,4 +1,4 @@
-@import './font.scss';
-@import './interactive.scss';
-@import './color.scss';
-@import './extend.scss';
+@forward './font.scss';
+@forward './interactive.scss';
+@forward './color.scss';
+@forward './extend.scss';

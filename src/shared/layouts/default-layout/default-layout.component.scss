@@ -1,14 +1,16 @@
-@import 'shared';
+@use 'sass:map';
+@use 'shared' as shared;
+
 .cus-default-layout-container {
   margin: auto;
-  max-width: map-get($grid-breakpoints, xxl);
+  max-width: map.get(shared.$grid-breakpoints, xxl);
 
-  @include media-breakpoint-up(md) {
+  @include shared.media-breakpoint-up(md) {
     display: flex;
   }
 
   .cus-side-nav-container {
-    @include media-breakpoint-up(md) {
+    @include shared.media-breakpoint-up(md) {
       width: 300px;
     }
   }

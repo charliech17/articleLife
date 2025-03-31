@@ -1,5 +1,5 @@
-@import 'shared.scss';
-@import 'base/tags/tags.scss';
+@use 'shared' as shared;
+@use 'base/tags/tags' as tags;
 
 $cus-gray: #ccc;
 

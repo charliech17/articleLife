@@ -1,5 +1,5 @@
-@import 'shared';
+@use 'shared' as shared;
 
 .al-text-blue {
-  color: $al-color-blue;
+  color: shared.$al-color-blue;
 }

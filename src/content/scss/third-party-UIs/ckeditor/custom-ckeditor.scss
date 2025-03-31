@@ -1,4 +1,5 @@
-@import 'shared';
+@use 'sass:map';
+@use 'shared' as shared;
 
 $al-ckeditor-toolbar-bg: rgba(0, 0, 0, 0.1);
 $al-ckeditor-main-content-bg: white;
@@ -7,7 +8,7 @@ $al-ckeditor-main-content-bg: white;
   .ck-rounded-corners .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
     border: 0;
     box-shadow: 1px 1px 3px 5px $al-ckeditor-toolbar-bg;
-    margin-bottom: map-get($spacers, 2);
+    margin-bottom: map.get(shared.$spacers, 2);
   }
 
   .ck.ck-editor__main > .ck-editor__editable:not(.ck-focused),
@@ -20,13 +21,13 @@ $al-ckeditor-main-content-bg: white;
 
 .al-ckeditor-video-container {
   text-align: center;
-  margin-top: map-get($spacers, 3);
+  margin-top: map.get(shared.$spacers, 3);
 
   .al-ckeditor-video-landscape {
     // 橫向
     width: 100%;
 
-    @include media-breakpoint-up(md) {
+    @include shared.media-breakpoint-up(md) {
       width: 90%;
     }
   }
@@ -36,7 +37,7 @@ $al-ckeditor-main-content-bg: white;
     max-height: 600px;
     width: 100%;
 
-    @include media-breakpoint-up(md) {
+    @include shared.media-breakpoint-up(md) {
       width: auto;
     }
   }

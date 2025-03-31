@@ -1,17 +1,17 @@
-@import 'shared.scss';
+@use 'shared' as shared;
 
 @mixin al-btn-base {
-  background-color: $darker-primary;
+  background-color: shared.$darker-primary;
   color: #fff;
-  border: 1px solid $darker-primary;
+  border: 1px solid shared.$darker-primary;
   border-radius: 8px;
   padding: 5px 12px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s;
   &:hover {
-    background-color: $primary;
-    border-color: $primary;
+    background-color: shared.$primary;
+    border-color: shared.$primary;
   }
 }
 

@@ -1,5 +1,5 @@
-@import 'shared.scss';
-@import 'base/tags/tags.scss';
+@use 'sass:map';
+@use 'shared' as shared;
 
 $cus-gray: #ccc;
 
@@ -8,6 +8,6 @@ $cus-gray: #ccc;
 }
 
 .cus-edit-container {
-  margin-top: map-get($spacers, 5);
-  padding: map-get($spacers, 2);
+  margin-top: map.get(shared.$spacers, 5);
+  padding: map.get(shared.$spacers, 2);
 }

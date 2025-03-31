@@ -1,6 +1,8 @@
-@import 'shared';
+@use 'sass:map';
+@use 'shared' as shared;
+
 .cus-user-response-container {
-  padding: map-get($spacers, 3);
+  padding: map.get(shared.$spacers, 3);
 
   .cus-user-response__input {
     width: 100%;
@@ -8,15 +10,15 @@
     height: 100px;
     margin: 0 auto;
 
-    @include media-breakpoint-up(md) {
+    @include shared.media-breakpoint-up(md) {
       max-width: 500px;
       height: 200px;
     }
   }
 
   .cus-user-response__item {
-    padding: map-get($spacers, 3);
-    margin-top: map-get($spacers, 3);
+    padding: map.get(shared.$spacers, 3);
+    margin-top: map.get(shared.$spacers, 3);
 
     .cus-user-info {
       padding-bottom: 4px;
@@ -25,7 +27,7 @@
     }
 
     .cus-badge {
-      background-color: $secondary;
+      background-color: shared.$secondary;
       color: #d3d3d3;
       border-radius: 8px;
     }

@@ -1,9 +1,9 @@
-@import './html';
-@import './h1';
-@import './h2';
-@import './h3';
-@import './p';
-@import './strong';
-@import './li';
-@import './ol';
-@import './ul';
+@forward './html';
+@forward './h1' hide $lh-xs, $fs-xs, $lh-m, $fs-m;
+@forward './h2' hide $lh-xs, $fs-xs, $lh-m, $fs-m;
+@forward './h3' hide $lh-xs, $fs-xs, $lh-m, $fs-m;
+@forward './p' hide $lh-xs, $fs-xs, $lh-m, $fs-m;
+@forward './strong';
+@forward './li' hide $lh-xs, $fs-xs, $lh-m, $fs-m;
+@forward './ol';
+@forward './ul';

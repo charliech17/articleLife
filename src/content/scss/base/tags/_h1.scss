@@ -1,4 +1,4 @@
-@import 'shared';
+@use 'shared' as shared;
 
 $lh-xs: 2.88rem;
 $fs-xs: 2.5rem;
@@ -6,27 +6,27 @@ $lh-m: 3.4rem;
 $fs-m: 3rem;
 
 h1 {
-  @include media-breakpoint-down(sm) {
+  @include shared.media-breakpoint-down(sm) {
     line-height: $lh-xs;
     font-size: $fs-xs;
   }
 
-  @include media-breakpoint-between(sm, md) {
+  @include shared.media-breakpoint-between(sm, md) {
     line-height: $lh-xs;
     font-size: $fs-xs;
   }
 
-  @include media-breakpoint-between(md, lg) {
+  @include shared.media-breakpoint-between(md, lg) {
     line-height: $lh-xs;
     font-size: $fs-xs;
   }
 
-  @include media-breakpoint-between(lg, xl) {
+  @include shared.media-breakpoint-between(lg, xl) {
     line-height: $lh-m;
     font-size: $fs-m;
   }
 
-  @include media-breakpoint-up(xl) {
+  @include shared.media-breakpoint-up(xl) {
     line-height: $lh-m;
     font-size: $fs-m;
   }

@@ -5,7 +5,7 @@ put Sass variables here:
 eg $input-color: red;
 ****************************/
 // Override Bootstrap variables
+@forward './third-party-UIs/ckeditor/index.scss';
+@forward './third-party-UIs/highlight-js/index.scss';
+@forward './third-party-UIs/material/index.scss';
 @import './third-party-UIs/bootstrap/index.scss';
-@import './third-party-UIs/ckeditor/index.scss';
-@import './third-party-UIs/highlight-js/index.scss';
-@import './third-party-UIs/material/index.scss';

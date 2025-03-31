@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use 'shared' as shared;
+
 ul {
-  padding-left: map-get($spacers, 5);
+  padding-left: map.get(shared.$spacers, 5);
 }

@@ -1,2 +1,2 @@
-@import './base/index.scss';
-@import './components/index.scss';
+@forward './components/index.scss';
+@forward './base/index.scss';

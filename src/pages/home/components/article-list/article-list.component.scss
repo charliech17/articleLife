@@ -1,4 +1,5 @@
-@import 'shared';
+@use 'sass:map';
+@use 'shared' as *;
 
 .cus-article__container {
   width: 80%;
@@ -9,7 +10,7 @@
   @include media-breakpoint-up(md) {
     padding: 48px;
     display: flex;
-    gap: map-get($spacers, 5);
+    gap: map.get($spacers, 5);
     align-items: center;
     justify-content: center;
 

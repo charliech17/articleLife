@@ -1,7 +1,7 @@
-@import 'shared';
+@use 'shared' as shared;
 
 .cus-article-outline__container {
   &.active {
-    color: $al-color-blue;
+    color: shared.$al-color-blue;
   }
 }

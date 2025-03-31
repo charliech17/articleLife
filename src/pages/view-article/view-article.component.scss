@@ -1,4 +1,5 @@
-@import './shared';
+@use 'shared' as shared;
+@use 'sass:map';
 
 $view-article-container-box-shadow:
   0 8px 16px 0 rgba(0, 0, 0, 0.3),
@@ -13,16 +14,16 @@ $view-article-divider-color: #694d4d;
 
 .cus-view-article-container {
   // Add padding to the container
-  padding: 0 map-get($spacers, 4);
+  padding: 0 map.get(shared.$spacers, 4);
   height: auto;
 
   // 用陰影和背景色來強調文章容器
   border-radius: 16px;
 
-  @include media-breakpoint-up(md) {
+  @include shared.media-breakpoint-up(md) {
     box-shadow: $view-article-container-box-shadow;
-    margin: map-get($spacers, 3);
-    padding: map-get($spacers, 6);
+    margin: map.get(shared.$spacers, 3);
+    padding: map.get(shared.$spacers, 6);
   }
 
   .cus-article-category {
@@ -33,8 +34,8 @@ $view-article-divider-color: #694d4d;
     // add background color to the intro
     background-color: $view-article-intro-background-color;
     color: $view-article-intro-color;
-    padding: map-get($spacers, 3);
-    border-radius: map-get($spacers, 3);
+    padding: map.get(shared.$spacers, 3);
+    border-radius: map.get(shared.$spacers, 3);
   }
 
   .cus-article-content {
@@ -48,9 +49,9 @@ $view-article-divider-color: #694d4d;
   }
 
   .ck-content ::ng-deep pre {
-    margin-top: map-get($spacers, 2);
+    margin-top: map.get(shared.$spacers, 2);
     background-color: $view-article-code-block;
-    border-radius: map-get($spacers, 3);
+    border-radius: map.get(shared.$spacers, 3);
     border-color: $view-article-code-block;
     box-shadow: $view-article-code-block-shadow;
     line-height: 1.5rem;
