@@ -48,6 +48,7 @@ export class EditorComponent {
     const { CustomVideoPlugin } = await import('./custom-video-plugin.class');
 
     this.config = {
+      licenseKey: 'GPL',
       toolbar: [
         'undo',
         'redo',

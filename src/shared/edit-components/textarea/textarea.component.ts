@@ -31,7 +31,9 @@ export class TextareaComponent implements OnInit {
   private onInputChangeResizeTextarea(): void {
     effect(() => {
       this.$iptTextarea();
-      this.resizeTextarea();
+      setTimeout(() => {
+        this.resizeTextarea();
+      }, 0);
     });
   }
 
