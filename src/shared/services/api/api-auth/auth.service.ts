@@ -2,7 +2,7 @@ import { GlobalStore } from './../../../stores/global.store';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IUserAuthInfo } from '../../../models/user.modes';
-import { tap } from 'rxjs';
+import { concatMap, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ApiAuthService {
@@ -36,6 +36,9 @@ export class ApiAuthService {
     return this.#http.post(`${this.apiUrl}/logout`, null).pipe(
       tap(() => {
         this.#globalStore.clearUserInfo();
+      }),
+      concatMap(() => {
+        return this.#http.get<{ responseData: string }>(`${this.apiUrl}/renewCsrfTokenIfNotExist`);
       }),
     );
   }
