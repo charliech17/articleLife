@@ -10,7 +10,6 @@ export class RouterService {
   constructor() {
     this.#router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(event => {
       this.$$currentPath.set(this.#router.url);
-      console.log(event);
     });
   }
 
