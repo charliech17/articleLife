@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IArticleDetails, IArticleInfo } from '../../../models/article.models';
+import { IArticleDetails, IArticleInfo, IPageArticleDetails } from '../../../models/article.models';
 
 @Injectable({
   providedIn: 'root',
@@ -44,5 +44,15 @@ export class ApiArticleService {
   // 是否可以編輯文章
   checkCanEditArticle(articleId: string, userLoginId: string): Observable<boolean> {
     return this.#http.post<boolean>(`${this.apiUrl}/canEdit`, { articleId, userLoginId });
+  }
+
+  getArticleByPage(currentPage: number, categoryId: string) {
+    return this.#http.post<{ responseData: IPageArticleDetails }>(`${this.apiUrl}/pageArticles`, {
+      title: null,
+      createTime: null,
+      categoryId,
+      currentPage,
+      pageSize: 5,
+    });
   }
 }
