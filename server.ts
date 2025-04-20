@@ -52,6 +52,7 @@ export function app(): express.Express {
         url: `${protocol}://${headers.host}${originalUrl.replace(basePath, '')}`,
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        inlineCriticalCss: false,
       })
       .then(html => res.send(html))
       .catch(err => next(err));
