@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-poc',
   standalone: true,
-  imports: [TranslateDirective, CKEditorModule],
+  imports: [CKEditorModule],
   templateUrl: './poc.component.html',
   styleUrl: './poc.component.scss',
 })

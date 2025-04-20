@@ -15,16 +15,7 @@ import { IArticleDetails } from '../../../../shared/models/article.models';
 @Component({
   selector: 'app-article-meta-data-setting-dialog',
   standalone: true,
-  imports: [
-    MatDialogTitle,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogClose,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatFormFieldModule, MatSelectModule, FormsModule, ReactiveFormsModule],
   templateUrl: './article-meta-data-setting-dialog.component.html',
   styleUrl: './article-meta-data-setting-dialog.component.scss',
 })
