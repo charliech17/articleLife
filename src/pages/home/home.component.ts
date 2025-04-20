@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, switchMap, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -11,21 +13,22 @@ import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleFilesService = inject(ApiArticleFilesService);
 
   $$allArticles = signal<IArticleInfo[]>([]);
   $$allArticleFiles = signal<IArticleFile[]>([]);
   articleIdMapFile: Map<number, IArticleFile[]> = new Map();
+  $currentPage = signal(0);
+  $currentPageForDisplay = computed(() => this.$currentPage() + 1);
+  $totalPages = signal(1);
+  $categoryId = signal<string>('');
+  #router = inject(Router);
+  #route = inject(ActivatedRoute);
+  #destroy$ = new Subject<void>();
 
   constructor() {
-    this.#apiArticleService.getAllArticleInfo().subscribe((res: IArticleInfo[]) => {
-      // sort res by modified time
-      this.sortByLastModifyTime(res);
-      this.$$allArticles.set(res);
-    });
-
     this.#apiArticleFilesService.getAllArticleFiles().subscribe(res => {
       this.$$allArticleFiles.set(res);
       res.forEach(file => {
@@ -35,6 +38,49 @@ export class HomeComponent {
           this.articleIdMapFile.set(file.articleId, [file]);
         }
       });
+    });
+
+    this.#route.queryParamMap
+      .pipe(
+        switchMap(queryParam => {
+          const currentPage = queryParam.get('page') || 1;
+          this.$currentPage.set(Number(currentPage) - 1);
+          this.$categoryId.set(queryParam.get('categoryId') || '');
+          return this.#apiArticleService.getArticleByPage(this.$currentPage(), this.$categoryId());
+        }),
+        takeUntil(this.#destroy$),
+      )
+      .subscribe(res => {
+        this.sortByLastModifyTime(res.responseData.content);
+        this.$$allArticles.set(res.responseData.content);
+        this.$currentPage.set(res.responseData.currentPage);
+        this.$totalPages.set(res.responseData.totalPages);
+        if (typeof window !== 'undefined') {
+          setTimeout(() => {
+            window.scrollTo(0, 0);
+          }, 0);
+        }
+      });
+  }
+
+  ngOnInit(): void {
+    console.log('ngOnInit');
+  }
+
+  ngOnDestroy(): void {
+    this.#destroy$.next();
+    this.#destroy$.complete();
+  }
+
+  navigatePage(incrementNum: number): void {
+    if (this.$currentPage() + incrementNum < 0 || this.$currentPage() + incrementNum >= this.$totalPages()) {
+      return;
+    }
+
+    this.#router.navigate([], {
+      relativeTo: this.#route,
+      queryParams: { page: this.$currentPageForDisplay() + incrementNum },
+      queryParamsHandling: 'merge',
     });
   }
 

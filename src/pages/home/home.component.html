@@ -1,5 +1,14 @@
 <div class="mx-auto w-100">
   <div class="p-md-6">
     <app-article-list [iptArticleList]="{ articleList: $$allArticles(), articleIdMapFile }"></app-article-list>
+    <div class="mt-4 p-4 d-flex align-items-center justify-content-between">
+      <button class="al-btn-sm" (click)="navigatePage(-1)">上一頁</button>
+      <div class="d-flex align-items-center gap-2">
+        <input type="number" [value]="$currentPageForDisplay()" />
+        <span> / </span>
+        <span>{{ $totalPages() }}</span>
+      </div>
+      <button class="al-btn-sm" (click)="navigatePage(1)">下一頁</button>
+    </div>
   </div>
 </div>

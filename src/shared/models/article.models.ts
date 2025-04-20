@@ -1,3 +1,10 @@
+export interface IPageArticleDetails {
+  content: IArticleDetails[];
+  currentPage: number;
+  totalPages: number;
+  totalElements: number;
+}
+
 export interface IArticleDetails {
   id: number;
   title: string;
