@@ -384,6 +384,14 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
   onDocumentMouseUp(event: MouseEvent): void {
     if (this.isResizing) {
       this.isResizing = false;
+      // 在開始縮放時，清除之前的計時器，避免多次儲存
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+
+      this.debounceTimer = setTimeout(() => {
+        this.saveState();
+      }, 300);
     }
   }
 
