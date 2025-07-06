@@ -1,0 +1,22 @@
+<div class="toolbar">
+  <button (click)="transformBlock('h2')" title="標題 1">H1</button>
+  <button (click)="transformBlock('h3')" title="標題 2">H2</button>
+  <button (click)="transformBlock('p')" title="段落">P</button>
+  <button (click)="transformBlock('li')" title="li">li</button>
+  <button (click)="manualInsertImage($event)" title="插入圖片">插入圖片</button>
+</div>
+
+<div class="editor-container">
+  <div
+    [innerHTML]="$$articleContent()"
+    [contentEditable]="$input().isEditMode"
+    (input)="handleEditorInput($event)"
+    (keydown)="handleKeyDown($event)"
+    (click)="onEditorClick($event)"
+    #editor
+  ></div>
+
+  <div #resizer class="image-resizer" [hidden]="!activeImage">
+    <div class="resize-handle bottom-right" (mousedown)="onResizeHandleMouseDown($event)"></div>
+  </div>
+</div>
