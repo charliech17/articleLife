@@ -74,7 +74,7 @@ export class EditArticleComponent {
           effectRef.destroy(); // only run once
         }
       },
-      { allowSignalWrites: true, manualCleanup: true },
+      { manualCleanup: true },
     );
   }
 

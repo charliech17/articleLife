@@ -134,17 +134,14 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    effect(
-      () => {
-        if (this.$$articleDetails().articleContent) {
-          setTimeout(() => {
-            this.observeHeaderPositions();
-            this.highlightCodeBlock();
-          }, 0);
-        }
-      },
-      { allowSignalWrites: true },
-    );
+    effect(() => {
+      if (this.$$articleDetails().articleContent) {
+        setTimeout(() => {
+          this.observeHeaderPositions();
+          this.highlightCodeBlock();
+        }, 0);
+      }
+    });
   }
 
   setHeaderIdAndExtract(): IArticleOutline[] {
