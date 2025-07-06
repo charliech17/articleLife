@@ -34,6 +34,7 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
   private undoStack: EditorState[] = [];
   private redoStack: EditorState[] = [];
   private isComposing = false;
+  canEdit = false;
 
   // 用來防止在執行 undo/redo 時，又觸發新的歷史紀錄儲存
   private isRestoringState = false;
@@ -53,6 +54,7 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
       this.initBlockElements();
       // 儲存編輯器的初始狀態
       this.saveState();
+      this.canEdit = true;
     }, 0);
   }
 
@@ -234,8 +236,11 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
       selection.addRange(newRange);
     }
     this.editorRef.nativeElement.focus();
-    this.handleUpdateEditor();
-    this.saveState();
+
+    setTimeout(() => {
+      this.handleUpdateEditor();
+      this.saveState();
+    }, 0); // 確保 DOM 更新完成
   }
 
   manualInsertImage(event: Event): void {
@@ -276,8 +281,10 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
     selection.addRange(newRange);
 
     this.editorRef.nativeElement.focus();
-    this.handleUpdateEditor();
-    this.saveState();
+    setTimeout(() => {
+      this.handleUpdateEditor();
+      this.saveState();
+    }, 0); // 確保 DOM 更新完成
   }
 
   /**

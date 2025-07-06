@@ -9,7 +9,7 @@
 <div class="editor-container">
   <div
     [innerHTML]="$$articleContent()"
-    [contentEditable]="$input().isEditMode"
+    [contentEditable]="$input().isEditMode && canEdit"
     (input)="handleEditorInput($event)"
     (keydown)="handleKeyDown($event)"
     (click)="onEditorClick($event)"
