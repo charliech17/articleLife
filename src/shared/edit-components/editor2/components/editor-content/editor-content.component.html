@@ -13,6 +13,8 @@
     (input)="handleEditorInput($event)"
     (keydown)="handleKeyDown($event)"
     (click)="onEditorClick($event)"
+    (compositionstart)="onCompositionStart($event)"
+    (compositionend)="onCompositionEnd($event)"
     #editor
   ></div>
 

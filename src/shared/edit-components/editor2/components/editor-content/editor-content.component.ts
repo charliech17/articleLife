@@ -11,7 +11,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { IEditorContentInput } from '../../interface/editor.interface';
+import { EditorState, IEditorContentInput, SerializableRange } from '../../interface/editor.interface';
 
 @Component({
   selector: 'app-editor-content',
@@ -31,6 +31,16 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
   private startWidth = 0;
   private startHeight = 0;
 
+  private undoStack: EditorState[] = [];
+  private redoStack: EditorState[] = [];
+  private isComposing = false;
+
+  // 用來防止在執行 undo/redo 時，又觸發新的歷史紀錄儲存
+  private isRestoringState = false;
+
+  // 用於實現延遲儲存的計時器
+  private debounceTimer: any = null;
+
   $input = input.required<IEditorContentInput>({ alias: 'input' });
   $output = output<string>({ alias: 'output' });
 
@@ -41,6 +51,8 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
     // 預設給一個段落，讓使用者可以馬上開始輸入
     setTimeout(() => {
       this.initBlockElements();
+      // 儲存編輯器的初始狀態
+      this.saveState();
     }, 0);
   }
 
@@ -55,54 +67,8 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
     this.handleUpdateEditor();
   }
 
-  // handleKeyDown(event: KeyboardEvent): void {
-  //   if (event.key === 'Enter' && !event.shiftKey) {
-  //     // 1. 防止瀏覽器預設行為
-  //     event.preventDefault();
-
-  //     const selection = window.getSelection();
-  //     if (!selection || selection.rangeCount === 0) return;
-
-  //     const range = selection.getRangeAt(0);
-  //     const editorNode = this.editorRef.nativeElement;
-
-  //     // 2. 核心邏輯：找到游標所在的頂層塊級元素 (在這裡是 <p>)
-  //     let currentBlock = range.startContainer;
-
-  //     // 從游標所在的節點 (可能是文字節點) 開始往上層遍歷
-  //     // 直到找到編輯器 div 的直接子元素為止，這個子元素就是我們當前的段落
-  //     while (currentBlock.parentNode !== editorNode) {
-  //       currentBlock = currentBlock.parentNode!;
-  //       if (!currentBlock) {
-  //         console.error('無法找到當前的塊級元素。');
-  //         return;
-  //       }
-  //     }
-
-  //     // 3. 建立新的 <p> 元素 (與之前相同)
-  //     const newParagraph = this.renderer.createElement('p');
-  //     const br = this.renderer.createElement('br');
-  //     this.renderer.appendChild(newParagraph, br);
-
-  //     // 4. 將新段落插入到當前段落的後面
-  //     // renderer.insertBefore 需要父節點、要插入的節點、以及參考節點
-  //     // currentBlock.nextSibling 是當前段落的下一個兄弟節點
-  //     // 如果 nextSibling 存在，就插在它前面；如果不存在 (即當前段落是最後一個)，insertBefore 會像 appendChild 一樣運作
-  //     this.renderer.insertBefore(editorNode, newParagraph, currentBlock.nextSibling);
-
-  //     // 5. 將游標移動到新建立的 <p> 元素內部 (與之前相同)
-  //     const newRange = document.createRange();
-  //     newRange.setStart(newParagraph, 0);
-  //     newRange.collapse(true);
-
-  //     selection.removeAllRanges();
-  //     selection.addRange(newRange);
-
-  //     this.handleUpdateEditor();
-  //   }
-  // }
   handleKeyDown(event: KeyboardEvent): void {
-    if (event.key === 'Enter' && !event.shiftKey) {
+    if (event.key === 'Enter' && !event.shiftKey && !this.isComposing) {
       event.preventDefault();
 
       const selection = window.getSelection();
@@ -169,7 +135,40 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
     this.$$articleContent.set(this.$input().content);
   }
 
+  onCompositionStart(event: CompositionEvent): void {
+    this.isComposing = true;
+  }
+
+  onCompositionEnd(event: CompositionEvent): void {
+    this.isComposing = false;
+    // 在組合輸入結束時，儲存當前狀態
+    this.debounceTimer = setTimeout(() => {
+      this.handleEditorInput(event);
+    }, 300);
+  }
+
   handleEditorInput(event: Event): void {
+    // 如果正在執行 undo/redo，則直接返回，不儲存新狀態
+    if (this.isRestoringState) {
+      return;
+    }
+
+    // 如果正在組合輸入，則不儲存狀態
+    if (this.isComposing) {
+      return;
+    }
+
+    // 清除上一個計時器
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+
+    // 設立一個新的計時器，延遲 100 毫秒後執行儲存
+    this.debounceTimer = setTimeout(() => {
+      console.log('State saved'); // 用於除錯
+      this.saveState();
+    }, 300);
+
     // 當編輯器內容變更時，更新 signal
     const target = event.target as HTMLElement;
     const text = target.innerHTML.trim();
@@ -236,6 +235,7 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
     }
     this.editorRef.nativeElement.focus();
     this.handleUpdateEditor();
+    this.saveState();
   }
 
   manualInsertImage(event: Event): void {
@@ -277,6 +277,7 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
 
     this.editorRef.nativeElement.focus();
     this.handleUpdateEditor();
+    this.saveState();
   }
 
   /**
@@ -383,6 +384,198 @@ export class EditorContentComponent implements OnInit, AfterViewInit {
   onDocumentMouseUp(event: MouseEvent): void {
     if (this.isResizing) {
       this.isResizing = false;
+    }
+  }
+
+  /**
+   * 儲存當前編輯器的狀態到 undoStack
+   */
+  private saveState(): void {
+    const currentState: EditorState = {
+      html: this.editorRef.nativeElement.innerHTML,
+      selection: this.serializeSelection(),
+    };
+
+    const lastState = this.undoStack[this.undoStack.length - 1];
+    if (lastState && lastState.html === currentState.html) {
+      return;
+    }
+
+    this.undoStack.push(currentState);
+    this.redoStack = [];
+
+    if (this.undoStack.length > 100) {
+      this.undoStack.shift();
+    }
+  }
+
+  /**
+   * 還原上一步操作
+   */
+  undo(): void {
+    if (this.undoStack.length <= 1) {
+      // 如果只剩下初始狀態，則無法再還原
+      return;
+    }
+
+    // 從 undo 堆疊中彈出當前狀態，並存入 redo 堆疊
+    const currentState = this.undoStack.pop()!;
+    this.redoStack.push(currentState);
+
+    // 取得要恢復的狀態 (即 undo 堆疊現在的頂部)
+    const stateToRestore = this.undoStack[this.undoStack.length - 1];
+    this.restoreState(stateToRestore);
+  }
+
+  /**
+   * 重做上一步被還原的操作
+   */
+  redo(): void {
+    if (this.redoStack.length === 0) {
+      return;
+    }
+
+    // 從 redo 堆疊中彈出狀態來恢復
+    const stateToRestore = this.redoStack.pop()!;
+    // 將這個狀態推回 undo 堆疊
+    this.undoStack.push(stateToRestore);
+
+    this.restoreState(stateToRestore);
+  }
+
+  /**
+   * 將編輯器恢復到指定狀態，並設定旗標避免循環觸發
+   * @param state HTML 字串狀態
+   */
+  private restoreState(state: EditorState): void {
+    this.isRestoringState = true;
+    this.editorRef.nativeElement.innerHTML = state.html;
+
+    // 【關鍵】使用 setTimeout 來確保 DOM 已經完全被瀏覽器渲染完畢
+    // 然後才去還原選區，否則 getNodeByPath 可能會找不到節點
+    setTimeout(() => {
+      this.deserializeSelection(state.selection);
+      // 在下一個事件循環中重設旗標
+      this.isRestoringState = false;
+    }, 0);
+  }
+
+  @HostListener('keydown', ['$event'])
+  handleUndoRedo(event: KeyboardEvent): void {
+    // 檢查是否按下了 Ctrl 鍵 (在 Mac 上是 Meta 鍵)
+    if (event.ctrlKey || event.metaKey) {
+      switch (event.key.toLowerCase()) {
+        case 'z':
+          event.preventDefault(); // 阻止瀏覽器的預設還原行為
+          if (event.shiftKey) {
+            // Ctrl+Shift+Z 執行重做
+            this.redo();
+          } else {
+            // Ctrl+Z 執行還原
+            this.undo();
+          }
+          break;
+
+        case 'y':
+          // Ctrl+Y 也是常見的重做快速鍵
+          event.preventDefault();
+          this.redo();
+          break;
+      }
+    }
+  }
+
+  /**
+   * 根據一個節點，計算出它相對於根節點的索引路徑
+   * @param root 根節點 (編輯器 div)
+   * @param node 要計算路徑的目標節點
+   * @returns 索引路徑陣列，例如 [0, 1, 0]
+   */
+  private getNodePath(root: Node, node: Node): number[] {
+    const path: number[] = [];
+    let currentNode: Node | null = node;
+    while (currentNode && currentNode !== root) {
+      const parent = currentNode.parentNode as ParentNode | null;
+      if (parent) {
+        // NodeList 並沒有 indexOf，所以我們需要手動查找
+        const index = Array.from(parent.childNodes).indexOf(currentNode as ChildNode);
+        path.push(index);
+        currentNode = parent;
+      } else {
+        break;
+      }
+    }
+    return path.reverse();
+  }
+
+  /**
+   * 根據索引路徑，從根節點找到目標節點
+   * @param root 根節點
+   * @param path 索引路徑陣列
+   * @returns 找到的 DOM 節點，或 null
+   */
+  private getNodeByPath(root: Node, path: number[]): Node | null {
+    let node: Node = root;
+    for (const index of path) {
+      if (node && node.childNodes[index]) {
+        node = node.childNodes[index];
+      } else {
+        return null;
+      }
+    }
+    return node;
+  }
+
+  /**
+   * 將當前的 window.getSelection() 序列化成可儲存的格式
+   * @returns SerializableRange 物件或 null
+   */
+  private serializeSelection(): SerializableRange | null {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) {
+      return null;
+    }
+
+    const range = selection.getRangeAt(0);
+    const root = this.editorRef.nativeElement;
+
+    // 檢查選區是否真的在編輯器內部
+    if (!root.contains(range.startContainer) || !root.contains(range.endContainer)) {
+      return null;
+    }
+
+    const startPath = this.getNodePath(root, range.startContainer);
+    const endPath = this.getNodePath(root, range.endContainer);
+
+    return {
+      startPath,
+      startOffset: range.startOffset,
+      endPath,
+      endOffset: range.endOffset,
+    };
+  }
+
+  /**
+   * 將序列化的選區資訊還原成一個真正的 Range 物件
+   * @param savedRange 儲存的 SerializableRange 物件
+   */
+  private deserializeSelection(savedRange: SerializableRange | null): void {
+    if (!savedRange) return;
+
+    const selection = window.getSelection();
+    if (!selection) return;
+
+    const root = this.editorRef.nativeElement;
+    const startContainer = this.getNodeByPath(root, savedRange.startPath);
+    const endContainer = this.getNodeByPath(root, savedRange.endPath);
+
+    if (startContainer && endContainer) {
+      const range = document.createRange();
+      range.setStart(startContainer, savedRange.startOffset);
+      range.setEnd(endContainer, savedRange.endOffset);
+
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 }
