@@ -1,6 +1,5 @@
 import { Editor, FileLoader, UploadAdapter } from 'ckeditor5';
-import { AppUtil } from '../../utils/app.util';
-import { API_CONSTANTS } from '../../../config/api.constants';
+import { EditorUploadImpl } from './editor-upload-impl';
 
 export function uploadAdapterPluginFactory(editor: Editor) {
   editor.plugins.get('FileRepository').createUploadAdapter = loader => {
@@ -24,10 +23,10 @@ class UploadAdapterImpl implements UploadAdapter {
     return this.loader.file.then(
       (file: File) =>
         new Promise((resolve, reject) => {
-          const processedFile = this._doProcessFile(file);
-          this._initRequest();
-          this._initListeners(resolve, reject, processedFile);
-          this._sendRequest(processedFile);
+          const xhr = (this.xhr = new XMLHttpRequest());
+          const instance = this.editor.config.get('editorUploadImplInstance') as EditorUploadImpl;
+          instance.setDataFromEditor(this.editor, file, resolve, reject, this.loader, xhr);
+          instance.upload();
         }),
     );
   }
@@ -37,97 +36,5 @@ class UploadAdapterImpl implements UploadAdapter {
     if (this.xhr) {
       this.xhr.abort();
     }
-  }
-
-  // Initializes the XMLHttpRequest object using the URL passed to the constructor.
-  _initRequest() {
-    const xhr = (this.xhr = new XMLHttpRequest());
-
-    // Note that your request may look different. It is up to you and your editor
-    // integration to choose the right communication channel. This example uses
-    // a POST request with JSON as a data structure but your configuration
-    // could be different.
-    xhr.open('POST', `${this.editor.config.get('baseApiUrl')}/api/files/upload`, true);
-    xhr.withCredentials = true;
-    xhr.responseType = 'json';
-    const xsrfToken = AppUtil.getCookie(API_CONSTANTS.XSRF_TOKEN);
-    if (xsrfToken) {
-      // 設置到 header 中
-      xhr.setRequestHeader(API_CONSTANTS.X_XSRF_TOKEN, xsrfToken);
-    }
-  }
-
-  // Initializes XMLHttpRequest listeners.
-  _initListeners(resolve: (value: unknown) => void, reject: (reason?: any) => void, file: File) {
-    if (!this.xhr) {
-      throw new Error('No xhr, please call _initRequest() first');
-    }
-
-    const xhr = this.xhr;
-    const loader = this.loader;
-    const genericErrorText = `Couldn't upload file: ${file.name}.`;
-
-    xhr.addEventListener('error', () => reject(genericErrorText));
-    xhr.addEventListener('abort', () => reject());
-    xhr.addEventListener('load', () => {
-      const response = xhr.response;
-      // This example assumes the XHR server's "response" object will come with
-      // an "error" which has its own "message" that can be passed to reject()
-      // in the upload promise.
-      //
-      // Your integration may handle upload errors in a different way so make sure
-      // it is done properly. The reject() function must be called when the upload fails.
-      if (!response || response.error) {
-        return reject(response && response.error ? response.error.message : genericErrorText);
-      }
-
-      // If the upload is successful, resolve the upload promise with an object containing
-      // at least the "default" URL, pointing to the image on the server.
-      // This URL will be used to display the image in the content. Learn more in the
-      // UploadAdapter#upload documentation.
-      resolve({
-        default: response.fileUrl,
-      });
-    });
-
-    // Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded
-    // properties which are used e.g. to display the upload progress bar in the editor
-    // user interface.
-    if (xhr.upload) {
-      xhr.upload.addEventListener('progress', (evt: ProgressEvent) => {
-        if (evt.lengthComputable) {
-          loader.uploadTotal = evt.total;
-          loader.uploaded = evt.loaded;
-        }
-      });
-    }
-  }
-
-  // Prepares the data and sends the request.
-  _sendRequest(file: File) {
-    if (!this.xhr) {
-      throw new Error('No xhr, please call _initRequest() first');
-    }
-
-    // Prepare the form data.
-    const data = new FormData();
-    data.append('articleId', this.editor.config.get('articleId') as string);
-    data.append('file', file);
-
-    // Important note: This is the right place to implement security mechanisms
-    // like authentication and CSRF protection. For instance, you can use
-    // XMLHttpRequest.setRequestHeader() to set the request headers containing
-    // the CSRF token generated earlier by your application.
-
-    // Send the request.
-    this.xhr.send(data);
-  }
-
-  _doProcessFile(file: File) {
-    const dateStr = new Date().toISOString().replaceAll(":", "_").replaceAll(".", "_");
-    const namedFile = new File([file], dateStr + '_' + file.name, {
-      type: file.type,
-    });
-    return namedFile;
   }
 }

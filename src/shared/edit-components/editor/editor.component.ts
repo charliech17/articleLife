@@ -3,6 +3,7 @@ import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { ClassicEditor } from 'ckeditor5';
 import { uploadAdapterPluginFactory } from './editor-upload.adapter';
 import { EnvService } from '../../services/env.service';
+import { EditorUploadImpl } from './editor-upload-impl';
 // import { initializeEditor } from './editor-plugins';
 
 @Component({
@@ -100,6 +101,7 @@ export class EditorComponent {
       },
       articleId: this.$inputEditor().uploadId,
       baseApiUrl: this.#envService.baseApiUrl,
+      editorUploadImplInstance: this.$inputEditor().instance,
     };
     this.editor = ClassicEditor;
     this.cdr.detectChanges();
@@ -114,6 +116,7 @@ export class EditorComponent {
 interface IEditorInput {
   initContent: string;
   uploadId: number;
+  instance: EditorUploadImpl;
 }
 
 type IEditorConfig = typeof ClassicEditor.defaultConfig & ICustomEditorConfig;
@@ -121,4 +124,5 @@ type IEditorConfig = typeof ClassicEditor.defaultConfig & ICustomEditorConfig;
 export interface ICustomEditorConfig {
   articleId: number;
   baseApiUrl: string;
+  editorUploadImplInstance: EditorUploadImpl;
 }
