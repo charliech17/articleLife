@@ -2,7 +2,7 @@ import { GlobalStore } from './../../shared/stores/global.store';
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
-import { IArticleDetails, IArticleFile, IArticleResponses } from '../../shared/models/article.models';
+import { ArticleTypePublic, IArticleDetails, IArticleFile, IArticleResponses } from '../../shared/models/article.models';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
@@ -48,6 +48,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     createdTime: '',
     categories: '',
     viewTimes: 0,
+    articleType: ArticleTypePublic,
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
   $$fileFirstImageUrl = signal<string | null>(null);
@@ -82,16 +83,17 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   getArticleContents() {
     this.#route.paramMap.subscribe(params => {
       const id = params.get('id');
+      const isPrivate = this.#router.url.includes('view-private-article');
       if (id) {
-        this.apiGetArticleContents(id);
+        this.apiGetArticleContents(id, isPrivate || false);
       }
     });
   }
 
-  apiGetArticleContents(id: string): void {
+  apiGetArticleContents(id: string, isPrivate: boolean): void {
     // 使用forkJoin '同時' 打兩支 API
     forkJoin({
-      articleContent: this.#apiArticleService.getArticle(id),
+      articleContent: isPrivate ? this.#apiArticleService.getMyPrivateArticle(id) : this.#apiArticleService.getArticle(id),
       articleAndFile: this.#apiArticleFilesService.getFileAndArticleByArticleId(id),
       articleResponses: this.#apiArticleResponseService.getArticleResponses(id),
     }).subscribe({

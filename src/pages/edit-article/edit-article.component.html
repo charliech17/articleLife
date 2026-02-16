@@ -27,11 +27,17 @@
       <app-edit-title [iptEditTitle]="{ title: '文章內容', isHide: false, color: 'blue' }"></app-edit-title>
     </div>
     <div class="mt-3">
-      <app-editor
-        class="al-ckeditor"
-        (optEditorChange)="handleUpdateEditor($event)"
-        [inputEditor]="{ initContent: $$currentArticleDetails().articleContent, uploadId: $$currentArticleDetails().id }"
-      ></app-editor>
+      @if (editorUploadImplInstance) {
+        <app-editor
+          class="al-ckeditor"
+          (optEditorChange)="handleUpdateEditor($event)"
+          [inputEditor]="{
+            initContent: $$currentArticleDetails().articleContent,
+            uploadId: $$currentArticleDetails().id,
+            instance: editorUploadImplInstance,
+          }"
+        ></app-editor>
+      }
     </div>
   }
 </div>

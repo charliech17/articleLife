@@ -32,11 +32,11 @@
         <button class="al-btn-sm ms-2" (click)="goToEditArticle()">編輯文章</button>
       }
 
-      @if ($router().url === '/home') {
+      @if ($router().url.split('?')[0] === '/home') {
         <button class="al-btn-sm ms-2" (click)="goAddNewArticle()">新增文章</button>
       }
     } @else {
-      @if ($router().url === '/login') {
+      @if ($router().url.split('?')[0] === '/login') {
         <button class="al-btn-sm" (click)="goToHome()">返回首頁</button>
       } @else {
         <button class="al-btn-sm" (click)="goToLogin()">登入</button>

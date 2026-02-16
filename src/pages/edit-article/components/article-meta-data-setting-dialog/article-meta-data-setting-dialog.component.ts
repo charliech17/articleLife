@@ -1,3 +1,4 @@
+import { ArticleTypePrivate, ArticleTypePublic } from './../../../../shared/models/article.models';
 import { Component, inject, signal } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -25,10 +26,14 @@ export class ArticleMetaDataSettingDialogComponent {
 
   $$articleCategories = signal<IArticleCategory[]>([]);
   selectCategoryControl = new FormControl<IArticleCategory[]>([], { nonNullable: true });
+  $$allArticleTypes = signal<string[]>([]);
+  selectArticleTypeControl = new FormControl<IArticleDetails['articleType']>(this.#dialogInput.selectedArticleType, { nonNullable: true });
 
   ngOnInit(): void {
     this.$$articleCategories.set(this.#dialogInput.allCategories);
     this.selectCategoryControl.setValue(this.#dialogInput.selectedCategories);
+    this.$$allArticleTypes.set(this.#dialogInput.allArticleTypes);
+    this.selectArticleTypeControl.setValue(this.#dialogInput.selectedArticleType);
   }
 
   closeDialog(confirmData: IConfirmCategories | null): void {
@@ -41,7 +46,7 @@ export class ArticleMetaDataSettingDialogComponent {
   }
 
   saveCategories(): void {
-    this.closeDialog({ selectedCategories: this.selectCategoryControl.value });
+    this.closeDialog({ selectedCategories: this.selectCategoryControl.value, selectedArticleType: this.selectArticleTypeControl.value });
   }
 }
 
@@ -52,10 +57,13 @@ export interface IArticleCategory {
 
 export interface IConfirmCategories {
   selectedCategories: IArticleCategory[];
+  selectedArticleType: IArticleDetails['articleType'];
 }
 
 export interface IDialogInput {
   articleDetails: IArticleDetails;
   allCategories: IArticleCategory[];
   selectedCategories: IArticleCategory[];
+  allArticleTypes: [typeof ArticleTypePublic, typeof ArticleTypePrivate];
+  selectedArticleType: IArticleDetails['articleType'];
 }

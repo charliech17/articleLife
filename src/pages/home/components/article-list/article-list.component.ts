@@ -35,6 +35,10 @@ export class ArticleListComponent implements AfterViewInit {
 
   viewArticleDetail(articleId: string | number) {
     this.#storageService.setSessionItem(ESessionStorageItems.articleYPosition, window.scrollY.toString());
+    if (this.$iptArticleList().isPrivateArticle) {
+      this.#router.navigate(['/view-private-article', articleId]);
+      return;
+    }
     this.#router.navigate(['/view-article', articleId]);
   }
 
@@ -59,4 +63,5 @@ export class ArticleListComponent implements AfterViewInit {
 interface IIptArticleList {
   articleList: IArticleInfo[];
   articleIdMapFile: Map<number, IArticleFile[]>;
+  isPrivateArticle?: boolean;
 }

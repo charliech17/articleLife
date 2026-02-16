@@ -22,5 +22,9 @@ export const routes: Routes = [
     path: 'view-article/:id',
     loadComponent: () => import('../pages/view-article/view-article.component').then(m => m.ViewArticleComponent),
   },
+  {
+    path: 'view-private-article/:id',
+    loadComponent: () => import('../pages/view-article/view-article.component').then(m => m.ViewArticleComponent),
+  },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];

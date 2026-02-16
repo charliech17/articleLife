@@ -1,6 +1,14 @@
 <div class="mx-auto w-100">
   <div class="p-md-6">
-    <app-article-list [iptArticleList]="{ articleList: $$allArticles(), articleIdMapFile }"></app-article-list>
+    @if ($$isShowPrivateArticles()) {
+      <h2 class="text-center mb-4">私人文章列表</h2>
+      <app-article-list
+        [iptArticleList]="{ articleList: $$privateArticles(), articleIdMapFile, isPrivateArticle: true }"
+      ></app-article-list>
+    } @else {
+      <h2 class="text-center mb-4">文章列表</h2>
+      <app-article-list [iptArticleList]="{ articleList: $$allArticles(), articleIdMapFile, isPrivateArticle: false }"></app-article-list>
+    }
     <div class="mt-4 p-4 d-flex align-items-center justify-content-between">
       <button class="al-btn-sm" (click)="navigatePage(-1)">上一頁</button>
       <div class="d-flex align-items-center gap-2">

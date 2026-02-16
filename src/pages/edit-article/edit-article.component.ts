@@ -1,3 +1,4 @@
+import { ArticleTypePrivate, ArticleTypePublic } from './../../shared/models/article.models';
 import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { TextareaComponent } from '../../shared/edit-components/textarea/textarea.component';
 import { EditorComponent } from '../../shared/edit-components/editor/editor.component';
@@ -16,6 +17,8 @@ import { ApiArticleCategoriesService } from '../../shared/services/api/api-artic
 import { of, switchMap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GlobalStore } from '../../shared/stores/global.store';
+import { EditorUploadImpl } from '../../shared/edit-components/editor/editor-upload-impl';
+import { EnvService } from '../../shared/services/env.service';
 
 @Component({
   selector: 'app-edit-article',
@@ -28,6 +31,7 @@ export class EditArticleComponent {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleCategoriesService = inject(ApiArticleCategoriesService);
   #globalStore = inject(GlobalStore);
+  #envService = inject(EnvService);
   #route = inject(ActivatedRoute);
   #router = inject(Router);
   #matDialog = inject(MatDialog);
@@ -43,12 +47,14 @@ export class EditArticleComponent {
     lastModifyTime: '',
     createdTime: '',
     viewTimes: 0,
+    articleType: ArticleTypePublic,
   });
 
   $$allCategories = signal<IArticleCategory[]>([]);
   $$currSelectedCategories = signal<IArticleCategory[]>([]);
   $isEditArticle = signal<boolean>(false);
   isLoading = true;
+  editorUploadImplInstance: EditorUploadImpl | null = null;
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -118,16 +124,27 @@ export class EditArticleComponent {
   }
 
   private apiLoadArticle(id: string): void {
-    this.#apiArticleService.getArticle(id).subscribe({
+    this.#apiArticleService.getEditArticle(id).subscribe({
       next: (res: IArticleDetails) => {
         this.$$currentArticleDetails.update(prev => ({ ...prev, ...res }));
         this.isLoading = false;
         this.apiGetAllCategories(res);
+
+        this.editorUploadImplInstance = new EditorUploadImpl(
+          res.id.toString(),
+          this.#envService.baseApiUrl,
+          this.uploadSuccessCallback.bind(this),
+        );
       },
       error: err => {
         console.error('Failed to fetch article', err);
       },
     });
+  }
+
+  private uploadSuccessCallback(): void {
+    console.log('File uploaded successfully');
+    this.saveArticle();
   }
 
   private apiGetAllCategories(articleDetailRes: IArticleDetails | null): void {
@@ -182,6 +199,8 @@ export class EditArticleComponent {
         articleDetails: this.$$currentArticleDetails(),
         allCategories: this.$$allCategories(),
         selectedCategories: this.$$currSelectedCategories(),
+        allArticleTypes: [ArticleTypePublic, ArticleTypePrivate],
+        selectedArticleType: this.$$currentArticleDetails().articleType,
       },
     });
 
@@ -192,7 +211,9 @@ export class EditArticleComponent {
       }
 
       this.$$currSelectedCategories.set(categories.selectedCategories);
+      this.$$currentArticleDetails.update(prev => ({ ...prev, articleType: categories.selectedArticleType }));
       this.updateMetaDataOrCreateArticle(categories);
+      this.saveArticle();
     });
   }
 

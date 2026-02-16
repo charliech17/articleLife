@@ -31,6 +31,10 @@ export class ApiArticleService {
     return this.#http.get<IArticleDetails>(`${this.apiUrl}/${id}`);
   }
 
+  getEditArticle(id: string): Observable<IArticleDetails> {
+    return this.#http.post<IArticleDetails>(`${this.apiUrl}/edit/${id}`, {});
+  }
+
   // 更新文章
   updateArticle(articleDetail: any): Observable<any> {
     return this.#http.put(`${this.apiUrl}/${articleDetail.id}`, articleDetail, { responseType: 'text' });
@@ -54,5 +58,22 @@ export class ApiArticleService {
       currentPage,
       pageSize: 5,
     });
+  }
+
+  getMyPrivateArticleByPage(currentPage: number) {
+    return this.#http.post<{ responseData: IPageArticleDetails }>(`${this.apiUrl}/myPrivate/pageArticles`, {
+      title: null,
+      createTime: null,
+      currentPage,
+      pageSize: 5,
+    });
+  }
+
+  getMyPrivateArticles(): Observable<IArticleDetails[]> {
+    return this.#http.post<IArticleDetails[]>(`${this.apiUrl}/myPrivate`, {});
+  }
+
+  getMyPrivateArticle(id: string): Observable<IArticleDetails> {
+    return this.#http.post<IArticleDetails>(`${this.apiUrl}/myPrivate/${id}`, {});
   }
 }

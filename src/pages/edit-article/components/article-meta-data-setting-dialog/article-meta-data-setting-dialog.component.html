@@ -1,13 +1,26 @@
-<h2 mat-dialog-title>選擇文章類型</h2>
 <mat-dialog-content>
-  <mat-form-field>
-    <mat-label>文章類型</mat-label>
-    <mat-select [formControl]="selectCategoryControl" multiple>
-      @for (category of $$articleCategories(); track category) {
-        <mat-option [value]="category">{{ category.categoryName }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <h2 mat-dialog-title class="text-center">選擇文章標籤</h2>
+  <div>
+    <mat-form-field>
+      <mat-label>文章標籤</mat-label>
+      <mat-select [formControl]="selectCategoryControl" multiple>
+        @for (category of $$articleCategories(); track category) {
+          <mat-option [value]="category">{{ category.categoryName }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <h2 mat-dialog-title class="text-center">選擇文章類型</h2>
+  <div>
+    <mat-form-field class="mt-4">
+      <mat-label>文章類型</mat-label>
+      <mat-select [formControl]="selectArticleTypeControl">
+        @for (type of $$allArticleTypes(); track type) {
+          <mat-option [value]="type">{{ type }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog(null)">關閉</button>

@@ -1,10 +1,11 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, switchMap, takeUntil } from 'rxjs';
+import { GlobalStore } from '../../shared/stores/global.store';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,12 @@ import { Subject, switchMap, takeUntil } from 'rxjs';
 export class HomeComponent implements OnInit, OnDestroy {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleFilesService = inject(ApiArticleFilesService);
+  #globalStore = inject(GlobalStore);
 
   $$allArticles = signal<IArticleInfo[]>([]);
+  $$privateArticles = signal<IArticleInfo[]>([]);
+  $$isShowPrivateArticles = signal<boolean>(false);
+
   $$allArticleFiles = signal<IArticleFile[]>([]);
   articleIdMapFile: Map<number, IArticleFile[]> = new Map();
   $currentPage = signal(0);
@@ -43,23 +48,42 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.#route.queryParamMap
       .pipe(
         switchMap(queryParam => {
+          const isPrivate = queryParam.get('articleType') == 'PRIVATE';
+          this.$$isShowPrivateArticles.set(isPrivate);
+
           const currentPage = queryParam.get('page') || 1;
           this.$currentPage.set(Number(currentPage) - 1);
           this.$categoryId.set(queryParam.get('categoryId') || '');
-          return this.#apiArticleService.getArticleByPage(this.$currentPage(), this.$categoryId());
+
+          if (isPrivate) {
+            return this.#apiArticleService.getMyPrivateArticleByPage(this.$currentPage());
+          } else {
+            return this.#apiArticleService.getArticleByPage(this.$currentPage(), this.$categoryId());
+          }
         }),
         takeUntil(this.#destroy$),
       )
-      .subscribe(res => {
-        this.sortByLastModifyTime(res.responseData.content);
-        this.$$allArticles.set(res.responseData.content);
-        this.$currentPage.set(res.responseData.currentPage);
-        this.$totalPages.set(res.responseData.totalPages);
-        if (typeof window !== 'undefined') {
-          setTimeout(() => {
-            window.scrollTo(0, 0);
-          }, 0);
-        }
+      .subscribe({
+        next: res => {
+          this.sortByLastModifyTime(res.responseData.content);
+          if (this.$$isShowPrivateArticles()) {
+            this.$$privateArticles.set(res.responseData.content);
+          } else {
+            this.$$allArticles.set(res.responseData.content);
+          }
+          this.$currentPage.set(res.responseData.currentPage);
+          this.$totalPages.set(res.responseData.totalPages);
+          if (typeof window !== 'undefined') {
+            setTimeout(() => {
+              window.scrollTo(0, 0);
+            }, 0);
+          }
+        },
+        error: err => {
+          if ((err.status === 401, !this.#globalStore.isLoggedIn())) {
+            this.#router.navigate(['/login'], { replaceUrl: true });
+          }
+        },
       });
   }
 

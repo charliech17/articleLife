@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { IUserAuthInfo } from '../models/user.modes';
 import { ICurrentViewArticle } from '../models/article.models';
 
@@ -11,6 +11,7 @@ export class GlobalStore {
   userInfo = this._userInfo.asReadonly();
   hasStoreFinishedInit = this._hasStoreFinishedInit.asReadonly();
   currentArticleInfo = this._currentArticleInfo.asReadonly();
+  isLoggedIn = computed(() => this._userInfo().id !== -1);
 
   getInitialUserInfo(): IUserAuthInfo {
     return {

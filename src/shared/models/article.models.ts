@@ -5,6 +5,9 @@ export interface IPageArticleDetails {
   totalElements: number;
 }
 
+export const ArticleTypePublic = 'PUBLIC';
+export const ArticleTypePrivate = 'PRIVATE';
+
 export interface IArticleDetails {
   id: number;
   title: string;
@@ -15,6 +18,7 @@ export interface IArticleDetails {
   lastModifyTime: string | null;
   viewTimes: number;
   categories: string | null;
+  articleType: typeof ArticleTypePublic | typeof ArticleTypePrivate;
 }
 
 export type IArticleInfo = Omit<IArticleDetails, 'articleContent'>;

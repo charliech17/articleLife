@@ -13,6 +13,7 @@ export class ActionSectionComponent {
   optSave = output<void>();
   optPublish = output<void>();
   optEditCategories = output<void>();
+  optEditArticleType = output<void>();
 
   receiveDoSave(): void {
     this.optSave.emit();
