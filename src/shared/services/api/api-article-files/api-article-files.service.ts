@@ -10,13 +10,13 @@ export class ApiArticleFilesService {
   private apiUrl = 'api/files';
 
   allArticleFiles: IArticleFile[] = [];
-  constructor() {}
-
-  getAllArticleFiles() {
-    return this.#http.get<IArticleFile[]>(this.apiUrl);
-  }
+  constructor() { }
 
   getFileAndArticleByArticleId(articleId: string) {
     return this.#http.get<IArticleFile | null>(`${this.apiUrl}/${articleId}`);
+  }
+
+  getAllArticleFilesByArticleIds(ids: number[]) {
+    return this.#http.post<IArticleFile[]>(`${this.apiUrl}/article`, { articleIds: [...ids] });
   }
 }

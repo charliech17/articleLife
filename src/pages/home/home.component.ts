@@ -4,7 +4,7 @@ import { ArticleListComponent } from './components/article-list/article-list.com
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, switchMap, takeUntil } from 'rxjs';
+import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
 
 @Component({
@@ -23,8 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   $$privateArticles = signal<IArticleInfo[]>([]);
   $$isShowPrivateArticles = signal<boolean>(false);
 
-  $$allArticleFiles = signal<IArticleFile[]>([]);
-  articleIdMapFile: Map<number, IArticleFile[]> = new Map();
+  $$articleIdMapFile = signal<Map<number, IArticleFile[]>>(new Map());
   $currentPage = signal(0);
   $currentPageForDisplay = computed(() => this.$currentPage() + 1);
   $totalPages = signal(1);
@@ -34,17 +33,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   #destroy$ = new Subject<void>();
 
   constructor() {
-    this.#apiArticleFilesService.getAllArticleFiles().subscribe(res => {
-      this.$$allArticleFiles.set(res);
-      res.forEach(file => {
-        if (this.articleIdMapFile.has(file.articleId)) {
-          this.articleIdMapFile.get(file.articleId)!.push(file);
-        } else {
-          this.articleIdMapFile.set(file.articleId, [file]);
-        }
-      });
-    });
-
     this.#route.queryParamMap
       .pipe(
         switchMap(queryParam => {
@@ -55,22 +43,44 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.$currentPage.set(Number(currentPage) - 1);
           this.$categoryId.set(queryParam.get('categoryId') || '');
 
-          if (isPrivate) {
-            return this.#apiArticleService.getMyPrivateArticleByPage(this.$currentPage());
-          } else {
-            return this.#apiArticleService.getArticleByPage(this.$currentPage(), this.$categoryId());
-          }
+          const articles$ = isPrivate
+            ? this.#apiArticleService.getMyPrivateArticleByPage(this.$currentPage())
+            : this.#apiArticleService.getArticleByPage(this.$currentPage(), this.$categoryId());
+
+          return articles$.pipe(
+            switchMap(res => {
+              const articles = res.responseData.content;
+              if (articles.length === 0) {
+                return of({ res, filesList: [] as IArticleFile[] });
+              }
+
+              const articleIds = articles.map(article => article.id);
+              return this.#apiArticleFilesService.getAllArticleFilesByArticleIds(articleIds).pipe(
+                map(filesList => ({ res, filesList }))
+              );
+            })
+          );
         }),
         takeUntil(this.#destroy$),
       )
       .subscribe({
-        next: res => {
-          this.sortByLastModifyTime(res.responseData.content);
+        next: ({ res, filesList }) => {
+          const articles = res.responseData.content;
+          this.sortByLastModifyTime(articles);
           if (this.$$isShowPrivateArticles()) {
-            this.$$privateArticles.set(res.responseData.content);
+            this.$$privateArticles.set(articles);
           } else {
-            this.$$allArticles.set(res.responseData.content);
+            this.$$allArticles.set(articles);
           }
+
+          const newMap = new Map<number, IArticleFile[]>();
+          filesList.forEach(file => {
+            const list = newMap.get(file.articleId) || [];
+            list.push(file);
+            newMap.set(file.articleId, list);
+          });
+          this.$$articleIdMapFile.set(newMap);
+
           this.$currentPage.set(res.responseData.currentPage);
           this.$totalPages.set(res.responseData.totalPages);
           if (typeof window !== 'undefined') {
