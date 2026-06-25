@@ -1,10 +1,11 @@
-import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnDestroy, OnInit, signal, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
+import { map, of, Subject, switchMap, takeUntil, EMPTY } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
 
 @Component({
@@ -18,6 +19,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleFilesService = inject(ApiArticleFilesService);
   #globalStore = inject(GlobalStore);
+  #platformId = inject(PLATFORM_ID);
 
   $$allArticles = signal<IArticleInfo[]>([]);
   $$privateArticles = signal<IArticleInfo[]>([]);
@@ -42,6 +44,11 @@ export class HomeComponent implements OnInit, OnDestroy {
           const currentPage = queryParam.get('page') || 1;
           this.$currentPage.set(Number(currentPage) - 1);
           this.$categoryId.set(queryParam.get('categoryId') || '');
+
+          // 當判斷為伺服器端 (SSR) 且正在請求「私有文章」時，會直接回傳 EMPTY 中斷這一次的資料流，不發送 API 請求（從而避免了 401 錯誤）
+          if (isPrivate && !isPlatformBrowser(this.#platformId)) {
+            return EMPTY;
+          }
 
           const articles$ = isPrivate
             ? this.#apiArticleService.getMyPrivateArticleByPage(this.$currentPage())
@@ -97,9 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {
-    console.log('ngOnInit');
-  }
+  ngOnInit(): void { }
 
   ngOnDestroy(): void {
     this.#destroy$.next();
