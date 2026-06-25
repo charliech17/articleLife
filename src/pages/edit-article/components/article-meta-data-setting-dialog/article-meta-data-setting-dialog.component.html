@@ -21,6 +21,12 @@
       </mat-select>
     </mat-form-field>
   </div>
+  <h2 mat-dialog-title class="text-center">其他設定</h2>
+  <div class="d-flex justify-content-center mt-2">
+    <mat-slide-toggle [formControl]="isCarouselEnabledControl">
+      啟用圖片/影片自動輪播
+    </mat-slide-toggle>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog(null)">關閉</button>

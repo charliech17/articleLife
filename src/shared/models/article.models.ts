@@ -19,6 +19,11 @@ export interface IArticleDetails {
   viewTimes: number;
   categories: string | null;
   articleType: typeof ArticleTypePublic | typeof ArticleTypePrivate;
+  extField1: string | null;
+}
+
+export interface ExtField1JSON {
+  isCarouselEnabled: boolean;
 }
 
 export type IArticleInfo = Omit<IArticleDetails, 'articleContent'>;

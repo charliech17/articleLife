@@ -14,6 +14,11 @@
     align-items: center;
     justify-content: center;
 
+    > div {
+      flex: 1;
+      min-width: 0;
+    }
+
     &:nth-child(even) {
       flex-direction: row-reverse;
     }
@@ -48,6 +53,37 @@
 
     @include media-breakpoint-up(md) {
       height: 400px;
+    }
+  }
+
+  .cus-carousel-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+
+    @include media-breakpoint-up(md) {
+      height: 400px;
+    }
+  }
+
+  ngb-carousel {
+    display: block;
+    width: 100%;
+
+    .carousel-inner {
+      border-radius: 4px;
+      overflow: hidden;
+      height: 300px;
+
+      @include media-breakpoint-up(md) {
+        height: 400px;
+      }
+    }
+
+    .carousel-item {
+      height: 100%;
+      width: 100%;
     }
   }
 }

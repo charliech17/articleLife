@@ -49,6 +49,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     categories: '',
     viewTimes: 0,
     articleType: ArticleTypePublic,
+    extField1: null,
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
   $$fileFirstImageUrl = signal<string | null>(null);
