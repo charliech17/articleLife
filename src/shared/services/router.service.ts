@@ -1,6 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { ArticleTypePrivate } from '../models/article.models';
 
 @Injectable({ providedIn: 'root' })
 export class RouterService {
@@ -15,5 +16,17 @@ export class RouterService {
 
   getCurrentPath(): string {
     return this.$$currentPath();
+  }
+
+  navigateHome(): void {
+    const urlTree = this.#router.parseUrl(this.#router.url);
+    const isPrivateHome = urlTree.queryParams['articleType'] === ArticleTypePrivate;
+    const isPrivateArticle = this.#router.url.startsWith('/view-private-article');
+
+    if (isPrivateHome || isPrivateArticle) {
+      this.#router.navigate(['/home'], { queryParams: { articleType: ArticleTypePrivate } });
+    } else {
+      this.#router.navigate(['/home']);
+    }
   }
 }

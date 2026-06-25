@@ -2,7 +2,7 @@ import { Component, computed, effect, inject, OnDestroy, OnInit, signal } from '
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
-import { IArticleFile, IArticleInfo } from '../../shared/models/article.models';
+import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.#route.queryParamMap
       .pipe(
         switchMap(queryParam => {
-          const isPrivate = queryParam.get('articleType') == 'PRIVATE';
+          const isPrivate = queryParam.get('articleType') == ArticleTypePrivate;
           this.$$isShowPrivateArticles.set(isPrivate);
 
           const currentPage = queryParam.get('page') || 1;

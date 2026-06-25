@@ -20,6 +20,6 @@ export class SideNavComponent {
   $isHomePage = computed(() => this.#routerService.getCurrentPath().startsWith('/home'));
 
   goBackHome(): void {
-    this.#router.navigate(['/home']);
+    this.#routerService.navigateHome();
   }
 }

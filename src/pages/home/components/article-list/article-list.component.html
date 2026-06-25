@@ -17,20 +17,20 @@
     <div class="text-center mt-3">
       @if (hasMedia.length > 1) {
       <ngb-carousel [interval]="getCarouselInterval(article)" [showNavigationArrows]="false" [animation]="true"
-        [pauseOnHover]="true" [wrap]="true">
+        [showNavigationIndicators]="isCarouselEnabled(article)" [pauseOnHover]="true" [wrap]="true">
         @for (file of hasMedia; track file.id) {
-          <ng-template ngbSlide [id]="'slide-' + article.id + '-' + file.id">
-            @if (isImage(file.fileType)) {
-            <div class="cus-carousel-slide">
-              <img class="cus-article-media" [src]="file.fileUrl" alt="" />
-            </div>
-            }
-            @if (isVideo(file.fileType)) {
-            <div class="cus-carousel-slide w-100">
-              <video class="cus-article-media" (click)="$event.stopPropagation()" [src]="file.fileUrl" controls></video>
-            </div>
-            }
-          </ng-template>
+        <ng-template ngbSlide [id]="'slide-' + article.id + '-' + file.id">
+          @if (isImage(file.fileType)) {
+          <div class="cus-carousel-slide">
+            <img class="cus-article-media" [src]="file.fileUrl" alt="" />
+          </div>
+          }
+          @if (isVideo(file.fileType)) {
+          <div class="cus-carousel-slide w-100">
+            <video class="cus-article-media" (click)="$event.stopPropagation()" [src]="file.fileUrl" controls></video>
+          </div>
+          }
+        </ng-template>
         }
       </ngb-carousel>
       } @else {

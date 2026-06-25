@@ -12,6 +12,7 @@ import { ArticleResponseComponent } from './components/article-response/article-
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 import { ScrollService } from '../../shared/services/scroll.service';
 import { SEOService } from '../../shared/services/seo.service';
+import { RouterService } from '../../shared/services/router.service';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { forkJoin } from 'rxjs';
 
@@ -32,6 +33,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #articleOutlineService = inject(ArticleOutlineService);
   #scrollService = inject(ScrollService);
   #globalStore = inject(GlobalStore);
+  #routerService = inject(RouterService);
   #platformId = inject(PLATFORM_ID);
   #seoService = inject(SEOService);
 
@@ -104,7 +106,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
       },
       error: error => {
         console.error(error);
-        this.#router.navigate(['/home']);
+        this.#routerService.navigateHome();
       },
     });
   }
