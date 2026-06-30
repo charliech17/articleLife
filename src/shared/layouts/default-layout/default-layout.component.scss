@@ -2,8 +2,7 @@
 @use 'shared' as shared;
 
 .cus-default-layout-container {
-  margin: auto;
-  max-width: map.get(shared.$grid-breakpoints, xxl);
+  width: 100%;
   min-height: 100vh;
   background-color: #f8f9fa; // Match global body bg
 
