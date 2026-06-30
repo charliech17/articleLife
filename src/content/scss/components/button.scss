@@ -1,17 +1,21 @@
 @use 'shared' as shared;
 
 @mixin al-btn-base {
-  background-color: shared.$darker-primary;
-  color: #fff;
-  border: 1px solid shared.$darker-primary;
-  border-radius: 8px;
-  padding: 5px 12px;
-  font-size: 14px;
+  background-color: #ffffff;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  border-radius: 9999px;
+  padding: 6px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
   &:hover {
-    background-color: shared.$primary;
-    border-color: shared.$primary;
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #111827;
   }
 }
 
