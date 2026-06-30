@@ -1,0 +1,110 @@
+@use 'shared' as shared;
+
+.al-filter-section {
+  padding: 16px 0;
+}
+
+.al-filter-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.al-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.al-chip {
+  background-color: #f3f4f6;
+  border: 1px solid transparent;
+  color: #4b5563;
+  padding: 8px 16px;
+  border-radius: 9999px; // Pill shape
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: #e5e7eb;
+    color: #111827;
+  }
+
+  &.active {
+    background-color: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  }
+}
+
+.al-action-btn {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+
+  &:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+  }
+}
+
+.al-action-btn-admin {
+  background-color: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+
+  &:hover {
+    background-color: #fee2e2;
+    border-color: #f87171;
+  }
+}
+
+.al-mobile-filter-toggle {
+  width: 100%;
+  background-color: #f8f9fa;
+  border: 1px solid #e5e7eb;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 16px;
+
+  @include shared.media-breakpoint-up(md) {
+    display: none !important;
+  }
+
+  .al-toggle-icon {
+    transition: transform 0.3s ease;
+    &.expanded {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.al-filter-content {
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  @include shared.media-breakpoint-up(md) {
+    display: block !important;
+  }
+}

@@ -20,15 +20,18 @@ export class ArticleFilterComponent {
   #globalStore = inject(GlobalStore);
   $$articleCategories = signal<IArticleCategory[]>([]);
   $$articleTypes = signal<IArticleDetails['articleType'] | '...'>('...');
+  $$categoryId = signal<string>('');
   $isLoggedIn = this.#globalStore.isLoggedIn;
   $isAdmin = this.#globalStore.isAdmin;
   ArticleTypePublic = ArticleTypePublic;
   ArticleTypePrivate = ArticleTypePrivate;
+  isFilterExpanded = signal(false);
 
   constructor() {
     this.#route.queryParamMap.subscribe(queryParam => {
       const articleType = queryParam.get('articleType') as IArticleDetails['articleType'] | null;
       this.$$articleTypes.set(articleType || ArticleTypePublic);
+      this.$$categoryId.set(queryParam.get('categoryId') || '');
     });
 
     this.#apiArticleCategoriesService.getAllArticleCategories().subscribe({
@@ -39,6 +42,10 @@ export class ArticleFilterComponent {
         console.error(err);
       },
     });
+  }
+
+  toggleFilter(): void {
+    this.isFilterExpanded.set(!this.isFilterExpanded());
   }
 
   toggleCategory(categoryId: string): void {

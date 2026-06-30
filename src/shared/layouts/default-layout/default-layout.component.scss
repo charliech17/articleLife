@@ -4,14 +4,30 @@
 .cus-default-layout-container {
   margin: auto;
   max-width: map.get(shared.$grid-breakpoints, xxl);
+  min-height: 100vh;
+  background-color: #f8f9fa; // Match global body bg
 
   @include shared.media-breakpoint-up(md) {
     display: flex;
   }
 
   .cus-side-nav-container {
+    background-color: #ffffff;
+    box-shadow: 2px 0 16px rgba(0,0,0,0.04);
+    border-right: 1px solid rgba(0,0,0,0.05);
+    z-index: 10;
+    position: relative;
+
     @include shared.media-breakpoint-up(md) {
-      width: 300px;
+      width: 320px;
+      min-height: 100vh;
+      flex-shrink: 0;
     }
+  }
+
+  .w-100 {
+    // The main content area
+    flex: 1;
+    min-width: 0; // Prevent flex item from overflowing
   }
 }

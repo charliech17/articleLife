@@ -1,22 +1,24 @@
-<div class="mx-auto w-100">
-  <div class="p-md-6">
+<div class="al-home-container">
+  <div class="al-home-content">
     @if ($$isShowPrivateArticles()) {
-      <h2 class="text-center mb-4">私人文章列表</h2>
+      <h2 class="al-page-title">私人文章列表</h2>
       <app-article-list
         [iptArticleList]="{ articleList: $$privateArticles(), articleIdMapFile: $$articleIdMapFile(), isPrivateArticle: true }"
       ></app-article-list>
     } @else {
-      <h2 class="text-center mb-4">文章列表</h2>
+      <h2 class="al-page-title">文章列表</h2>
       <app-article-list [iptArticleList]="{ articleList: $$allArticles(), articleIdMapFile: $$articleIdMapFile(), isPrivateArticle: false }"></app-article-list>
     }
-    <div class="mt-4 p-4 d-flex align-items-center justify-content-between">
-      <button class="al-btn-sm" (click)="navigatePage(-1)">上一頁</button>
-      <div class="d-flex align-items-center gap-2">
-        <input type="number" [value]="$currentPageForDisplay()" />
-        <span> / </span>
-        <span>{{ $totalPages() }}</span>
+    
+    <!-- Modern Pagination -->
+    <div class="al-pagination-wrapper">
+      <button class="al-btn-pagination" (click)="navigatePage(-1)" [disabled]="$currentPageForDisplay() <= 1">上一頁</button>
+      <div class="al-pagination-info">
+        <input type="number" class="al-pagination-input" [value]="$currentPageForDisplay()" />
+        <span class="al-pagination-separator"> / </span>
+        <span class="al-pagination-total">{{ $totalPages() }}</span>
       </div>
-      <button class="al-btn-sm" (click)="navigatePage(1)">下一頁</button>
+      <button class="al-btn-pagination" (click)="navigatePage(1)" [disabled]="$currentPageForDisplay() >= $totalPages()">下一頁</button>
     </div>
   </div>
 </div>

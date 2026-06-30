@@ -1,21 +1,25 @@
-<div class="d-flex flex-column justify-content-center align-items-center">
+<div class="al-article-list-wrapper">
   @for (article of $iptArticleList().articleList; track $index) {
   @let hasMedia = $iptArticleList().articleIdMapFile.get(article.id);
 
-  <div class="cus-article__container text-break al-pointer-cursor" (click)="viewArticleDetail(article.id)">
-    <div>
-      <div>
-        <h2 class="text-center">{{ article.title }}</h2>
-        <div class="text-center mt-2 al-text-blue">
-          <span class="me-2">分類: {{ article.categories | categories }}</span>
-          <span>時間: {{ article.lastModifyTime ?? article.createdTime | date: 'YYYY-MM-dd HH:mm:ss' }}</span>
-        </div>
+  <div class="cus-article__container al-pointer-cursor" (click)="viewArticleDetail(article.id)">
+    <div class="al-article-content">
+      <h2 class="al-article-title">{{ article.title }}</h2>
+      <div class="al-article-meta">
+        <span class="al-meta-item">
+          <!-- FontAwesome icon could go here -->
+          分類: {{ article.categories | categories }}
+        </span>
+        <span class="al-meta-item">
+          <!-- FontAwesome icon could go here -->
+          時間: {{ article.lastModifyTime ?? article.createdTime | date: 'YYYY-MM-dd HH:mm:ss' }}
+        </span>
       </div>
-      <p class="mt-2 text-primary" [class]="{ 'text-center': !hasMedia }">{{ article.intro }}</p>
+      <p class="al-article-intro">{{ article.intro }}</p>
     </div>
-    @if (hasMedia) {
-    <div class="text-center mt-3">
-      @if (hasMedia.length > 1) {
+
+    <div class="al-article-media-container">
+      @if (hasMedia && hasMedia.length > 1) {
       <ngb-carousel [interval]="getCarouselInterval(article)" [showNavigationArrows]="false" [animation]="true"
         [showNavigationIndicators]="isCarouselEnabled(article)" [pauseOnHover]="true" [wrap]="true">
         @for (file of hasMedia; track file.id) {
@@ -33,7 +37,7 @@
         </ng-template>
         }
       </ngb-carousel>
-      } @else {
+      } @else if (hasMedia && hasMedia.length === 1) {
       @let articleFile = hasMedia[0];
       @if (isImage(articleFile.fileType)) {
       <img class="cus-article-media" [src]="articleFile.fileUrl" alt="" />
@@ -44,9 +48,10 @@
           controls></video>
       </div>
       }
+      } @else {
+      <img class="cus-article-media" [src]="'https://picsum.photos/seed/' + article.id + '/400/300'" alt="Default Random Image" />
       }
     </div>
-    }
   </div>
   }
 </div>
