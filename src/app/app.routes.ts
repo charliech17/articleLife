@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { adminGuard } from '../core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'home', loadComponent: () => import('../pages/home/home.component').then(m => m.HomeComponent) },
@@ -25,6 +26,11 @@ export const routes: Routes = [
   {
     path: 'view-private-article/:id',
     loadComponent: () => import('../pages/view-article/view-article.component').then(m => m.ViewArticleComponent),
+  },
+  {
+    path: 'manage-motto',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-motto/manage-motto.component').then(m => m.ManageMottoComponent),
   },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];

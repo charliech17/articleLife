@@ -3,25 +3,32 @@
   <div class="mt-2 d-flex flex-wrap gap-2">
     <button mat-raised-button (click)="toggleCategory('')">全部類型</button>
     @for (category of $$articleCategories(); track $index) {
-      <button mat-raised-button (click)="toggleCategory(category.categoryId)">{{ category.categoryName }}</button>
+    <button mat-raised-button (click)="toggleCategory(category.categoryId)">{{ category.categoryName }}</button>
     }
   </div>
 
   @if ($isLoggedIn()) {
-    <h3 class="mt-5">公開/私人文章</h3>
-    <div class="mt-2 d-flex flex-wrap gap-2">
-      <button mat-raised-button (click)="toggleArticleType()">
-        <div>
-          切換成
-          @if ($$articleTypes() === ArticleTypePublic) {
-            私人文章
-          } @else if ($$articleTypes() === ArticleTypePrivate) {
-            公開文章
-          } @else {
-            ...
-          }
-        </div>
-      </button>
-    </div>
+  <h3 class="mt-5">公開/私人文章</h3>
+  <div class="mt-2 d-flex flex-wrap gap-2">
+    <button mat-raised-button (click)="toggleArticleType()">
+      <div>
+        切換成
+        @if ($$articleTypes() === ArticleTypePublic) {
+        私人文章
+        } @else if ($$articleTypes() === ArticleTypePrivate) {
+        公開文章
+        } @else {
+        ...
+        }
+      </div>
+    </button>
+  </div>
+  }
+
+  @if ($isAdmin()) {
+  <div>
+    <h3 class="mt-5">前往管理介面</h3>
+    <button mat-raised-button (click)="goAdminPage()">前往管理頁面</button>
+  </div>
   }
 </div>

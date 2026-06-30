@@ -12,6 +12,7 @@ export class GlobalStore {
   hasStoreFinishedInit = this._hasStoreFinishedInit.asReadonly();
   currentArticleInfo = this._currentArticleInfo.asReadonly();
   isLoggedIn = computed(() => this._userInfo().id !== -1);
+  isAdmin = computed(() => this._userInfo().isAdmin);
 
   getInitialUserInfo(): IUserAuthInfo {
     return {
@@ -24,6 +25,7 @@ export class GlobalStore {
       lastLogin: '',
       isActive: false,
       createdAt: '',
+      isAdmin: false,
     };
   }
 

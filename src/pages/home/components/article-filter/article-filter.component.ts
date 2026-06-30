@@ -21,6 +21,7 @@ export class ArticleFilterComponent {
   $$articleCategories = signal<IArticleCategory[]>([]);
   $$articleTypes = signal<IArticleDetails['articleType'] | '...'>('...');
   $isLoggedIn = this.#globalStore.isLoggedIn;
+  $isAdmin = this.#globalStore.isAdmin;
   ArticleTypePublic = ArticleTypePublic;
   ArticleTypePrivate = ArticleTypePrivate;
 
@@ -58,5 +59,9 @@ export class ArticleFilterComponent {
       queryParams,
       queryParamsHandling: 'replace',
     });
+  }
+
+  goAdminPage(): void {
+    this.#router.navigate(['manage-motto']);
   }
 }

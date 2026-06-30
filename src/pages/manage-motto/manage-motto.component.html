@@ -1,0 +1,68 @@
+<div class="motto-container">
+  <h2 class="page-title">座右銘管理 (Manage Mottos)</h2>
+  
+  <mat-card class="form-card mat-elevation-z3">
+    <mat-card-header>
+      <mat-card-title>{{ isEditing ? '編輯座右銘 (Edit)' : '新增座右銘 (Add)' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" class="motto-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>座右銘 (Motto)</mat-label>
+          <input matInput type="text" name="motto" [(ngModel)]="currentMotto.motto" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>出處 (Reference)</mat-label>
+          <input matInput type="text" name="reference" [(ngModel)]="currentMotto.reference" required>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">{{ isEditing ? '更新 (Update)' : '新增 (Add)' }}</button>
+          <button mat-button type="button" *ngIf="isEditing" (click)="resetForm()">取消 (Cancel)</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="table-card mt-4 mat-elevation-z3">
+    <table mat-table [dataSource]="mottos" class="full-width-table">
+      
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let m"> {{m.id}} </td>
+      </ng-container>
+
+      <!-- Motto Column -->
+      <ng-container matColumnDef="motto">
+        <th mat-header-cell *matHeaderCellDef> 座右銘 (Motto) </th>
+        <td mat-cell *matCellDef="let m"> {{m.motto}} </td>
+      </ng-container>
+
+      <!-- Reference Column -->
+      <ng-container matColumnDef="reference">
+        <th mat-header-cell *matHeaderCellDef> 出處 (Reference) </th>
+        <td mat-cell *matCellDef="let m"> {{m.reference}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> 操作 (Actions) </th>
+        <td mat-cell *matCellDef="let m">
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" (click)="editMotto(m)" class="action-btn">編輯</button>
+            <button mat-stroked-button color="warn" (click)="deleteMotto(m.id)" class="action-btn">刪除</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <div *ngIf="!mottos || mottos.length === 0" class="no-data">
+      目前沒有座右銘資料 (No mottos found).
+    </div>
+  </mat-card>
+</div>

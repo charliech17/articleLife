@@ -3,3 +3,8 @@ export interface IMotto {
   motto: string;
   reference: string;
 }
+
+export interface IMottoDTO {
+  motto: string;
+  reference: string;
+}
