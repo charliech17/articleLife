@@ -12,6 +12,7 @@
         <div class="al-news-card">
           <div class="al-card-header">
             <span class="al-date">{{ news.publishedDate | date:'MM/dd' }}</span>
+            <span class="al-time">{{ news.publishedDate | date:'HH:mm:ss' }}</span>
           </div>
           <div class="al-card-body">
             <h4 class="al-news-card-title">{{ news.title }}</h4>
