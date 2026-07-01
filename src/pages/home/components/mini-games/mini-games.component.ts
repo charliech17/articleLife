@@ -13,11 +13,12 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
 
   $$isLightOn = signal<boolean>(true);
   $$isFlickering = signal<boolean>(false);
-  $$characterPos = signal<{x: number, y: number}>({x: 0, y: 0});
+  $$showLight = signal<boolean>(false);
+  $$characterPos = signal<{ x: number, y: number }>({ x: 0, y: 0 });
   $$characterState = signal<'idle' | 'ready' | 'walk' | 'attack'>('idle');
   $$characterDirection = signal<number>(1);
   $$chatBubble = signal<string>(''); // For the fun feature
-  
+
   $$mouseX = signal<number>(0);
   $$mouseY = signal<number>(0);
 
@@ -39,7 +40,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       if (pos) {
         try {
           this.$$characterPos.set(JSON.parse(pos));
-        } catch(e) {}
+        } catch (e) { }
       }
     }
   }
@@ -76,7 +77,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       event.preventDefault();
       return;
     }
-    
+
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
       this.#keysDown.add(event.key);
       if (this.$$characterState() !== 'walk') {
@@ -126,19 +127,19 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       let moved = false;
       if (this.#keysDown.has('ArrowUp')) { pos.y -= step; moved = true; }
       if (this.#keysDown.has('ArrowDown')) { pos.y += step; moved = true; }
-      if (this.#keysDown.has('ArrowLeft')) { 
-        pos.x -= step; 
+      if (this.#keysDown.has('ArrowLeft')) {
+        pos.x -= step;
         this.$$characterDirection.set(-1);
-        moved = true; 
+        moved = true;
       }
-      if (this.#keysDown.has('ArrowRight')) { 
-        pos.x += step; 
+      if (this.#keysDown.has('ArrowRight')) {
+        pos.x += step;
         this.$$characterDirection.set(1);
-        moved = true; 
+        moved = true;
       }
-      
+
       if (moved) {
-        this.$$characterPos.set({...pos});
+        this.$$characterPos.set({ ...pos });
         if (isPlatformBrowser(this.#platformId)) {
           localStorage.setItem('al_character_pos', JSON.stringify(this.$$characterPos()));
         }
@@ -155,7 +156,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
 
   simulateKey(key: string, isDown: boolean, event: Event): void {
     event.preventDefault();
-    const mockEvent = { key, preventDefault: () => {} } as KeyboardEvent;
+    const mockEvent = { key, preventDefault: () => { } } as KeyboardEvent;
     if (isDown) {
       this.onCharacterKeyDown(mockEvent);
     } else {

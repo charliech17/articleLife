@@ -70,6 +70,10 @@
   display: flex;
   justify-content: center;
 
+  @media (max-width: 768px) {
+    display: none;
+  }
+
   .al-character-sprite {
     width: 64px;
     height: 64px;
@@ -184,7 +188,7 @@
 
   &.show {
     @media (max-width: 768px) {
-      display: flex;
+      display: none;
     }
   }
 

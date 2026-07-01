@@ -1,56 +1,57 @@
 <!-- Global Dark Overlay (Fun feature: Global Dark Mode) -->
-<div 
-  class="al-global-dark-overlay" 
-  [class.active]="!$$isLightOn()"
-  [style.background]="!$$isLightOn() ? 'radial-gradient(circle 250px at ' + $$mouseX() + 'px ' + $$mouseY() + 'px, transparent 0%, rgba(0, 0, 0, 0.95) 100%)' : 'rgba(0, 0, 0, 0.95)'"
-></div>
+<div class="al-global-dark-overlay" [class.active]="!$$isLightOn()"
+  [style.background]="!$$isLightOn() ? 'radial-gradient(circle 250px at ' + $$mouseX() + 'px ' + $$mouseY() + 'px, transparent 0%, rgba(0, 0, 0, 0.95) 100%)' : 'rgba(0, 0, 0, 0.95)'">
+</div>
 
 <!-- 點燈遊戲 -->
+@if ($$showLight()) {
 <div class="al-light-game-floating" [class.flickering]="$$isFlickering()">
   <button class="al-btn-light" [class.is-on]="$$isLightOn()" (click)="toggleLight()">
     <span class="al-light-icon">{{ $$isLightOn() ? '💡' : '🌑' }}</span>
   </button>
 </div>
+}
 
 <!-- 人物控制遊戲 -->
-<div 
-  class="al-character-floating" 
-  tabindex="0" 
-  (keydown)="onCharacterKeyDown($event)"
-  (keyup)="onCharacterKeyUp($event)"
-  (blur)="onCharacterBlur()"
-  (focus)="onCharacterFocus()"
-  [style.transform]="'translate(' + $$characterPos().x + 'px, ' + $$characterPos().y + 'px)'"
->
+<div class="al-character-floating" tabindex="0" (keydown)="onCharacterKeyDown($event)"
+  (keyup)="onCharacterKeyUp($event)" (blur)="onCharacterBlur()" (focus)="onCharacterFocus()"
+  [style.transform]="'translate(' + $$characterPos().x + 'px, ' + $$characterPos().y + 'px)'">
   <!-- 對話泡泡 (Fun feature: Chat Bubble) -->
   @if ($$chatBubble()) {
-    <div class="al-chat-bubble">{{ $$chatBubble() }}</div>
+  <div class="al-chat-bubble">{{ $$chatBubble() }}</div>
   }
 
   <!-- 灰塵殘影 (Fun feature: Dust Trail) -->
   @if ($$characterState() === 'walk') {
-    <div class="al-dust-trail" [style.transform]="'scaleX(' + $$characterDirection() + ')'">
-      <div class="dust d1"></div>
-      <div class="dust d2"></div>
-      <div class="dust d3"></div>
-    </div>
+  <div class="al-dust-trail" [style.transform]="'scaleX(' + $$characterDirection() + ')'">
+    <div class="dust d1"></div>
+    <div class="dust d2"></div>
+    <div class="dust d3"></div>
+  </div>
   }
 
   <!-- 人物本體 -->
-  <div 
-    class="al-character-sprite" 
-    [ngClass]="'state-' + $$characterState()"
-    [style.transform]="'scale(' + ($$characterDirection() * 2) + ', 2)'"
-  ></div>
+  <div class="al-character-sprite" [ngClass]="'state-' + $$characterState()"
+    [style.transform]="'scale(' + ($$characterDirection() * 2) + ', 2)'"></div>
 </div>
 
 <!-- 手機版操作控制 (僅在手機版顯示且已 Focus 時) -->
 <div class="al-mobile-controls" [class.show]="$$characterState() !== 'idle'">
   <div class="dpad">
-    <button class="dpad-btn up" (touchstart)="simulateKey('ArrowUp', true, $event)" (touchend)="simulateKey('ArrowUp', false, $event)" (touchcancel)="simulateKey('ArrowUp', false, $event)">▲</button>
-    <button class="dpad-btn right" (touchstart)="simulateKey('ArrowRight', true, $event)" (touchend)="simulateKey('ArrowRight', false, $event)" (touchcancel)="simulateKey('ArrowRight', false, $event)">▶</button>
-    <button class="dpad-btn down" (touchstart)="simulateKey('ArrowDown', true, $event)" (touchend)="simulateKey('ArrowDown', false, $event)" (touchcancel)="simulateKey('ArrowDown', false, $event)">▼</button>
-    <button class="dpad-btn left" (touchstart)="simulateKey('ArrowLeft', true, $event)" (touchend)="simulateKey('ArrowLeft', false, $event)" (touchcancel)="simulateKey('ArrowLeft', false, $event)">◀</button>
+    <button class="dpad-btn up" (touchstart)="simulateKey('ArrowUp', true, $event)"
+      (touchend)="simulateKey('ArrowUp', false, $event)"
+      (touchcancel)="simulateKey('ArrowUp', false, $event)">▲</button>
+    <button class="dpad-btn right" (touchstart)="simulateKey('ArrowRight', true, $event)"
+      (touchend)="simulateKey('ArrowRight', false, $event)"
+      (touchcancel)="simulateKey('ArrowRight', false, $event)">▶</button>
+    <button class="dpad-btn down" (touchstart)="simulateKey('ArrowDown', true, $event)"
+      (touchend)="simulateKey('ArrowDown', false, $event)"
+      (touchcancel)="simulateKey('ArrowDown', false, $event)">▼</button>
+    <button class="dpad-btn left" (touchstart)="simulateKey('ArrowLeft', true, $event)"
+      (touchend)="simulateKey('ArrowLeft', false, $event)"
+      (touchcancel)="simulateKey('ArrowLeft', false, $event)">◀</button>
   </div>
-  <button class="action-btn" (touchstart)="simulateKey('Spacebar', true, $event)" (touchend)="simulateKey('Spacebar', false, $event)" (touchcancel)="simulateKey('Spacebar', false, $event)">攻擊</button>
+  <button class="action-btn" (touchstart)="simulateKey('Spacebar', true, $event)"
+    (touchend)="simulateKey('Spacebar', false, $event)"
+    (touchcancel)="simulateKey('Spacebar', false, $event)">攻擊</button>
 </div>
