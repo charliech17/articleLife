@@ -1,4 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
+import { CSP_NONCE } from '@angular/core';
+import crypto from 'node:crypto';
 import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
@@ -9,12 +11,14 @@ import { Request, Response } from 'express-serve-static-core';
 import QueryString from 'qs';
 
 const basePath = environment.baseHref || '/';
-const CSP =
+const getCSP = (nonce: string) =>
   "default-src 'self';" +
-  "script-src 'self' 'unsafe-inline';" +
+  `script-src 'self' 'nonce-${nonce}';` +
   "frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com;" +
-  "img-src * data: blob: 'unsafe-inline';" +
-  "connect-src http: https:; style-src 'self' 'unsafe-inline';" +
+  "img-src * data: blob:;" +
+  "font-src 'self' https://fonts.gstatic.com;" +
+  `connect-src http: https:;` +
+  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;` +
   "frame-ancestors 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/;object-src 'none'";
 // The Express app is exported so that it can be used by serverless Functions.
 
@@ -43,7 +47,8 @@ export function app(): express.Express {
   // All regular routes use the Angular engine
   server.get(`${basePath}/*`, (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
-    setResHeaders(req, res);
+    const nonce = crypto.randomBytes(16).toString('base64');
+    setResHeaders(req, res, nonce);
 
     commonEngine
       .render({
@@ -51,10 +56,13 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl.replace(basePath, '')}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          { provide: CSP_NONCE, useValue: nonce }
+        ],
         inlineCriticalCss: false,
       })
-      .then(html => res.send(html))
+      .then(html => res.send(html.replace('CSRF_NONCE_PLACEHOLDER', nonce)))
       .catch(err => next(err));
   });
 
@@ -64,12 +72,13 @@ export function app(): express.Express {
 function setResHeaders(
   req: Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>,
   res: Response<any, Record<string, any>, number>,
+  nonce: string
 ) {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), geolocation=(), microphone=(), payment=() ');
-  res.setHeader('Content-Security-Policy', CSP);
+  res.setHeader('Content-Security-Policy', getCSP(nonce));
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
