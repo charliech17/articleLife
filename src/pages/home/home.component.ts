@@ -1,7 +1,8 @@
 import { Component, computed, effect, inject, OnDestroy, OnInit, signal, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
+import { MiniGamesComponent } from './components/mini-games/mini-games.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +12,7 @@ import { GlobalStore } from '../../shared/stores/global.store';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ArticleListComponent],
+  imports: [ArticleListComponent, MiniGamesComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -104,7 +105,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 
   ngOnDestroy(): void {
     this.#destroy$.next();

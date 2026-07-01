@@ -1,0 +1,329 @@
+.al-global-dark-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  pointer-events: none;
+  z-index: 900;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+
+  &.active {
+    opacity: 1;
+  }
+}
+
+/* 點燈遊戲 */
+.al-light-game-floating {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+
+  &.flickering {
+    animation: flicker 0.6s ease-in-out;
+  }
+
+  .al-btn-light {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+    background-color: #374151;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &.is-on {
+      background-color: #fef08a;
+      border-color: #eab308;
+      box-shadow: 0 0 20px 5px rgba(250, 204, 21, 0.5);
+      color: #1f2937;
+    }
+  }
+}
+
+/* 人物控制遊戲 */
+.al-character-floating {
+  position: fixed;
+  bottom: 30px;
+  right: 110px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+
+  .al-character-sprite {
+    width: 64px;
+    height: 64px;
+    background-image: url('../../../../assets/sprite.png');
+    background-repeat: no-repeat;
+    display: block;
+    transform-origin: bottom center;
+    image-rendering: pixelated;
+    background-size: 384px 256px;
+
+    &.state-idle {
+      animation: sprite-idle 0.5s steps(2) infinite;
+      background-position: 0px 0px;
+    }
+
+    &.state-ready {
+      animation: sprite-ready 0.4s steps(3) infinite;
+      background-position: 0px -64px;
+    }
+
+    &.state-walk {
+      animation: sprite-walk 0.6s steps(6) infinite;
+      background-position: 0px -128px;
+    }
+
+    &.state-attack {
+      animation: sprite-attack 0.5s steps(6) forwards;
+      background-position: 0px -192px;
+    }
+  }
+
+  .al-chat-bubble {
+    position: absolute;
+    top: -90px;
+    z-index: 10;
+    background: white;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    white-space: nowrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: pop-in 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: white transparent transparent transparent;
+      display: block;
+    }
+  }
+
+  .al-dust-trail {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    pointer-events: none;
+    z-index: -1;
+
+    .dust {
+      position: absolute;
+      bottom: 5px;
+      left: 20px;
+      width: 12px;
+      height: 12px;
+      background: rgba(200, 200, 200, 0.8);
+      border-radius: 50%;
+      animation: dust-fade 0.5s linear infinite;
+
+      &.d1 {
+        animation-delay: 0s;
+      }
+
+      &.d2 {
+        animation-delay: 0.15s;
+        left: 30px;
+        bottom: 8px;
+        width: 8px;
+        height: 8px;
+      }
+
+      &.d3 {
+        animation-delay: 0.3s;
+        left: 10px;
+        bottom: 2px;
+        width: 10px;
+        height: 10px;
+      }
+    }
+  }
+}
+
+/* 手機版操作控制 */
+.al-mobile-controls {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 1001;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+
+  &.show {
+    @media (max-width: 768px) {
+      display: flex;
+    }
+  }
+
+  .dpad {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    pointer-events: auto;
+
+    .dpad-btn {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-size: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #374151;
+
+      &:active {
+        background: rgba(209, 213, 219, 0.9);
+      }
+
+      &.up {
+        top: 0;
+        left: 48px;
+      }
+
+      &.right {
+        top: 48px;
+        right: 0;
+      }
+
+      &.down {
+        bottom: 0;
+        left: 48px;
+      }
+
+      &.left {
+        top: 48px;
+        left: 0;
+      }
+    }
+  }
+
+  .action-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.8);
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: 3px solid rgba(220, 38, 38, 0.9);
+    pointer-events: auto;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.4);
+
+    &:active {
+      background: rgba(185, 28, 28, 0.9);
+      transform: scale(0.95);
+    }
+  }
+}
+
+/* Animations */
+@keyframes sprite-idle {
+  100% {
+    background-position: -128px 0px;
+  }
+}
+
+@keyframes sprite-ready {
+  100% {
+    background-position: -192px -64px;
+  }
+}
+
+@keyframes sprite-walk {
+  100% {
+    background-position: -384px -128px;
+  }
+}
+
+@keyframes sprite-attack {
+  100% {
+    background-position: -384px -192px;
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dust-fade {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translate(-15px, -10px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.1;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  40% {
+    opacity: 0.2;
+  }
+
+  60% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
