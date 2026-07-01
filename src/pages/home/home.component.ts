@@ -100,9 +100,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
         },
         error: err => {
-          if ((err.status === 401, !this.#globalStore.isLoggedIn())) {
-            this.#router.navigate(['/login'], { replaceUrl: true });
-          }
+          console.log(err);
         },
       });
   }
