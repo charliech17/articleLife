@@ -32,5 +32,15 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('../pages/manage-motto/manage-motto.component').then(m => m.ManageMottoComponent),
   },
+  {
+    path: 'manage',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-index/manage-index.component').then(m => m.ManageIndexComponent),
+  },
+  {
+    path: 'manage/categories',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-categories/manage-categories.component').then(m => m.ManageCategoriesComponent),
+  },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];

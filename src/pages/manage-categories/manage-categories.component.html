@@ -1,0 +1,79 @@
+<div class="category-container">
+  <h2 class="page-title">文章分類管理 (Manage Categories)</h2>
+  
+  <mat-card class="form-card mat-elevation-z3">
+    <mat-card-header>
+      <mat-card-title>{{ isEditing ? '編輯分類 (Edit)' : '新增分類 (Add)' }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" class="category-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>分類名稱 (Name)</mat-label>
+          <input matInput type="text" name="categoryName" [(ngModel)]="currentCategory.categoryName" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>分類描述 (Description)</mat-label>
+          <input matInput type="text" name="description" [(ngModel)]="currentCategory.description">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>排序 (Order)</mat-label>
+          <input matInput type="number" name="order" [(ngModel)]="currentCategory.order">
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit">{{ isEditing ? '更新 (Update)' : '新增 (Add)' }}</button>
+          <button mat-button type="button" *ngIf="isEditing" (click)="resetForm()">取消 (Cancel)</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="table-card mt-4 mat-elevation-z3">
+    <table mat-table [dataSource]="categories" class="full-width-table">
+      
+      <!-- ID Column -->
+      <ng-container matColumnDef="categoryId">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let c"> {{c.categoryId}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="categoryName">
+        <th mat-header-cell *matHeaderCellDef> 名稱 (Name) </th>
+        <td mat-cell *matCellDef="let c"> {{c.categoryName}} </td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> 描述 (Description) </th>
+        <td mat-cell *matCellDef="let c"> {{c.description}} </td>
+      </ng-container>
+
+      <!-- Order Column -->
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef> 排序 (Order) </th>
+        <td mat-cell *matCellDef="let c"> {{c.order}} </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> 操作 (Actions) </th>
+        <td mat-cell *matCellDef="let c">
+          <div class="action-buttons">
+            <button mat-stroked-button color="primary" (click)="editCategory(c)" class="action-btn">編輯</button>
+            <button mat-stroked-button color="warn" (click)="deleteCategory(c.categoryId)" class="action-btn">刪除</button>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    
+    <div *ngIf="!categories || categories.length === 0" class="no-data">
+      目前沒有分類資料 (No categories found).
+    </div>
+  </mat-card>
+</div>

@@ -10,9 +10,9 @@ import { IArticleDetails, ExtField1JSON } from '../../shared/models/article.mode
 import { MatDialog } from '@angular/material/dialog';
 import {
   ArticleMetaDataSettingDialogComponent,
-  IArticleCategory,
   IConfirmCategories,
 } from './components/article-meta-data-setting-dialog/article-meta-data-setting-dialog.component';
+import { IArticleCategory } from '../../shared/models/article-category.models';
 import { ApiArticleCategoriesService } from '../../shared/services/api/api-article-categories/api-article-categories.service';
 import { of, switchMap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';

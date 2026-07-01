@@ -1,10 +1,10 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { IArticleCategory } from '../../../edit-article/components/article-meta-data-setting-dialog/article-meta-data-setting-dialog.component';
 import { ApiArticleCategoriesService } from './../../../../shared/services/api/api-article-categories/api-article-categories.service';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { GlobalStore } from '../../../../shared/stores/global.store';
 import { ArticleTypePrivate, ArticleTypePublic, IArticleDetails } from '../../../../shared/models/article.models';
+import { IArticleCategory } from '../../../../shared/models/article-category.models';
 
 @Component({
   selector: 'app-article-filter',
@@ -69,6 +69,6 @@ export class ArticleFilterComponent {
   }
 
   goAdminPage(): void {
-    this.#router.navigate(['manage-motto']);
+    this.#router.navigate(['manage']);
   }
 }

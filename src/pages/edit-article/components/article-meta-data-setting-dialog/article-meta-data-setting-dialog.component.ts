@@ -12,6 +12,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { IArticleDetails, ExtField1JSON } from '../../../../shared/models/article.models';
+import { IArticleCategory } from '../../../../shared/models/article-category.models';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @Component({
@@ -67,10 +68,7 @@ export class ArticleMetaDataSettingDialogComponent {
   }
 }
 
-export interface IArticleCategory {
-  categoryId: string;
-  categoryName: string;
-}
+
 
 export interface IConfirmCategories {
   selectedCategories: IArticleCategory[];

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IArticleCategory } from '../../../../pages/edit-article/components/article-meta-data-setting-dialog/article-meta-data-setting-dialog.component';
+import { IArticleCategory, IArticleCategoryDTO } from '../../../models/article-category.models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiArticleCategoriesService {
@@ -26,5 +26,19 @@ export class ApiArticleCategoriesService {
     articleCategoriesJSON: string;
   }): Observable<string> {
     return this.#http.put<string>(`${this.apiUrl}/update`, categories);
+  }
+
+  // --- Standard Category Management CRUD ---
+
+  createCategory(categoryData: IArticleCategoryDTO): Observable<IArticleCategory> {
+    return this.#http.post<IArticleCategory>(`${this.apiUrl}/create`, categoryData);
+  }
+
+  updateCategory(categoryId: string, categoryData: IArticleCategoryDTO): Observable<IArticleCategory> {
+    return this.#http.post<IArticleCategory>(`${this.apiUrl}/update/${categoryId}`, categoryData);
+  }
+
+  deleteCategory(categoryId: string): Observable<void> {
+    return this.#http.post<void>(`${this.apiUrl}/delete/${categoryId}`, {});
   }
 }

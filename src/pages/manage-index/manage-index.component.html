@@ -1,0 +1,31 @@
+<div class="manage-index-container">
+  <h2 class="page-title">管理首頁 (Management Dashboard)</h2>
+  
+  <div class="cards-grid">
+    <mat-card class="action-card mat-elevation-z3" (click)="goTo('manage-motto')">
+      <mat-card-header>
+        <mat-card-title>座右銘管理</mat-card-title>
+        <mat-card-subtitle>Manage Mottos</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>新增、編輯或刪除網站顯示的隨機座右銘。</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary">前往管理</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="action-card mat-elevation-z3" (click)="goTo('manage/categories')">
+      <mat-card-header>
+        <mat-card-title>文章分類管理</mat-card-title>
+        <mat-card-subtitle>Manage Categories</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>新增、編輯或刪除文章的分類標籤。</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-button color="primary">前往管理</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
