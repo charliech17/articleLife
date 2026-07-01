@@ -1,5 +1,9 @@
 <div class="al-home-container">
   <div class="al-home-content">
+    
+    <!-- Daily News Area -->
+    <app-daily-news></app-daily-news>
+
     @if ($$isShowPrivateArticles()) {
       <h2 class="al-page-title">私人文章列表</h2>
       <app-article-list
@@ -25,3 +29,6 @@
     <app-mini-games></app-mini-games>
   </div>
 </div>
+
+<!-- AI Chat Floating Dialog -->
+<app-ai-chat></app-ai-chat>

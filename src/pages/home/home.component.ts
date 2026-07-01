@@ -3,6 +3,8 @@ import { isPlatformBrowser, NgClass } from '@angular/common';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 import { MiniGamesComponent } from './components/mini-games/mini-games.component';
+import { DailyNewsComponent } from './components/daily-news/daily-news.component';
+import { AiChatComponent } from './components/ai-chat/ai-chat.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +14,7 @@ import { GlobalStore } from '../../shared/stores/global.store';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ArticleListComponent, MiniGamesComponent],
+  imports: [ArticleListComponent, MiniGamesComponent, DailyNewsComponent, AiChatComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })

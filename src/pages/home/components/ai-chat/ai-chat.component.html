@@ -1,0 +1,59 @@
+<div class="al-ai-chat-wrapper">
+  
+  <!-- Chat Window -->
+  @if ($isOpen()) {
+    <div class="al-chat-window">
+      <div class="al-chat-header">
+        <div class="al-chat-title">
+          <span class="al-sparkle-icon">✨</span>
+          <span>AI 助理</span>
+        </div>
+        <button class="al-close-btn" (click)="toggleChat()">✕</button>
+      </div>
+
+      <div class="al-chat-messages" #chatMessagesContainer>
+        @for (msg of $messages(); track msg.id) {
+          <div class="al-message-row" [ngClass]="msg.sender === 'user' ? 'al-user-row' : 'al-ai-row'">
+            @if (msg.sender === 'ai') {
+              <div class="al-avatar al-ai-avatar">✨</div>
+            }
+            <div class="al-message-bubble" [ngClass]="msg.sender === 'user' ? 'al-user-bubble' : 'al-ai-bubble'">
+              {{ msg.text }}
+            </div>
+          </div>
+        }
+        
+        @if ($isTyping()) {
+          <div class="al-message-row al-ai-row">
+            <div class="al-avatar al-ai-avatar">✨</div>
+            <div class="al-message-bubble al-ai-bubble al-typing-indicator">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="al-chat-input-area">
+        <textarea 
+          class="al-chat-input" 
+          placeholder="輸入您的問題..."
+          [(ngModel)]="$inputText"
+          (keydown)="handleKeyDown($event)"
+          rows="1"
+        ></textarea>
+        <button class="al-send-btn" (click)="sendMessage()" [disabled]="!$inputText().trim() || $isTyping()">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Floating Button -->
+  <button class="al-chat-fab" (click)="toggleChat()" [ngClass]="{'al-fab-active': $isOpen()}">
+    @if (!$isOpen()) {
+      <span class="al-fab-icon">✨</span>
+    } @else {
+      <span class="al-fab-icon">✕</span>
+    }
+  </button>
+</div>
