@@ -14,6 +14,70 @@
   }
 }
 
+.al-widgets-header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 24px;
+
+  .al-page-title {
+    margin-bottom: 0;
+  }
+
+  .mobile-collapse-btn {
+    display: none;
+    background: #f3f4f6;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4f46e5;
+    cursor: pointer;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @include media-breakpoint-down(md) {
+      display: inline-block;
+    }
+  }
+}
+
+.al-top-widgets {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &.collapsed {
+    @include media-breakpoint-down(md) {
+      height: 0;
+      margin-bottom: 0;
+      opacity: 0;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    flex-direction: row;
+    align-items: stretch;
+    
+    .al-widget {
+      flex: 1;
+      width: 50%;
+    }
+  }
+}
+
+.al-section-divider {
+  border: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.08), transparent);
+  margin: 40px 0 60px 0;
+}
+
 .al-page-title {
   text-align: center;
   font-size: 2rem;

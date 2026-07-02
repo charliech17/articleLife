@@ -70,11 +70,14 @@ export class DailyNewsComponent implements OnInit, OnDestroy {
   }
 
   onReadMore(event: Event, news: DailyNews) {
+    event.preventDefault();
     if (news.url && news.url !== '#') {
-      // Allow default link behavior to open news
-      window.open(news.url, '_blank');
+      const width = 1000;
+      const height = 800;
+      const left = (window.innerWidth / 2) - (width / 2);
+      const top = (window.innerHeight / 2) - (height / 2);
+      window.open(news.url, 'newsPopup', `width=${width},height=${height},top=${top},left=${left}`);
     } else {
-      event.preventDefault();
       alert(`即將前往閱讀: ${news.title}`);
     }
   }

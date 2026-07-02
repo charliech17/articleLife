@@ -1,0 +1,59 @@
+<div class="al-stock-tracker">
+  <div class="stock-header">
+    <div class="title-wrapper">
+      <h3 class="stock-title">
+        📈 每日市場指標
+      </h3>
+      <span class="update-time" *ngIf="stocks.length > 0">
+        最後更新: {{ stocks[0].timestamp | date:'MM/dd HH:mm:ss' }}
+      </span>
+    </div>
+    <button *ngIf="!loading" class="refresh-btn" (click)="fetchStocks()">
+      <i class="bi bi-arrow-clockwise"></i>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="stock-loading">
+    <div class="spinner"></div> 載入中...
+  </div>
+
+  <div *ngIf="error" class="stock-error">
+    無法載入股票資料，請稍後再試。
+  </div>
+
+  <div *ngIf="!loading && !error && marketIndices.length > 0" class="market-indices-block">
+    <a class="market-index-item" *ngFor="let index of marketIndices"
+      href="https://finance.yahoo.com/quote/{{ index.symbol }}"
+      (click)="openStockPopup($event, index.symbol)"
+      target="_blank" rel="noopener noreferrer"
+      [ngClass]="{'is-up': index.priceChange > 0, 'is-down': index.priceChange < 0, 'is-flat': index.priceChange === 0}">
+      <span class="index-name">{{ index.name }}</span>
+      <span class="index-price">{{ index.currentPrice | number:'1.2-2' }}</span>
+      <span class="index-change">
+        {{ index.priceChange > 0 ? '+' : '' }}{{ index.priceChange | number:'1.2-2' }}
+        ({{ index.percentChange > 0 ? '+' : '' }}{{ index.percentChange | number:'1.2-2' }}%)
+      </span>
+    </a>
+  </div>
+
+  <div *ngIf="!loading && !error" class="stock-list">
+    <a class="stock-item" *ngFor="let stock of stocks"
+      href="https://finance.yahoo.com/quote/{{ stock.symbol }}"
+      (click)="openStockPopup($event, stock.symbol)"
+      target="_blank"
+      rel="noopener noreferrer"
+      [ngClass]="{'is-up': stock.priceChange > 0, 'is-down': stock.priceChange < 0, 'is-flat': stock.priceChange === 0}">
+      <div class="stock-info">
+        <span class="stock-name">{{ stock.name }}</span>
+        <span class="stock-symbol">{{ stock.symbol }}</span>
+      </div>
+      <div class="stock-price-box">
+        <div class="current-price">{{ stock.currentPrice | number:'1.2-2' }}</div>
+        <div class="price-change">
+          {{ stock.priceChange > 0 ? '+' : '' }}{{ stock.priceChange | number:'1.2-2' }} 
+          ({{ stock.percentChange > 0 ? '+' : '' }}{{ stock.percentChange | number:'1.2-2' }}%)
+        </div>
+      </div>
+    </a>
+  </div>
+</div>

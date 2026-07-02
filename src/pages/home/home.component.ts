@@ -5,6 +5,7 @@ import { ArticleListComponent } from './components/article-list/article-list.com
 import { MiniGamesComponent } from './components/mini-games/mini-games.component';
 import { DailyNewsComponent } from './components/daily-news/daily-news.component';
 import { AiChatComponent } from './components/ai-chat/ai-chat.component';
+import { StockTrackerComponent } from './components/stock-tracker/stock-tracker.component';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/models/article.models';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -14,7 +15,7 @@ import { GlobalStore } from '../../shared/stores/global.store';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ArticleListComponent, MiniGamesComponent, DailyNewsComponent, AiChatComponent],
+  imports: [ArticleListComponent, MiniGamesComponent, DailyNewsComponent, AiChatComponent, StockTrackerComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
@@ -36,6 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #destroy$ = new Subject<void>();
+  isWidgetsCollapsed = false;
 
   constructor() {
     this.#route.queryParamMap
@@ -111,6 +113,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.#destroy$.next();
     this.#destroy$.complete();
+  }
+
+  toggleWidgets(): void {
+    this.isWidgetsCollapsed = !this.isWidgetsCollapsed;
   }
 
   navigatePage(incrementNum: number): void {
