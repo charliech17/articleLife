@@ -1,6 +1,15 @@
 import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, signal, HostListener } from '@angular/core';
 import { isPlatformBrowser, NgClass } from '@angular/common';
 
+export interface MiniGame {
+  id: string;
+  name: string;
+  url: string;
+  x: number;
+  y: number;
+  icon: string;
+}
+
 @Component({
   selector: 'app-mini-games',
   standalone: true,
@@ -18,6 +27,18 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   $$characterState = signal<'idle' | 'ready' | 'walk' | 'attack'>('idle');
   $$characterDirection = signal<number>(1);
   $$chatBubble = signal<string>(''); // For the fun feature
+
+  $$miniGames = signal<MiniGame[]>([
+    {
+      id: 'flappybird',
+      name: 'Flappy Bird',
+      url: 'https://josh-lifesharing.com/flappybird',
+      x: 77,
+      y: -72,
+      icon: '🐦'
+    }
+  ]);
+  $$nearbyGame = signal<MiniGame | null>(null);
 
   $$mouseX = signal<number>(0);
   $$mouseY = signal<number>(0);
@@ -42,6 +63,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
           this.$$characterPos.set(JSON.parse(pos));
         } catch (e) { }
       }
+      this.checkProximity();
     }
   }
 
@@ -74,6 +96,15 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
 
   onCharacterKeyDown(event: KeyboardEvent): void {
     if (this.$$characterState() === 'attack') {
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      const nearby = this.$$nearbyGame();
+      if (nearby) {
+        this.openGame(nearby);
+      }
       event.preventDefault();
       return;
     }
@@ -140,6 +171,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
 
       if (moved) {
         this.$$characterPos.set({ ...pos });
+        this.checkProximity();
         if (isPlatformBrowser(this.#platformId)) {
           localStorage.setItem('al_character_pos', JSON.stringify(this.$$characterPos()));
         }
@@ -161,6 +193,29 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       this.onCharacterKeyDown(mockEvent);
     } else {
       this.onCharacterKeyUp(mockEvent);
+    }
+  }
+
+  checkProximity() {
+    const pos = this.$$characterPos();
+    let found: MiniGame | null = null;
+    for (const game of this.$$miniGames()) {
+      const dx = pos.x - game.x;
+      const dy = pos.y - game.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance < 60) {
+        found = game;
+        break;
+      }
+    }
+    if (this.$$nearbyGame()?.id !== found?.id) {
+      this.$$nearbyGame.set(found);
+    }
+  }
+
+  openGame(game: MiniGame) {
+    if (isPlatformBrowser(this.#platformId)) {
+      window.open(game.url, '_blank');
     }
   }
 }

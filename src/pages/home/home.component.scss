@@ -111,6 +111,10 @@
   margin-left: auto;
   margin-right: auto;
   border: 1px solid rgba(0, 0, 0, 0.05);
+
+  @include media-breakpoint-down(md) {
+    margin-bottom: 80px; /* 留出空白讓懸浮按鈕不會擋住 */
+  }
 }
 
 .al-btn-pagination {
