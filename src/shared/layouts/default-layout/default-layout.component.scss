@@ -19,8 +19,26 @@
 
     @include shared.media-breakpoint-up(md) {
       width: 320px;
-      min-height: 100vh;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
       flex-shrink: 0;
+
+      &::-webkit-scrollbar {
+        width: 4px; /* 極細捲軸 */
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(79, 70, 229, 0.25); /* 淡淡的主題色 */
+        border-radius: 4px;
+        
+        &:hover {
+          background-color: rgba(79, 70, 229, 0.6); /* 滑鼠游標經過時加深 */
+        }
+      }
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
     }
   }
 
