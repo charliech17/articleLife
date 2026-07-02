@@ -8,12 +8,12 @@
         最後更新: {{ stocks[0].timestamp | date:'MM/dd HH:mm:ss' }}
       </span>
     </div>
-    <button *ngIf="!loading" class="refresh-btn" (click)="fetchStocks()">
+    <button class="refresh-btn" [class.spinning]="loading" (click)="fetchStocks()" [disabled]="loading">
       <i class="bi bi-arrow-clockwise"></i>
     </button>
   </div>
 
-  <div *ngIf="loading" class="stock-loading">
+  <div *ngIf="loading && stocks.length === 0 && marketIndices.length === 0" class="stock-loading">
     <div class="spinner"></div> 載入中...
   </div>
 

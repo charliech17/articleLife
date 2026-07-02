@@ -1,9 +1,16 @@
-@for (item of $articleOutline(); track $index) {
-  <div
-    class="mt-2 cus-article-outline__container al-pointer-cursor"
-    [class.active]="item.id === $activeHeaderId()"
-    (click)="goToTitle(item.id)"
-  >
-    <a class="cus-article-outline__link">{{ item.title }}</a>
-  </div>
-}
+<nav class="al-outline-nav">
+  @if ($articleOutline() && $articleOutline().length > 0) {
+    <h6 class="al-outline-title"><i class="bi bi-list-nested"></i> 文章目錄</h6>
+    <ul class="al-outline-list">
+      @for (item of $articleOutline(); track $index) {
+        <li
+          class="al-outline-item al-pointer-cursor"
+          [class.active]="item.id === $activeHeaderId()"
+          (click)="goToTitle(item.id)"
+        >
+          <a class="al-outline-link" [title]="item.title">{{ item.title }}</a>
+        </li>
+      }
+    </ul>
+  }
+</nav>

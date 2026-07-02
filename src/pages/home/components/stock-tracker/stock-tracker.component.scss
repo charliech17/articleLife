@@ -53,9 +53,22 @@
       border-radius: 50%;
       transition: color 0.2s, transform 0.2s;
 
-      &:hover {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover:not(:disabled) {
         color: #4f46e5;
         transform: rotate(45deg);
+      }
+
+      &.spinning {
+        cursor: not-allowed;
+        color: #4f46e5;
+        i {
+          display: inline-block;
+          animation: spin 1s linear infinite;
+        }
       }
     }
   }

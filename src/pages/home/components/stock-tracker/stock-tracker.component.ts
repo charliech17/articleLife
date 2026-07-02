@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiStockService, IStock } from '../../../../shared/services/api/api-stock/api-stock.service';
-import { catchError, of } from 'rxjs';
+import { catchError, of, forkJoin, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-stock-tracker',
@@ -23,28 +23,31 @@ export class StockTrackerComponent implements OnInit {
   }
 
   fetchStocks(): void {
+    if (this.loading && this.stocks.length > 0) return;
     this.loading = true;
     
-    // Fetch user tracked stocks
-    this.#apiStock.getDailyStocks().pipe(
-      catchError(err => {
-        console.error('Failed to fetch stocks', err);
-        this.error = true;
-        return of([]);
+    forkJoin({
+      stocks: this.#apiStock.getDailyStocks().pipe(
+        catchError(err => {
+          console.error('Failed to fetch stocks', err);
+          this.error = true;
+          return of([]);
+        })
+      ),
+      indices: this.#apiStock.getMarketIndices().pipe(
+        catchError(err => {
+          console.error('Failed to fetch market indices', err);
+          return of([]);
+        })
+      )
+    }).pipe(
+      finalize(() => {
+        // Ensure visual feedback is given to the user
+        setTimeout(() => this.loading = false, 600);
       })
-    ).subscribe((data: IStock[]) => {
-      this.stocks = data;
-      this.loading = false;
-    });
-
-    // Fetch global market indices
-    this.#apiStock.getMarketIndices().pipe(
-      catchError(err => {
-        console.error('Failed to fetch market indices', err);
-        return of([]);
-      })
-    ).subscribe((data: IStock[]) => {
-      this.marketIndices = data;
+    ).subscribe(({ stocks, indices }) => {
+      this.stocks = stocks;
+      this.marketIndices = indices;
     });
   }
 

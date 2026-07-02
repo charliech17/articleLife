@@ -5,17 +5,17 @@
     <div class="al-chat-window">
       <div class="al-chat-header">
         <div class="al-chat-title">
-          <span class="al-sparkle-icon">✨</span>
+          <i class="bi bi-robot al-sparkle-icon"></i>
           <span>AI 助理</span>
         </div>
-        <button class="al-close-btn" (click)="toggleChat()">✕</button>
+        <button class="al-close-btn" (click)="toggleChat()"><i class="bi bi-x-lg"></i></button>
       </div>
 
       <div class="al-chat-messages" #chatMessagesContainer>
         @for (msg of $messages(); track msg.id) {
           <div class="al-message-row" [ngClass]="msg.sender === 'user' ? 'al-user-row' : 'al-ai-row'">
             @if (msg.sender === 'ai') {
-              <div class="al-avatar al-ai-avatar">✨</div>
+              <div class="al-avatar al-ai-avatar"><i class="bi bi-robot"></i></div>
             }
             <div class="al-message-bubble" [ngClass]="msg.sender === 'user' ? 'al-user-bubble' : 'al-ai-bubble'">
               {{ msg.text }}
@@ -25,7 +25,7 @@
         
         @if ($isTyping()) {
           <div class="al-message-row al-ai-row">
-            <div class="al-avatar al-ai-avatar">✨</div>
+            <div class="al-avatar al-ai-avatar"><i class="bi bi-robot"></i></div>
             <div class="al-message-bubble al-ai-bubble al-typing-indicator">
               <span></span><span></span><span></span>
             </div>
@@ -51,9 +51,12 @@
   <!-- Floating Button -->
   <button class="al-chat-fab" (click)="toggleChat()" [ngClass]="{'al-fab-active': $isOpen()}">
     @if (!$isOpen()) {
-      <span class="al-fab-icon">✨</span>
+      <div class="al-fab-icon-wrapper">
+        <i class="bi bi-robot al-fab-icon"></i>
+        <i class="bi bi-stars al-fab-sparkle"></i>
+      </div>
     } @else {
-      <span class="al-fab-icon">✕</span>
+      <i class="bi bi-x-lg al-fab-icon"></i>
     }
   </button>
 </div>

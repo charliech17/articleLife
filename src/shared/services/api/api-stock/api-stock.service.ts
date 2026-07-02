@@ -19,10 +19,10 @@ export class ApiStockService {
   constructor() { }
 
   getDailyStocks(): Observable<IStock[]> {
-    return this.#http.get<IStock[]>(this.apiUrl);
+    return this.#http.get<IStock[]>(`${this.apiUrl}?t=${new Date().getTime()}`);
   }
 
   getMarketIndices(): Observable<IStock[]> {
-    return this.#http.get<IStock[]>(`${this.apiUrl}/indices`);
+    return this.#http.get<IStock[]>(`${this.apiUrl}/indices?t=${new Date().getTime()}`);
   }
 }
