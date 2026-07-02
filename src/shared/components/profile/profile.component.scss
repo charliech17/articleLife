@@ -1,16 +1,24 @@
 @use 'shared' as shared;
 
 .al-profile-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  border: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  @include shared.media-breakpoint-up(md) {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
   }
 }
 
@@ -21,13 +29,18 @@
   &::after {
     content: '';
     position: absolute;
-    inset: -4px;
+    inset: -2px;
     border-radius: 50%;
     background: linear-gradient(135deg, #4f46e5, #ec4899);
     z-index: -1;
     opacity: 0;
-    filter: blur(10px);
+    filter: blur(6px);
     transition: opacity 0.4s ease;
+
+    @include shared.media-breakpoint-up(md) {
+      inset: -4px;
+      filter: blur(10px);
+    }
   }
 
   &:hover::after {
@@ -35,12 +48,12 @@
   }
 
   img {
-    width: 90px;
-    height: 90px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid #ffffff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
     background-color: #f3f4f6;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     
@@ -51,21 +64,27 @@
     @include shared.media-breakpoint-up(md) {
       width: 100px;
       height: 100px;
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
   }
 }
 
 .al-profile-info {
   .al-profile-name {
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #1f2937;
     margin: 0;
     letter-spacing: -0.5px;
+
+    @include shared.media-breakpoint-up(md) {
+      font-size: 1.3rem;
+    }
   }
   
   .al-profile-role {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 1.5px;
@@ -75,45 +94,73 @@
     background: #f3f4f6;
     padding: 2px 8px;
     border-radius: 12px;
+
+    @include shared.media-breakpoint-up(md) {
+      font-size: 0.75rem;
+    }
   }
 }
 
 .al-motto-container {
   position: relative;
-  background: linear-gradient(to right bottom, #ffffff, #f9fafb);
-  border-radius: 16px;
-  padding: 1.25rem;
+  background: transparent;
+  border-radius: 0;
+  padding: 0.5rem 0.5rem;
   text-align: center;
-  border-left: 4px solid #4f46e5;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  border-left: 3px solid #4f46e5;
+  box-shadow: none;
   
+  @include shared.media-breakpoint-up(md) {
+    background: linear-gradient(to right bottom, #ffffff, #f9fafb);
+    padding: 1.25rem;
+    border-radius: 16px;
+    border-left: 4px solid #4f46e5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  }
+
   .al-motto-quote {
     position: absolute;
-    top: -8px;
-    left: 8px;
-    font-size: 3.5rem;
+    top: -6px;
+    left: 6px;
+    font-size: 2rem;
     color: rgba(79, 70, 229, 0.1);
     font-family: serif;
     line-height: 1;
     pointer-events: none;
+
+    @include shared.media-breakpoint-up(md) {
+      top: -8px;
+      left: 8px;
+      font-size: 3.5rem;
+    }
   }
 
   .al-motto-text {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: #374151;
     font-weight: 500;
-    margin-bottom: 0.5rem;
-    line-height: 1.6;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
     position: relative;
     z-index: 1;
+
+    @include shared.media-breakpoint-up(md) {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
   }
 
   .al-motto-ref {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #9ca3af;
     margin: 0;
     font-weight: 600;
     text-align: right;
+
+    @include shared.media-breakpoint-up(md) {
+      font-size: 0.8rem;
+    }
   }
 }
 
@@ -122,18 +169,28 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    font-size: 0.95rem;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
     font-weight: 600;
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
     width: 100%;
     
+    @include shared.media-breakpoint-up(md) {
+      gap: 8px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+    }
+
     i {
-      font-size: 1.1rem;
+      font-size: 1rem;
+      @include shared.media-breakpoint-up(md) {
+        font-size: 1.1rem;
+      }
     }
     
     &.primary {
