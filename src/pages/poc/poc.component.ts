@@ -27,6 +27,7 @@ export class PocComponent {
   async loadCkEditor() {
     const { Bold, Essentials, Italic, Mention, Paragraph, Undo, ClassicEditor, Heading } = await import('ckeditor5');
     this.config = {
+      licenseKey: 'GPL',
       toolbar: ['undo', 'redo', '|', 'bold', 'italic', 'Heading'],
       plugins: [Bold, Essentials, Italic, Mention, Paragraph, Undo, Heading],
       heading: {
