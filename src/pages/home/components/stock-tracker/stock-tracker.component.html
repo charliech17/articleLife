@@ -4,25 +4,25 @@
       <h3 class="stock-title">
         📈 每日市場指標
       </h3>
-      <span class="update-time" *ngIf="stocks.length > 0">
-        最後更新: {{ stocks[0].timestamp | date:'MM/dd HH:mm:ss' }}
+      <span class="update-time" *ngIf="stocks().length > 0">
+        最後更新: {{ stocks()[0].timestamp | date:'MM/dd HH:mm:ss' }}
       </span>
     </div>
-    <button class="refresh-btn" [class.spinning]="loading" (click)="fetchStocks()" [disabled]="loading">
+    <button class="refresh-btn" [class.spinning]="loading()" (click)="fetchStocks()" [disabled]="loading()">
       <i class="bi bi-arrow-clockwise"></i>
     </button>
   </div>
 
-  <div *ngIf="loading && stocks.length === 0 && marketIndices.length === 0" class="stock-loading">
+  <div *ngIf="loading() && stocks().length === 0 && marketIndices().length === 0" class="stock-loading">
     <div class="spinner"></div> 載入中...
   </div>
 
-  <div *ngIf="error" class="stock-error">
+  <div *ngIf="error()" class="stock-error">
     無法載入股票資料，請稍後再試。
   </div>
 
-  <div *ngIf="!loading && !error && marketIndices.length > 0" class="market-indices-block">
-    <a class="market-index-item" *ngFor="let index of marketIndices"
+  <div *ngIf="!loading() && !error() && marketIndices().length > 0" class="market-indices-block">
+    <a class="market-index-item" *ngFor="let index of marketIndices()"
       href="https://finance.yahoo.com/quote/{{ index.symbol }}"
       (click)="openStockPopup($event, index.symbol)"
       target="_blank" rel="noopener noreferrer"
@@ -36,8 +36,8 @@
     </a>
   </div>
 
-  <div *ngIf="!loading && !error" class="stock-list">
-    <a class="stock-item" *ngFor="let stock of stocks"
+  <div *ngIf="!loading() && !error()" class="stock-list">
+    <a class="stock-item" *ngFor="let stock of stocks()"
       href="https://finance.yahoo.com/quote/{{ stock.symbol }}"
       (click)="openStockPopup($event, stock.symbol)"
       target="_blank"

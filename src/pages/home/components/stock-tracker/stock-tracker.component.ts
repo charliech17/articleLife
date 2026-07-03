@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiStockService, IStock } from '../../../../shared/services/api/api-stock/api-stock.service';
 import { catchError, of, forkJoin, finalize } from 'rxjs';
@@ -12,10 +12,12 @@ import { catchError, of, forkJoin, finalize } from 'rxjs';
 })
 export class StockTrackerComponent implements OnInit {
   #apiStock = inject(ApiStockService);
-  stocks: IStock[] = [];
-  marketIndices: IStock[] = [];
-  loading = true;
-  error = false;
+  
+  stocks = signal<IStock[]>([]);
+  marketIndices = signal<IStock[]>([]);
+  loading = signal(true);
+  error = signal(false);
+  
   Math = Math; // Expose Math to template
 
   ngOnInit(): void {
@@ -23,14 +25,14 @@ export class StockTrackerComponent implements OnInit {
   }
 
   fetchStocks(): void {
-    if (this.loading && this.stocks.length > 0) return;
-    this.loading = true;
+    if (this.loading() && this.stocks().length > 0) return;
+    this.loading.set(true);
     
     forkJoin({
       stocks: this.#apiStock.getDailyStocks().pipe(
         catchError(err => {
           console.error('Failed to fetch stocks', err);
-          this.error = true;
+          this.error.set(true);
           return of([]);
         })
       ),
@@ -43,11 +45,13 @@ export class StockTrackerComponent implements OnInit {
     }).pipe(
       finalize(() => {
         // Ensure visual feedback is given to the user
-        setTimeout(() => this.loading = false, 600);
+        setTimeout(() => {
+          this.loading.set(false);
+        }, 600);
       })
     ).subscribe(({ stocks, indices }) => {
-      this.stocks = stocks;
-      this.marketIndices = indices;
+      this.stocks.set(stocks);
+      this.marketIndices.set(indices);
     });
   }
 
