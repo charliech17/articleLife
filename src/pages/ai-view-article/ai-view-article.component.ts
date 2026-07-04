@@ -81,7 +81,7 @@ export class AiViewArticleComponent implements OnDestroy {
       if (id) {
         let decodedId = id;
         try {
-          decodedId = window.atob(id);
+          decodedId = atob(id);
         } catch (e) {
           // fallback in case it's not base64 encoded
         }
