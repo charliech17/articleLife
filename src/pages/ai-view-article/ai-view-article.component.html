@@ -5,6 +5,13 @@
     <span class="al-meta-item"><i class="bi bi-robot"></i> AI 分類: {{ $$articleDetails().categories | categories }}</span>
     <span class="al-meta-item"><i class="bi bi-calendar3"></i> {{ $articleCreateTime() | date: 'yyyy/MM/dd HH:mm' }}</span>
     <span class="al-meta-item"><i class="bi bi-eye"></i> 瀏覽次數: {{ $$articleDetails().viewTimes }}</span>
+    <button class="al-meta-item al-copy-btn" (click)="copyUrl()">
+      @if (isCopied()) {
+        <i class="bi bi-check2 me-1"></i> 已複製
+      } @else {
+        <i class="bi bi-link-45deg me-1"></i> 複製網址
+      }
+    </button>
   </div>
 
   @if ($$articleDetails().intro) {

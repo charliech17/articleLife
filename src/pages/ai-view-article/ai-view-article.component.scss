@@ -42,6 +42,19 @@
       border-radius: 9999px;
       font-weight: 500;
       color: #4b5563;
+
+      &.al-copy-btn {
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 4px 12px;
+        background-color: #f9fafb;
+        
+        &:hover {
+          background-color: #e5e7eb;
+        }
+      }
     }
   }
 

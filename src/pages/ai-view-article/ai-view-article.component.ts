@@ -39,6 +39,17 @@ export class AiViewArticleComponent implements OnDestroy {
     extField1: null,
   });
 
+  isCopied = signal<boolean>(false);
+
+  copyUrl(): void {
+    if (isPlatformBrowser(this.#platformId)) {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        this.isCopied.set(true);
+        setTimeout(() => this.isCopied.set(false), 2000);
+      });
+    }
+  }
+
   $articleContent = computed(() => this.getInnerHtml(this.$$articleDetails().articleContent));
   $articleCreateTime = computed(() => {
     const createdTime = this.$$articleDetails().createdTime;

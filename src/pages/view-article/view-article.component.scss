@@ -38,10 +38,24 @@
       display: inline-flex;
       align-items: center;
       background-color: #f3f4f6;
-      padding: 6px 14px;
-      border-radius: 9999px;
+      padding: 6px 12px;
+      border-radius: 8px;
       font-weight: 500;
-      color: #4b5563;
+      border: 1px solid #e5e7eb;
+
+      &.al-copy-btn {
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 4px 12px;
+        background-color: #f9fafb;
+        color: #4b5563;
+        
+        &:hover {
+          background-color: #e5e7eb;
+        }
+      }
     }
   }
 

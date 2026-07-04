@@ -54,7 +54,17 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     extField1: null,
   });
   $$articleResponses = signal<IArticleResponses[]>([]);
+  isCopied = signal<boolean>(false);
   $$fileFirstImageUrl = signal<string | null>(null);
+
+  copyUrl(): void {
+    if (isPlatformBrowser(this.#platformId)) {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        this.isCopied.set(true);
+        setTimeout(() => this.isCopied.set(false), 2000);
+      });
+    }
+  }
 
   $articleContent = computed(() => this.getInnerHtml(this.$$articleDetails().articleContent));
   $articleCreateTime = computed(() => {
@@ -90,7 +100,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
       if (id) {
         let decodedId = id;
         try {
-          decodedId = window.atob(id);
+          decodedId = atob(id);
         } catch (e) {
           // fallback in case it's not base64 encoded
         }
