@@ -1,5 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleCategoriesService } from './../../../../shared/services/api/api-article-categories/api-article-categories.service';
+import { ApiAiArticleService } from '../../../../shared/services/api/api-ai-article/api-ai-article.service';
 import { Component, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { GlobalStore } from '../../../../shared/stores/global.store';
@@ -15,11 +16,12 @@ import { IArticleCategory } from '../../../../shared/models/article-category.mod
 })
 export class ArticleFilterComponent {
   #apiArticleCategoriesService = inject(ApiArticleCategoriesService);
+  #apiAiArticleService = inject(ApiAiArticleService);
   #router = inject(Router);
   #route = inject(ActivatedRoute);
   #globalStore = inject(GlobalStore);
   $$articleCategories = signal<IArticleCategory[]>([]);
-  $$articleTypes = signal<IArticleDetails['articleType'] | '...'>('...');
+  $$articleTypes = signal<IArticleDetails['articleType'] | '...' | 'AI'>('...');
   $$categoryId = signal<string>('');
   $isLoggedIn = this.#globalStore.isLoggedIn;
   $isAdmin = this.#globalStore.isAdmin;
@@ -29,19 +31,41 @@ export class ArticleFilterComponent {
 
   constructor() {
     this.#route.queryParamMap.subscribe(queryParam => {
-      const articleType = queryParam.get('articleType') as IArticleDetails['articleType'] | null;
+      const articleType = queryParam.get('articleType') as IArticleDetails['articleType'] | 'AI' | null;
       this.$$articleTypes.set(articleType || ArticleTypePublic);
       this.$$categoryId.set(queryParam.get('categoryId') || '');
-    });
 
-    this.#apiArticleCategoriesService.getAllArticleCategories().subscribe({
-      next: res => {
-        this.$$articleCategories.set(res || []);
-      },
-      error: err => {
-        console.error(err);
-      },
+      this.fetchCategories();
     });
+  }
+
+  fetchCategories(): void {
+    if (this.$$articleTypes() === 'AI') {
+      this.#apiAiArticleService.getAiCategories().subscribe({
+        next: res => {
+          const mappedCategories: IArticleCategory[] = (res || []).map(cat => ({
+            categoryId: cat.id.toString(),
+            categoryName: cat.categoryName,
+            categoryOrder: cat.categoryOrder,
+            categoryImgUrl: '',
+            categoryUrlId: ''
+          }));
+          this.$$articleCategories.set(mappedCategories);
+        },
+        error: err => {
+          console.error(err);
+        },
+      });
+    } else {
+      this.#apiArticleCategoriesService.getAllArticleCategories().subscribe({
+        next: res => {
+          this.$$articleCategories.set(res || []);
+        },
+        error: err => {
+          console.error(err);
+        },
+      });
+    }
   }
 
   toggleFilter(): void {
@@ -49,24 +73,26 @@ export class ArticleFilterComponent {
   }
 
   toggleCategory(categoryId: string): void {
-    const queryParams = categoryId ? { categoryId } : {};
+    const queryParams: any = { page: 1 };
+    queryParams.categoryId = categoryId ? categoryId : null;
 
     this.#router.navigate([], {
       relativeTo: this.#route,
       queryParams,
-      queryParamsHandling: 'replace',
+      queryParamsHandling: 'merge',
     });
   }
 
   toggleArticleType(): void {
-    const queryParams = this.$$articleTypes() === ArticleTypePublic ? { articleType: ArticleTypePrivate } : {};
+    const queryParams: any = this.$$articleTypes() !== ArticleTypePrivate ? { articleType: ArticleTypePrivate } : { articleType: null };
 
     this.#router.navigate([], {
       relativeTo: this.#route,
       queryParams,
-      queryParamsHandling: 'replace',
+      queryParamsHandling: 'merge',
     });
   }
+
 
   goAdminPage(): void {
     this.#router.navigate(['manage']);

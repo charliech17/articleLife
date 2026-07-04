@@ -23,8 +23,13 @@ export class RouterService {
     const isPrivateHome = urlTree.queryParams['articleType'] === ArticleTypePrivate;
     const isPrivateArticle = this.#router.url.startsWith('/view-private-article');
 
+    const isAiHome = urlTree.queryParams['articleType'] === 'AI';
+    const isAiArticle = this.#router.url.startsWith('/ai-view-article');
+
     if (isPrivateHome || isPrivateArticle) {
       this.#router.navigate(['/home'], { queryParams: { articleType: ArticleTypePrivate } });
+    } else if (isAiHome || isAiArticle) {
+      this.#router.navigate(['/home'], { queryParams: { articleType: 'AI' } });
     } else {
       this.#router.navigate(['/home']);
     }

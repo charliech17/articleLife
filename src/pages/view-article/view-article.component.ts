@@ -88,7 +88,13 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
       const id = params.get('id');
       const isPrivate = this.#router.url.includes('view-private-article');
       if (id) {
-        this.apiGetArticleContents(id, isPrivate || false);
+        let decodedId = id;
+        try {
+          decodedId = window.atob(id);
+        } catch (e) {
+          // fallback in case it's not base64 encoded
+        }
+        this.apiGetArticleContents(decodedId, isPrivate || false);
       }
     });
   }

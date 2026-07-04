@@ -16,7 +16,12 @@
 
     <hr class="al-section-divider">
 
-    @if ($$isShowPrivateArticles()) {
+    @if ($$isAiMode()) {
+      <h2 class="al-page-title">探索 AI 創作</h2>
+      <app-article-list
+        [iptArticleList]="{ articleList: $$allArticles(), articleIdMapFile: $$articleIdMapFile(), isPrivateArticle: false }"
+      ></app-article-list>
+    } @else if ($$isShowPrivateArticles()) {
       <h2 class="al-page-title">私人文章列表</h2>
       <app-article-list
         [iptArticleList]="{ articleList: $$privateArticles(), articleIdMapFile: $$articleIdMapFile(), isPrivateArticle: true }"

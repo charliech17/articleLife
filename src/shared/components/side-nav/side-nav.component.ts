@@ -5,6 +5,7 @@ import { ProfileComponent } from '../profile/profile.component';
 import { Router } from '@angular/router';
 import { ArticleOutlineComponent } from '../article-outline/article-outline.component';
 import { ArticleFilterComponent } from '../../../pages/home/components/article-filter/article-filter.component';
+import { GlobalStore } from '../../stores/global.store';
 
 @Component({
   selector: 'app-side-nav',
@@ -19,7 +20,20 @@ export class SideNavComponent {
   $currentPath = computed(() => this.#routerService.getCurrentPath());
   $isHomePage = computed(() => this.#routerService.getCurrentPath().startsWith('/home'));
 
+  $isAiArticlesPage = computed(() => {
+    const path = this.$currentPath();
+    return path.includes('articleType=AI') || path.startsWith('/ai-view-article');
+  });
+
   goBackHome(): void {
     this.#routerService.navigateHome();
+  }
+
+  toggleAiArticlesPage(): void {
+    if (this.$isAiArticlesPage()) {
+      this.#router.navigate(['/home']);
+    } else {
+      this.#router.navigate(['/home'], { queryParams: { articleType: 'AI' } });
+    }
   }
 }

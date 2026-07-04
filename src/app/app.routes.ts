@@ -3,6 +3,7 @@ import { adminGuard } from '../core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: 'home', loadComponent: () => import('../pages/home/home.component').then(m => m.HomeComponent) },
+  { path: 'ai-view-article/:id', loadComponent: () => import('../pages/ai-view-article/ai-view-article.component').then(m => m.AiViewArticleComponent) },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'login', loadComponent: () => import('../pages/auth/login/login.component').then(m => m.LoginComponent) },
   {

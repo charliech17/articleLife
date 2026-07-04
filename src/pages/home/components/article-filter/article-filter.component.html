@@ -22,12 +22,10 @@
       <button class="al-action-btn" (click)="toggleArticleType()">
         <span class="al-btn-text">
           切換為
-          @if ($$articleTypes() === ArticleTypePublic) {
-          私人文章
-          } @else if ($$articleTypes() === ArticleTypePrivate) {
-          公開文章
+          @if ($$articleTypes() !== ArticleTypePrivate) {
+            私人文章
           } @else {
-          ...
+            公開文章
           }
         </span>
       </button>

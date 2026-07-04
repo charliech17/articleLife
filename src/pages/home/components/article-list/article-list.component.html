@@ -2,7 +2,7 @@
   @for (article of $iptArticleList().articleList; track $index) {
   @let hasMedia = $iptArticleList().articleIdMapFile.get(article.id);
 
-  <div class="cus-article__container al-pointer-cursor" (click)="viewArticleDetail(article.id)">
+  <div class="cus-article__container al-pointer-cursor" (click)="viewArticleDetail(article)">
     <div class="al-article-content">
       <h2 class="al-article-title">{{ article.title }}</h2>
       <div class="al-article-meta">
@@ -49,7 +49,8 @@
       </div>
       }
       } @else {
-      <img class="cus-article-media" [src]="'https://picsum.photos/seed/' + article.id + '/400/300'" alt="Default Random Image" />
+      <img class="cus-article-media" [src]="'https://picsum.photos/seed/' + article.id + '/400/300'"
+        alt="Default Random Image" />
       }
     </div>
   </div>

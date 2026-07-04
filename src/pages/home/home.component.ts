@@ -11,6 +11,7 @@ import { ArticleTypePrivate, IArticleFile, IArticleInfo } from '../../shared/mod
 import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, Subject, switchMap, takeUntil, EMPTY } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
+import { ApiAiArticleService } from '../../shared/services/api/api-ai-article/api-ai-article.service';
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,14 @@ import { GlobalStore } from '../../shared/stores/global.store';
 export class HomeComponent implements OnInit, OnDestroy {
   #apiArticleService = inject(ApiArticleService);
   #apiArticleFilesService = inject(ApiArticleFilesService);
-  #globalStore = inject(GlobalStore);
+  #apiAiArticleService = inject(ApiAiArticleService);
   #platformId = inject(PLATFORM_ID);
 
   $$allArticles = signal<IArticleInfo[]>([]);
   $$privateArticles = signal<IArticleInfo[]>([]);
   $$isShowPrivateArticles = signal<boolean>(false);
+  $$isAiMode = signal<boolean>(false);
+
 
   $$articleIdMapFile = signal<Map<number, IArticleFile[]>>(new Map());
   $currentPage = signal(0);
@@ -43,8 +46,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.#route.queryParamMap
       .pipe(
         switchMap(queryParam => {
-          const isPrivate = queryParam.get('articleType') == ArticleTypePrivate;
+          const explicitArticleType = queryParam.get('articleType');
+
+          const isPrivate = explicitArticleType == ArticleTypePrivate;
           this.$$isShowPrivateArticles.set(isPrivate);
+
+          const isAi = explicitArticleType == 'AI';
+          this.$$isAiMode.set(isAi);
 
           const currentPage = queryParam.get('page') || 1;
           this.$currentPage.set(Number(currentPage) - 1);
@@ -53,6 +61,31 @@ export class HomeComponent implements OnInit, OnDestroy {
           // 當判斷為伺服器端 (SSR) 且正在請求「私有文章」時，會直接回傳 EMPTY 中斷這一次的資料流，不發送 API 請求（從而避免了 401 錯誤）
           if (isPrivate && !isPlatformBrowser(this.#platformId)) {
             return EMPTY;
+          }
+
+          if (isAi) {
+            return this.#apiAiArticleService.getAiArticles(this.$currentPage(), 10, this.$categoryId()).pipe(
+              switchMap((res: any) => {
+                const articles = res.content.map((a: any) => ({
+                  id: a.id,
+                  title: a.title,
+                  intro: a.intro,
+                  articleContent: a.articleContent,
+                  createdTime: a.createdTime,
+                  categories: JSON.stringify([a.category?.categoryName || 'AI 創作']),
+                  viewTimes: a.viewTimes,
+                  isAi: true 
+                }));
+                const mappedRes = {
+                  responseData: {
+                    content: articles,
+                    currentPage: res.number,
+                    totalPages: res.totalPages
+                  }
+                };
+                return of({ res: mappedRes, filesList: [] as IArticleFile[] });
+              })
+            );
           }
 
           const articles$ = isPrivate

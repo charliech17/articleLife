@@ -22,19 +22,27 @@ export class ArticleListComponent implements AfterViewInit, OnInit {
 
   $iptArticleList = input.required<IIptArticleList>({ alias: 'iptArticleList' });
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     this.scrollToArticleListPosition();
   }
 
-  viewArticleDetail(articleId: string | number) {
+  viewArticleDetail(article: IArticleInfo) {
     this.#storageService.setSessionItem(ESessionStorageItems.articleYPosition, window.scrollY.toString());
-    if (this.$iptArticleList().isPrivateArticle) {
-      this.#router.navigate(['/view-private-article', articleId]);
+    const encodedId = window.btoa(article.id.toString());
+    const queryParams = { title: article.title };
+
+    if (article.isAi) {
+      this.#router.navigate(['/ai-view-article', encodedId], { queryParams });
       return;
     }
-    this.#router.navigate(['/view-article', articleId]);
+
+    if (this.$iptArticleList().isPrivateArticle) {
+      this.#router.navigate(['/view-private-article', encodedId]);
+      return;
+    }
+    this.#router.navigate(['/view-article', encodedId], { queryParams });
   }
 
   isCarouselEnabled(article: IArticleInfo): boolean {

@@ -13,6 +13,16 @@
   <div class="mt-4 mt-md-5">
     <app-profile></app-profile>
   </div>
+  <div class="mt-4 text-center">
+    <button class="al-ai-btn" [class.al-ai-btn-active]="$isAiArticlesPage()" (click)="toggleAiArticlesPage()">
+      <i class="bi bi-robot"></i> 
+      @if ($isAiArticlesPage()) {
+        返回首頁
+      } @else {
+        探索 AI 創作
+      }
+    </button>
+  </div>
   @if ($isHomePage()) {
     <div class="mt-4">
       <app-article-filter></app-article-filter>

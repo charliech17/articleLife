@@ -20,6 +20,7 @@ export interface IArticleDetails {
   categories: string | null;
   articleType: typeof ArticleTypePublic | typeof ArticleTypePrivate;
   extField1: string | null;
+  isAi?: boolean;
 }
 
 export interface ExtField1JSON {

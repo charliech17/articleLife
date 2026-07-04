@@ -1,0 +1,17 @@
+<div class="cus-view-article-container text-break">
+  <h1 class="cus-article-title al-break-all">{{ $$articleDetails().title }}</h1>
+  
+  <div class="mt-4 mb-4 cus-article-meta d-flex flex-wrap gap-3 align-items-center">
+    <span class="al-meta-item"><i class="bi bi-robot"></i> AI 分類: {{ $$articleDetails().categories | categories }}</span>
+    <span class="al-meta-item"><i class="bi bi-calendar3"></i> {{ $articleCreateTime() | date: 'yyyy/MM/dd HH:mm' }}</span>
+    <span class="al-meta-item"><i class="bi bi-eye"></i> 瀏覽次數: {{ $$articleDetails().viewTimes }}</span>
+  </div>
+
+  @if ($$articleDetails().intro) {
+    <blockquote class="mt-4 cus-article-intro">
+      {{ $$articleDetails().intro }}
+    </blockquote>
+  }
+
+  <div class="mt-5 ck ck-content cus-article-content" [innerHTML]="$articleContent()"></div>
+</div>
