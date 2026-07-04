@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           }
 
           if (isAi) {
-            return this.#apiAiArticleService.getAiArticles(this.$currentPage(), 10, this.$categoryId()).pipe(
+            return this.#apiAiArticleService.getAiArticles(this.$currentPage(), 5, this.$categoryId()).pipe(
               switchMap((res: any) => {
                 const articles = res.content.map((a: any) => ({
                   id: a.id,
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                   createdTime: a.createdTime,
                   categories: JSON.stringify([a.category?.categoryName || 'AI 創作']),
                   viewTimes: a.viewTimes,
-                  isAi: true 
+                  isAi: true
                 }));
                 const mappedRes = {
                   responseData: {

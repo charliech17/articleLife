@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -7,7 +7,9 @@ import { ArticleTypePublic, IArticleDetails } from '../../shared/models/article.
 import { SEOService } from '../../shared/services/seo.service';
 import { ScrollService } from '../../shared/services/scroll.service';
 import hljs from 'highlight.js';
+import { marked } from 'marked';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
+import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
 
 @Component({
   selector: 'app-ai-view-article',
@@ -24,6 +26,9 @@ export class AiViewArticleComponent implements OnDestroy {
   #seoService = inject(SEOService);
   #scrollService = inject(ScrollService);
   #platformId = inject(PLATFORM_ID);
+  #articleOutlineService = inject(ArticleOutlineService);
+
+  @ViewChild('contentContainer') contentContainer!: ElementRef;
 
   $$articleDetails = signal<IArticleDetails>({
     id: -1,
@@ -58,14 +63,7 @@ export class AiViewArticleComponent implements OnDestroy {
 
   constructor() {
     this.getArticleContents();
-    
-    effect(() => {
-      if (this.$$articleDetails().articleContent && isPlatformBrowser(this.#platformId)) {
-        setTimeout(() => {
-          hljs.highlightAll();
-        }, 0);
-      }
-    });
+    this.setupOutline();
 
     if (isPlatformBrowser(this.#platformId)) {
       this.#scrollService.scrollToTop();
@@ -73,6 +71,7 @@ export class AiViewArticleComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.#articleOutlineService.destroyOutline();
   }
 
   getArticleContents() {
@@ -132,40 +131,33 @@ export class AiViewArticleComponent implements OnDestroy {
     return this.#sanitizer.bypassSecurityTrustHtml(innerHTML);
   }
 
+  setupOutline() {
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+
+    effect(() => {
+      if (this.$$articleDetails().articleContent) {
+        setTimeout(() => {
+          this.#articleOutlineService.setupOutline(this.contentContainer.nativeElement);
+          hljs.highlightAll();
+        }, 0);
+      }
+    });
+  }
+
   parseMarkdown(md: string): string {
-    let html = md || '';
+    let markdownString = md || '';
     
     // Remove the first level-1 heading if it is at the very beginning of the markdown
-    html = html.replace(/^\s*#\s+.*?\n/m, '');
+    markdownString = markdownString.replace(/^\s*#\s+.*?\n/m, '');
 
-    // headers
-    html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-    html = html.replace(/\!\[(.*?)\]\((.*?)\)/gim, "<img alt='$1' src='$2' style='max-width:100%; border-radius: 8px;' />");
-    html = html.replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2'>$1</a>");
-    html = html.replace(/\*\*(.*?)\*\*/gim, "<strong>$1</strong>");
-    html = html.replace(/\*(.*?)\*/gim, "<em>$1</em>");
-    html = html.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
-    const lines = html.split('\n');
-    let inList = false;
-    let resHtml = '';
-    for (let line of lines) {
-      if (line.trim().startsWith('- ')) {
-        if (!inList) { resHtml += '<ul>\n'; inList = true; }
-        resHtml += `<li>${line.trim().substring(2)}</li>\n`;
-      } else {
-        if (inList) { resHtml += '</ul>\n'; inList = false; }
-        if (line.trim() !== '') {
-          if (!/^<(\/)?(h|ul|ol|li|blockquote|pre|img)/.test(line.trim())) {
-            resHtml += `<p>${line.trim()}</p>\n`;
-          } else {
-            resHtml += `${line.trim()}\n`;
-          }
-        }
-      }
-    }
-    if (inList) { resHtml += '</ul>\n'; }
-    return resHtml;
+    // Parse markdown to HTML
+    let html = marked.parse(markdownString) as string;
+    
+    // Add custom styles to images to match previous behavior
+    html = html.replace(/<img([^>]*)>/gi, "<img$1 style='max-width:100%; border-radius: 8px;' />");
+
+    return html;
   }
 }

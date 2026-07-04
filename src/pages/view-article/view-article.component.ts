@@ -38,7 +38,6 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #seoService = inject(SEOService);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
-  private _observer: IntersectionObserver | null = null;
 
   $$articleDetails = signal<IArticleDetails>({
     id: -1,
@@ -85,12 +84,8 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.#articleOutlineService.setOutlineContent([]);
-    this.#articleOutlineService.setActiveHeaderId(null);
+    this.#articleOutlineService.destroyOutline();
     this.#globalStore.setCurrentArticleInfo(null);
-    if (this._observer) {
-      this._observer.disconnect();
-    }
   }
 
   getArticleContents() {
@@ -158,46 +153,11 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     effect(() => {
       if (this.$$articleDetails().articleContent) {
         setTimeout(() => {
-          this.observeHeaderPositions();
+          this.#articleOutlineService.setupOutline(this.contentContainer.nativeElement);
           this.highlightCodeBlock();
         }, 0);
       }
     });
-  }
-
-  setHeaderIdAndExtract(): IArticleOutline[] {
-    const h2Elements = this.contentContainer.nativeElement.querySelectorAll('h2');
-    const headerTitles: IArticleOutline[] = [];
-
-    h2Elements.forEach((element: HTMLElement, index: number) => {
-      if (!this._checkIsWantedHeader(element)) return;
-
-      const id = `section-${index}`;
-      element.setAttribute('id', id); // 設定唯一ID以便滾動
-      headerTitles.push({ id, title: element.innerText, isActive: false, offsetTop: element.offsetTop });
-    });
-
-    return headerTitles;
-  }
-
-  observeHeaderPositions() {
-    if (this._observer) {
-      this._observer.disconnect();
-    }
-
-    this._observer = new IntersectionObserver(() => {
-      const newOutlineContent = this.setHeaderIdAndExtract();
-      this.#articleOutlineService.setOutlineContent(newOutlineContent);
-    });
-
-    this.contentContainer.nativeElement.querySelectorAll('h2').forEach((element: HTMLElement) => {
-      if (!this._checkIsWantedHeader(element)) return;
-      this._observer!.observe(element);
-    });
-  }
-
-  private _checkIsWantedHeader(element: HTMLElement) {
-    return element.tagName === 'H2' && !element.closest('pre');
   }
 
   highlightCodeBlock(): void {

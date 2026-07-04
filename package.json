@@ -38,6 +38,7 @@
     "dayjs": "1.11.13",
     "express": "^4.21.2",
     "highlight.js": "^11.11.1",
+    "marked": "^18.0.0",
     "merge-jsons-webpack-plugin": "^2.0.1",
     "ngx-cookie-service": "^22.0.0",
     "ngx-cookie-service-ssr": "^22.0.0",

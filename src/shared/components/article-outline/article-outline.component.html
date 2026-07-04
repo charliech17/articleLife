@@ -6,6 +6,8 @@
         <li
           class="al-outline-item al-pointer-cursor"
           [class.active]="item.id === $activeHeaderId()"
+          [class.al-outline-level-1]="item.level === 1"
+          [class.al-outline-level-2]="item.level === 2"
           (click)="goToTitle(item.id)"
         >
           <a class="al-outline-link" [title]="item.title">{{ item.title }}</a>

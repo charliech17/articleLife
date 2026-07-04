@@ -93,6 +93,40 @@
         transform: translateX(4px);
       }
     }
+
+    &.al-outline-level-1 {
+      font-weight: 700;
+      color: #111827;
+      padding-left: 20px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      border-radius: 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+
+      &::before {
+        width: 10px;
+        height: 10px;
+        background-color: #ec4899;
+        left: 0px;
+      }
+
+      &.active {
+        color: #ec4899;
+        background-color: transparent;
+        &::before {
+          background-color: #ec4899;
+          box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+        }
+      }
+
+      &:hover {
+        background-color: transparent;
+        color: #ec4899;
+        &::before {
+          background-color: #fbcfe8;
+        }
+      }
+    }
   }
 
   .al-outline-link {
