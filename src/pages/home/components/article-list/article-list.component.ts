@@ -1,11 +1,13 @@
-import { AfterViewInit, Component, inject, input, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import { AfterViewInit, Component, computed, inject, input, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoriesPipe } from '../../../../shared/filters/categories.pipe';
 import { DatePipe, isPlatformBrowser } from '@angular/common';
 import { IArticleFile, IArticleInfo, ExtField1JSON } from '../../../../shared/models/article.models';
 import { ESessionStorageItems, StorageService } from '../../../../shared/services/storage.service';
 import { ScrollService } from '../../../../shared/services/scroll.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgbCarousel, NgbSlide } from '@ng-bootstrap/ng-bootstrap';
+import { parseMarkdownIntro } from '../../../../shared/utils/markdown.util';
 
 @Component({
   selector: 'app-article-list',
@@ -19,8 +21,24 @@ export class ArticleListComponent implements AfterViewInit, OnInit {
   #storageService = inject(StorageService);
   #scrollService = inject(ScrollService);
   #platformId = inject(PLATFORM_ID);
+  #sanitizer = inject(DomSanitizer);
 
   $iptArticleList = input.required<IIptArticleList>({ alias: 'iptArticleList' });
+
+  $parsedArticles = computed(() => {
+    const listInfo = this.$iptArticleList();
+    return listInfo.articleList.map(article => {
+      let parsedIntro: SafeHtml | null = null;
+      if (article.intro) {
+        const html = parseMarkdownIntro(article.intro);
+        parsedIntro = this.#sanitizer.bypassSecurityTrustHtml(html);
+      }
+      return {
+        ...article,
+        parsedIntro
+      };
+    });
+  });
 
   ngOnInit(): void { }
 

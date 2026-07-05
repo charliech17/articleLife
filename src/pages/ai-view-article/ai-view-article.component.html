@@ -14,10 +14,8 @@
     </button>
   </div>
 
-  @if ($$articleDetails().intro) {
-    <blockquote class="mt-4 cus-article-intro">
-      {{ $$articleDetails().intro }}
-    </blockquote>
+  @if ($articleIntroHtml()) {
+    <blockquote class="mt-4 cus-article-intro" [innerHTML]="$articleIntroHtml()"></blockquote>
   }
 
   <div #contentContainer class="mt-5 ck ck-content cus-article-content" [innerHTML]="$articleContent()"></div>

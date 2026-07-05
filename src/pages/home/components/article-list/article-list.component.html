@@ -1,5 +1,5 @@
 <div class="al-article-list-wrapper">
-  @for (article of $iptArticleList().articleList; track $index) {
+  @for (article of $parsedArticles(); track $index) {
   @let hasMedia = $iptArticleList().articleIdMapFile.get(article.id);
 
   <div class="cus-article__container al-pointer-cursor" (click)="viewArticleDetail(article)">
@@ -15,7 +15,7 @@
           時間: {{ article.lastModifyTime ?? article.createdTime | date: 'yyyy-MM-dd HH:mm:ss' }}
         </span>
       </div>
-      <p class="al-article-intro">{{ article.intro }}</p>
+      <div class="al-article-intro" [innerHTML]="article.parsedIntro"></div>
     </div>
 
     <div class="al-article-media-container">

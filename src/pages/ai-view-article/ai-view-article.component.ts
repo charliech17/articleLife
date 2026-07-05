@@ -9,6 +9,7 @@ import { ScrollService } from '../../shared/services/scroll.service';
 import hljs from 'highlight.js';
 import { marked } from 'marked';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
+import { parseMarkdownArticle, parseMarkdownIntro } from '../../shared/utils/markdown.util';
 import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
 
 @Component({
@@ -60,6 +61,14 @@ export class AiViewArticleComponent implements OnDestroy {
     const createdTime = this.$$articleDetails().createdTime;
     return createdTime ? new Date(createdTime) : new Date();
   });
+  
+  $articleIntroHtml = computed(() => {
+    const intro = this.$$articleDetails().intro;
+    if (!intro) return null;
+    
+    const parsedHtml = parseMarkdownIntro(intro);
+    return this.getInnerHtml(parsedHtml);
+  });
 
   constructor() {
     this.getArticleContents();
@@ -96,7 +105,7 @@ export class AiViewArticleComponent implements OnDestroy {
           id: articleContent.id,
           title: articleContent.title,
           intro: articleContent.intro,
-          articleContent: this.parseMarkdown(articleContent.articleContent),
+          articleContent: parseMarkdownArticle(articleContent.articleContent),
           authorId: '',
           lastModifyTime: articleContent.createdTime,
           createdTime: articleContent.createdTime,
@@ -144,20 +153,5 @@ export class AiViewArticleComponent implements OnDestroy {
         }, 0);
       }
     });
-  }
-
-  parseMarkdown(md: string): string {
-    let markdownString = md || '';
-    
-    // Remove the first level-1 heading if it is at the very beginning of the markdown
-    markdownString = markdownString.replace(/^\s*#\s+.*?\n/m, '');
-
-    // Parse markdown to HTML
-    let html = marked.parse(markdownString) as string;
-    
-    // Add custom styles to images to match previous behavior
-    html = html.replace(/<img([^>]*)>/gi, "<img$1 style='max-width:100%; border-radius: 8px;' />");
-
-    return html;
   }
 }
