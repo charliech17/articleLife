@@ -29,7 +29,7 @@ export function app(): express.Express {
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
   const commonEngine = new CommonEngine({
-    allowedHosts: ['josh-lifesharing.com', 'www.josh-lifesharing.com', 'localhost', '127.0.0.1', '192.168.68.59']
+    allowedHosts: ['josh-lifesharing.com', 'www.josh-lifesharing.com']
   });
 
   server.set('view engine', 'html');
