@@ -14,7 +14,7 @@ const basePath = environment.baseHref || '/';
 const getCSP = (nonce: string) =>
   "default-src 'self';" +
   `script-src 'self' 'nonce-${nonce}';` +
-  "frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com;" +
+  "frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com https://www.google.com/ https://maps.google.com/;" +
   "img-src * data: blob:;" +
   "font-src 'self' https://fonts.gstatic.com;" +
   `connect-src http: https:;` +
