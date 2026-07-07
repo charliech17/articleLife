@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiStockService, IStock } from '../../../../shared/services/api/api-stock/api-stock.service';
 import { catchError, of, forkJoin, finalize } from 'rxjs';
+import { AppUtil } from '../../../../shared/utils/app.util';
 
 @Component({
   selector: 'app-stock-tracker',
@@ -12,12 +13,12 @@ import { catchError, of, forkJoin, finalize } from 'rxjs';
 })
 export class StockTrackerComponent implements OnInit {
   #apiStock = inject(ApiStockService);
-  
+
   stocks = signal<IStock[]>([]);
   marketIndices = signal<IStock[]>([]);
   loading = signal(true);
   error = signal(false);
-  
+
   Math = Math; // Expose Math to template
 
   ngOnInit(): void {
@@ -27,7 +28,7 @@ export class StockTrackerComponent implements OnInit {
   fetchStocks(): void {
     if (this.loading() && this.stocks().length > 0) return;
     this.loading.set(true);
-    
+
     forkJoin({
       stocks: this.#apiStock.getDailyStocks().pipe(
         catchError(err => {
@@ -57,11 +58,13 @@ export class StockTrackerComponent implements OnInit {
 
   openStockPopup(event: Event, symbol: string): void {
     event.preventDefault();
+    const isMobile = AppUtil.isMobileDevice();
+    const targetName = isMobile ? '_blank' : 'stockPopup';
     const width = 1000;
     const height = 800;
     const left = (window.innerWidth / 2) - (width / 2);
     const top = (window.innerHeight / 2) - (height / 2);
     const url = `https://finance.yahoo.com/quote/${symbol}`;
-    window.open(url, 'stockPopup', `width=${width},height=${height},top=${top},left=${left}`);
+    window.open(url, targetName, `width=${width},height=${height},top=${top},left=${left}`);
   }
 }

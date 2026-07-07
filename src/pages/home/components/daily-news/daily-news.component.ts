@@ -2,6 +2,7 @@ import { Component, OnInit, signal, inject, OnDestroy } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ApiNewsService, DailyNews } from '../../../../shared/services/api/api-news/api-news.service';
 import { Subject, takeUntil } from 'rxjs';
+import { AppUtil } from '../../../../shared/utils/app.util';
 
 @Component({
   selector: 'app-daily-news',
@@ -72,11 +73,13 @@ export class DailyNewsComponent implements OnInit, OnDestroy {
   onReadMore(event: Event, news: DailyNews) {
     event.preventDefault();
     if (news.url && news.url !== '#') {
+      const isMobile = AppUtil.isMobileDevice();
+      const targetName = isMobile ? '_blank' : 'newsPopup';
       const width = 1000;
       const height = 800;
       const left = (window.innerWidth / 2) - (width / 2);
       const top = (window.innerHeight / 2) - (height / 2);
-      window.open(news.url, 'newsPopup', `width=${width},height=${height},top=${top},left=${left}`);
+      window.open(news.url, targetName, `width=${width},height=${height},top=${top},left=${left}`);
     } else {
       alert(`即將前往閱讀: ${news.title}`);
     }
