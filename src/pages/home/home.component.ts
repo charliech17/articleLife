@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, of, Subject, switchMap, takeUntil, EMPTY } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
 import { ApiAiArticleService } from '../../shared/services/api/api-ai-article/api-ai-article.service';
+import { IAiArticleFile } from '../../shared/models/ai-article.models';
 
 @Component({
   selector: 'app-home',
@@ -83,7 +84,25 @@ export class HomeComponent implements OnInit, OnDestroy {
                     totalPages: res.totalPages
                   }
                 };
-                return of({ res: mappedRes, filesList: [] as IArticleFile[] });
+
+                if (articles.length === 0) {
+                  return of({ res: mappedRes, filesList: [] as IArticleFile[] });
+                }
+                const articleIds = articles.map((article: any) => article.id);
+                return this.#apiAiArticleService.getAiArticleFilesByArticleIds(articleIds).pipe(
+                  map((filesList: IAiArticleFile[]) => {
+                    const mappedFiles: IArticleFile[] = filesList.map(f => ({
+                      id: f.id,
+                      articleId: f.aiArticleId,
+                      fileName: f.fileName,
+                      fileUrl: f.fileUrl,
+                      fileType: f.fileType,
+                      fileSize: f.fileSize,
+                      createdTime: f.createdTime
+                    }));
+                    return { res: mappedRes, filesList: mappedFiles };
+                  })
+                );
               })
             );
           }

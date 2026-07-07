@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../env/env';
+import { IAiArticleFile } from '../../../models/ai-article.models';
 
 export interface AiArticleCategory {
   id: number;
@@ -44,5 +45,9 @@ export class ApiAiArticleService {
 
   getAiArticleById(id: string | number): Observable<AiArticleDetails> {
     return this.#http.get<AiArticleDetails>(`${environment.apiPath}/api/ai-articles/${id}`);
+  }
+
+  getAiArticleFilesByArticleIds(articleIds: number[]): Observable<IAiArticleFile[]> {
+    return this.#http.post<IAiArticleFile[]>(`${environment.apiPath}/api/ai-articles/files`, { articleIds });
   }
 }
