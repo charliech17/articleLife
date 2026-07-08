@@ -49,7 +49,9 @@ export class AiViewArticleComponent implements OnDestroy {
 
   copyUrl(): void {
     if (isPlatformBrowser(this.#platformId)) {
-      navigator.clipboard.writeText(window.location.href).then(() => {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('title');
+      navigator.clipboard.writeText(url.href).then(() => {
         this.isCopied.set(true);
         setTimeout(() => this.isCopied.set(false), 2000);
       });
