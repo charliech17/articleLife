@@ -1,5 +1,5 @@
 import { RouterService } from './../../services/router.service';
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
 import { LogoComponent } from '../logo/logo.component';
 import { ProfileComponent } from '../profile/profile.component';
 import { Router } from '@angular/router';
@@ -19,10 +19,14 @@ export class SideNavComponent {
   #router = inject(Router);
   #routerService = inject(RouterService);
   #themeService = inject(ThemeService);
+  #globalStore = inject(GlobalStore);
 
   $currentPath = computed(() => this.#routerService.getCurrentPath());
   $isHomePage = computed(() => this.#routerService.getCurrentPath().startsWith('/home'));
   $isDarkMode = this.#themeService.$isDarkMode;
+  $isLoggedIn = this.#globalStore.isLoggedIn;
+  
+  isMobileMenuOpen = signal(false);
 
   $isAiArticlesPage = computed(() => {
     const path = this.$currentPath();
@@ -43,5 +47,9 @@ export class SideNavComponent {
 
   toggleTheme(): void {
     this.#themeService.toggleTheme();
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update(v => !v);
   }
 }

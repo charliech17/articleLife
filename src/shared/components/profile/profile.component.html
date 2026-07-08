@@ -24,7 +24,7 @@
     </div>
 
     @if ($$mottoText()?.motto) {
-      <div class="al-motto-container mt-0 mt-md-4 flex-grow-1">
+      <div class="al-motto-container mt-0 mt-md-4 flex-grow-1 d-none d-md-block">
         <div class="al-motto-quote">"</div>
         <h4 class="al-motto-text">{{ $$mottoText()?.motto }}</h4>
         @if ($$mottoText()?.reference) {
@@ -34,17 +34,17 @@
     }
   </div>
 
-  <div class="al-action-buttons mt-3 mt-md-4 d-flex flex-row flex-md-column flex-wrap justify-content-center gap-2">
+  <div class="al-action-buttons mt-3 mt-md-4 d-flex flex-column gap-2">
     @if ($userInfo().id >= 1) {
-      <div class="d-flex gap-2 w-100 flex-wrap flex-md-nowrap">
+      <div class="d-flex gap-2 w-100 flex-column">
         @if ($isViewSelfArticle()) {
         <button class="al-btn-modern primary flex-grow-1" (click)="goToEditArticle()">
-          <i class="bi bi-pencil-square"></i> <span class="d-none d-md-inline">編輯文章</span><span class="d-inline d-md-none">編輯</span>
+          <i class="bi bi-pencil-square"></i> 編輯文章
         </button>
         }
         @if ($router().url.split('?')[0] === '/home') {
         <button class="al-btn-modern primary flex-grow-1" (click)="goAddNewArticle()">
-          <i class="bi bi-plus-lg"></i> <span class="d-none d-md-inline">新增文章</span><span class="d-inline d-md-none">新增</span>
+          <i class="bi bi-plus-lg"></i> 新增文章
         </button>
         }
       </div>
