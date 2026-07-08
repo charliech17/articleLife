@@ -34,16 +34,18 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
   constructor() { }
 
   ngOnInit(): void {
-    const saved = localStorage.getItem(this.STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          this.$messages.set(parsed);
-          return;
+    if (typeof localStorage !== 'undefined') {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            this.$messages.set(parsed);
+            return;
+          }
+        } catch (e) {
+          console.error('Failed to parse chat history', e);
         }
-      } catch (e) {
-        console.error('Failed to parse chat history', e);
       }
     }
 
@@ -63,7 +65,9 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
   }
 
   private saveHistory(msgs: ChatMessage[]) {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(msgs));
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(msgs));
+    }
   }
 
   deleteMessage(id: string) {
