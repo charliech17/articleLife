@@ -19,4 +19,6 @@ export class EditSaveButtonComponent {
 
 export interface IEditSaveButtonInput {
   buttonText: string;
+  btnStyle?: 'primary' | 'secondary';
+  icon?: string;
 }

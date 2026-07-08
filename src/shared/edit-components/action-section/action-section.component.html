@@ -1,12 +1,20 @@
 <div class="text-end">
   @if ($inputAction().isEdit) {
     <app-edit-save-button
-      class="me-2"
-      [iptEditSaveButton]="{ buttonText: 'categories' }"
+      class="me-2 d-inline-block"
+      [iptEditSaveButton]="{ buttonText: '設定分類', btnStyle: 'secondary', icon: 'bi bi-tags-fill' }"
       (optSave)="receiveEditCategories()"
     ></app-edit-save-button>
-    <app-edit-save-button class="me-2" [iptEditSaveButton]="{ buttonText: 'save' }" (optSave)="receiveDoSave()"></app-edit-save-button>
+    <app-edit-save-button 
+      class="me-2 d-inline-block" 
+      [iptEditSaveButton]="{ buttonText: '儲存變更', btnStyle: 'primary', icon: 'bi bi-check-circle-fill' }" 
+      (optSave)="receiveDoSave()">
+    </app-edit-save-button>
   } @else {
-    <app-edit-save-button [iptEditSaveButton]="{ buttonText: 'publish' }" (optSave)="receiveDoPublish()"></app-edit-save-button>
+    <app-edit-save-button 
+      class="d-inline-block"
+      [iptEditSaveButton]="{ buttonText: '發佈文章', btnStyle: 'primary', icon: 'bi bi-send-fill' }" 
+      (optSave)="receiveDoPublish()">
+    </app-edit-save-button>
   }
 </div>

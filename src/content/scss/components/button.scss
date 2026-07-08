@@ -22,3 +22,60 @@
 .al-btn-sm {
   @include al-btn-base;
 }
+
+.al-btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: linear-gradient(135deg, #4338ca, #4f46e5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.al-btn-secondary {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 8px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+  }
+
+  :host-context([data-bs-theme="dark"]) & {
+    background: #374151;
+    color: #d1d5db;
+    border: 1px solid #4b5563;
+    
+    &:hover {
+      background: #4b5563;
+      color: #f9fafb;
+    }
+  }
+}

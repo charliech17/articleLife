@@ -1,1 +1,9 @@
-<button (click)="doSave()">{{ $iptEditSaveButton().buttonText }}</button>
+<button 
+  class="al-btn-{{ $iptEditSaveButton().btnStyle || 'primary' }}" 
+  (click)="doSave()"
+>
+  @if ($iptEditSaveButton().icon) {
+    <i class="{{ $iptEditSaveButton().icon }} me-1"></i>
+  }
+  {{ $iptEditSaveButton().buttonText }}
+</button>

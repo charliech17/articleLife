@@ -3,6 +3,8 @@
 
 .cus-edit-title__top-placeholder {
   animation: moveTopPlaceholder 1s forwards;
+  margin-bottom: 8px;
+  font-weight: 500;
   @keyframes moveTopPlaceholder {
     0% {
       transform: translateY(100%);
