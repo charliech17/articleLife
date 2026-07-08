@@ -116,26 +116,28 @@
       color: #d1d5db;
     }
     
-    h2, h3, h4 {
-      color: #111827;
-      margin-top: 2em;
-      margin-bottom: 1em;
-      font-weight: 600;
+    ::ng-deep {
+      h2, h3, h4 {
+        color: #111827;
+        margin-top: 2em;
+        margin-bottom: 1em;
+        font-weight: 600;
 
-      :host-context([data-bs-theme="dark"]) & {
-        color: #f9fafb;
+        :host-context([data-bs-theme="dark"]) & {
+          color: #f9fafb;
+        }
       }
-    }
-    
-    p {
-      margin-bottom: 1.5em;
-    }
+      
+      p {
+        margin-bottom: 1.5em;
+      }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 12px;
-      margin: 1.5em 0;
+      img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 12px;
+        margin: 1.5em 0;
+      }
     }
   }
 
