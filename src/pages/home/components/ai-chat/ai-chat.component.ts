@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild, ElementRef, AfterViewChecked, inject } from '@angular/core';
+import { Component, OnInit, signal, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiAiService } from '../../../../shared/services/api/api-ai/api-ai.service';
@@ -17,7 +17,7 @@ export interface ChatMessage {
   templateUrl: './ai-chat.component.html',
   styleUrl: './ai-chat.component.scss'
 })
-export class AiChatComponent implements OnInit, AfterViewChecked {
+export class AiChatComponent implements OnInit {
 
   #apiAiService = inject(ApiAiService);
 
@@ -78,12 +78,11 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
-  }
-
   toggleChat() {
     this.$isOpen.update(v => !v);
+    if (this.$isOpen()) {
+      this.scrollToBottomWithDelay();
+    }
   }
 
   sendMessage() {
@@ -105,6 +104,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
     });
     this.$inputText.set('');
     this.$isTyping.set(true);
+    this.scrollToBottomWithDelay();
 
     // Call API
     this.#apiAiService.chat(text).subscribe({
@@ -121,6 +121,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
           return newMsgs;
         });
         this.$isTyping.set(false);
+        this.scrollToBottomWithDelay();
       },
       error: (err) => {
         console.error('Failed to get AI response', err);
@@ -136,6 +137,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
           return newMsgs;
         });
         this.$isTyping.set(false);
+        this.scrollToBottomWithDelay();
       }
     });
   }
@@ -148,6 +150,12 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
       event.preventDefault();
       this.sendMessage();
     }
+  }
+
+  private scrollToBottomWithDelay(): void {
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 50);
   }
 
   private scrollToBottom(): void {
