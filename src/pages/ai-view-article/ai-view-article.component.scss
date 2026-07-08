@@ -9,6 +9,11 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
   margin-bottom: 32px;
 
+  :host-context([data-bs-theme="dark"]) & {
+    background-color: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
   @include shared.media-breakpoint-up(md) {
     padding: 48px;
     margin: 24px auto;
@@ -23,6 +28,10 @@
     line-height: 1.3;
     margin-bottom: 8px;
 
+    :host-context([data-bs-theme="dark"]) & {
+      color: #f9fafb;
+    }
+
     @include shared.media-breakpoint-up(md) {
       font-size: 2.5rem;
     }
@@ -34,6 +43,11 @@
     border-bottom: 1px solid #e5e7eb;
     padding-bottom: 16px;
 
+    :host-context([data-bs-theme="dark"]) & {
+      color: #9ca3af;
+      border-bottom-color: #374151;
+    }
+
     .al-meta-item {
       display: inline-flex;
       align-items: center;
@@ -42,6 +56,11 @@
       border-radius: 9999px;
       font-weight: 500;
       color: #4b5563;
+
+      :host-context([data-bs-theme="dark"]) & {
+        background-color: #374151;
+        color: #d1d5db;
+      }
 
       &.al-copy-btn {
         border-radius: 6px;
@@ -53,6 +72,15 @@
         
         &:hover {
           background-color: #e5e7eb;
+        }
+
+        :host-context([data-bs-theme="dark"]) & {
+          border-color: #4b5563;
+          background-color: #374151;
+          color: #d1d5db;
+          &:hover {
+            background-color: #4b5563;
+          }
         }
       }
     }
@@ -67,6 +95,11 @@
     font-size: 1.05rem;
     line-height: 1.6;
     margin: 24px 0;
+
+    :host-context([data-bs-theme="dark"]) & {
+      background-color: #374151;
+      color: #d1d5db;
+    }
     
     p { margin: 0; }
   }
@@ -75,6 +108,10 @@
     color: #374151;
     font-size: 1.1rem;
     line-height: 1.8;
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #d1d5db;
+    }
     
     ::ng-deep {
       h2, h3, h4 {
@@ -82,6 +119,10 @@
         margin-top: 2em;
         margin-bottom: 1em;
         font-weight: 600;
+
+        :host-context([data-bs-theme="dark"]) & {
+          color: #f9fafb;
+        }
       }
       
       p {
@@ -110,6 +151,10 @@
     border-top: 1px solid #e5e7eb;
     margin: 40px 0;
     opacity: 1;
+
+    :host-context([data-bs-theme="dark"]) & {
+      border-top-color: #374151;
+    }
   }
 
   .ck-content ::ng-deep pre {

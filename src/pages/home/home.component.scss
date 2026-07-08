@@ -41,6 +41,11 @@
     @include media-breakpoint-down(md) {
       display: inline-block;
     }
+
+    :host-context([data-bs-theme="dark"]) & {
+      background: #374151;
+      color: #818cf8;
+    }
   }
 }
 
@@ -87,6 +92,10 @@
   margin-bottom: 40px;
   position: relative;
 
+  :host-context([data-bs-theme="dark"]) & {
+    color: #f9fafb;
+  }
+
   &::after {
     content: '';
     display: block;
@@ -112,6 +121,12 @@
   margin-right: auto;
   border: 1px solid rgba(0, 0, 0, 0.05);
 
+  :host-context([data-bs-theme="dark"]) & {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
   @include media-breakpoint-down(md) {
     margin-bottom: 80px; /* 留出空白讓懸浮按鈕不會擋住 */
   }
@@ -136,6 +151,16 @@
     opacity: 0.5;
     cursor: not-allowed;
   }
+
+  :host-context([data-bs-theme="dark"]) & {
+    background-color: #374151;
+    color: #e5e7eb;
+
+    &:hover:not(:disabled) {
+      background-color: #4b5563;
+      color: #f9fafb;
+    }
+  }
 }
 
 .al-pagination-info {
@@ -145,6 +170,10 @@
   font-weight: 500;
   color: #6b7280;
 
+  :host-context([data-bs-theme="dark"]) & {
+    color: #9ca3af;
+  }
+
   .al-pagination-input {
     width: 48px;
     height: 36px;
@@ -153,11 +182,23 @@
     border-radius: 6px;
     font-family: inherit;
     font-size: 0.9rem;
+    background-color: transparent;
+    color: inherit;
 
     &:focus {
       outline: none;
       border-color: #4f46e5;
       box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+    }
+
+    :host-context([data-bs-theme="dark"]) & {
+      border-color: #4b5563;
+      background-color: #374151;
+      
+      &:focus {
+        border-color: #818cf8;
+        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+      }
     }
   }
 }

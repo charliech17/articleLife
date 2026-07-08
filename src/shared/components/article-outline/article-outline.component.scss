@@ -10,6 +10,10 @@
     font-weight: 700;
     margin-bottom: 1.2rem;
     display: flex;
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #9ca3af;
+    }
     align-items: center;
     gap: 8px;
     padding-left: 4px;
@@ -61,6 +65,12 @@
       z-index: 1;
       border: 2px solid #ffffff;
       box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
+
+      :host-context([data-bs-theme="dark"]) & {
+        background-color: #4b5563;
+        border-color: #1f2937;
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+      }
     }
 
     &:hover {
@@ -74,6 +84,15 @@
       
       .al-outline-link {
         transform: translateX(4px);
+      }
+
+      :host-context([data-bs-theme="dark"]) & {
+        background-color: rgba(79, 70, 229, 0.2);
+        color: #d1d5db;
+        
+        &::before {
+          background-color: #6366f1;
+        }
       }
     }
 
@@ -92,6 +111,14 @@
       .al-outline-link {
         transform: translateX(4px);
       }
+
+      :host-context([data-bs-theme="dark"]) & {
+        background-color: rgba(79, 70, 229, 0.3);
+        
+        &::before {
+          border-color: #1f2937;
+        }
+      }
     }
 
     &.al-outline-level-1 {
@@ -102,6 +129,11 @@
       font-size: 0.95rem;
       border-radius: 0;
       border-bottom: 1px solid rgba(0,0,0,0.05);
+
+      :host-context([data-bs-theme="dark"]) & {
+        color: #f9fafb;
+        border-bottom-color: rgba(255, 255, 255, 0.1);
+      }
 
       &::before {
         width: 10px;
@@ -124,6 +156,19 @@
         color: #ec4899;
         &::before {
           background-color: #fbcfe8;
+        }
+
+        :host-context([data-bs-theme="dark"]) & {
+          color: #f472b6;
+          &::before {
+            background-color: #be185d;
+          }
+        }
+      }
+
+      &.active {
+        :host-context([data-bs-theme="dark"]) & {
+          color: #f472b6;
         }
       }
     }

@@ -23,6 +23,15 @@
       }
     </button>
   </div>
+  <div class="mt-3 text-center">
+    <button class="al-theme-btn" (click)="toggleTheme()">
+      @if ($isDarkMode()) {
+        <i class="bi bi-sun"></i> 切換為淺色模式
+      } @else {
+        <i class="bi bi-moon-stars"></i> 切換為深色模式
+      }
+    </button>
+  </div>
   @if ($isHomePage()) {
     <div class="mt-4">
       <app-article-filter></app-article-filter>

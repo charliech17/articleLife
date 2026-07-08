@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ArticleOutlineComponent } from '../article-outline/article-outline.component';
 import { ArticleFilterComponent } from '../../../pages/home/components/article-filter/article-filter.component';
 import { GlobalStore } from '../../stores/global.store';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -17,8 +18,11 @@ import { GlobalStore } from '../../stores/global.store';
 export class SideNavComponent {
   #router = inject(Router);
   #routerService = inject(RouterService);
+  #themeService = inject(ThemeService);
+
   $currentPath = computed(() => this.#routerService.getCurrentPath());
   $isHomePage = computed(() => this.#routerService.getCurrentPath().startsWith('/home'));
+  $isDarkMode = this.#themeService.$isDarkMode;
 
   $isAiArticlesPage = computed(() => {
     const path = this.$currentPath();
@@ -35,5 +39,9 @@ export class SideNavComponent {
     } else {
       this.#router.navigate(['/home'], { queryParams: { articleType: 'AI' } });
     }
+  }
+
+  toggleTheme(): void {
+    this.#themeService.toggleTheme();
   }
 }

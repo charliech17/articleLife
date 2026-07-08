@@ -19,6 +19,11 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     }
+    
+    :host-context([data-bs-theme="dark"]) & {
+      background: #1f2937;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
   }
 }
 
@@ -67,6 +72,11 @@
       border: 3px solid #ffffff;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
+    
+    :host-context([data-bs-theme="dark"]) & {
+      border-color: #1f2937;
+      background-color: #374151;
+    }
   }
 }
 
@@ -80,6 +90,10 @@
 
     @include shared.media-breakpoint-up(md) {
       font-size: 1.3rem;
+    }
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #f9fafb;
     }
   }
   
@@ -97,6 +111,11 @@
 
     @include shared.media-breakpoint-up(md) {
       font-size: 0.75rem;
+    }
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #9ca3af;
+      background: #374151;
     }
   }
 }
@@ -116,6 +135,10 @@
     border-radius: 16px;
     border-left: 4px solid #4f46e5;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    
+    :host-context([data-bs-theme="dark"]) & {
+      background: linear-gradient(to right bottom, #1f2937, #111827);
+    }
   }
 
   .al-motto-quote {
@@ -149,6 +172,10 @@
       margin-bottom: 0.5rem;
       line-height: 1.6;
     }
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #d1d5db;
+    }
   }
 
   .al-motto-ref {
@@ -160,6 +187,10 @@
 
     @include shared.media-breakpoint-up(md) {
       font-size: 0.8rem;
+    }
+    
+    :host-context([data-bs-theme="dark"]) & {
+      color: #6b7280;
     }
   }
 }
@@ -216,6 +247,16 @@
       &:hover {
         background-color: #e5e7eb;
         color: #1f2937;
+      }
+      
+      :host-context([data-bs-theme="dark"]) & {
+        background-color: #374151;
+        color: #d1d5db;
+        
+        &:hover {
+          background-color: #4b5563;
+          color: #f9fafb;
+        }
       }
     }
   }
