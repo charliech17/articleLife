@@ -11,6 +11,11 @@
         <button class="al-close-btn" (click)="toggleChat()"><i class="bi bi-x-lg"></i></button>
       </div>
 
+      <div class="al-chat-banner">
+        <i class="bi bi-info-circle"></i>
+        <span>每次對話皆為獨立，系統暫存最多 {{ maxHistory }} 則紀錄。</span>
+      </div>
+
       <div class="al-chat-messages" #chatMessagesContainer>
         @for (msg of $messages(); track msg.id) {
           <div class="al-message-row al-message-row-hoverable" [ngClass]="msg.sender === 'user' ? 'al-user-row' : 'al-ai-row'">

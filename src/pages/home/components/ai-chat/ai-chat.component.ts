@@ -29,7 +29,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
   @ViewChild('chatMessagesContainer') private chatMessagesContainer!: ElementRef;
 
   private readonly STORAGE_KEY = 'al_ai_chat_history';
-  private readonly MAX_HISTORY = 20;
+  readonly maxHistory = 20;
 
   constructor() { }
 
@@ -95,7 +95,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
     };
 
     this.$messages.update(msgs => {
-      const newMsgs = [...msgs, userMsg].slice(-this.MAX_HISTORY);
+      const newMsgs = [...msgs, userMsg].slice(-this.maxHistory);
       this.saveHistory(newMsgs);
       return newMsgs;
     });
@@ -112,7 +112,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
           timestamp: new Date()
         };
         this.$messages.update(msgs => {
-          const newMsgs = [...msgs, aiMsg].slice(-this.MAX_HISTORY);
+          const newMsgs = [...msgs, aiMsg].slice(-this.maxHistory);
           this.saveHistory(newMsgs);
           return newMsgs;
         });
@@ -127,7 +127,7 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
           timestamp: new Date()
         };
         this.$messages.update(msgs => {
-          const newMsgs = [...msgs, aiMsg].slice(-this.MAX_HISTORY);
+          const newMsgs = [...msgs, aiMsg].slice(-this.maxHistory);
           this.saveHistory(newMsgs);
           return newMsgs;
         });
