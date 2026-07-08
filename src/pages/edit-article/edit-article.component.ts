@@ -1,7 +1,7 @@
 import { ArticleTypePrivate, ArticleTypePublic } from './../../shared/models/article.models';
 import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { TextareaComponent } from '../../shared/edit-components/textarea/textarea.component';
-import { EditorComponent, EditorUploadImpl } from '@coder-josh/ckeditor5-wrapper';
+import { EditorComponent, EditorUploadImpl } from '@josh-kccha/ckeditor5-wrapper';
 import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit-title.component';
 import { ActionSectionComponent } from '../../shared/edit-components/action-section/action-section.component';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
@@ -96,7 +96,7 @@ export class EditArticleComponent {
     this.#route.paramMap.subscribe(params => {
       const idParam = params.get('id');
       const articleId = AppUtil.decodeBase64Id(idParam ?? '');
-      
+
       this.checkIsValidAuthor(articleId).subscribe({
         next: _res => {
           this.goAddOrEditArticle(articleId);
