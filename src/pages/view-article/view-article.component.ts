@@ -72,9 +72,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
 
   askAi(): void {
     if (isPlatformBrowser(this.#platformId)) {
-      const url = new URL(window.location.href);
-      url.searchParams.delete('title');
-      const message = `請總結這篇文章：${url.href}`;
+      const message = `請總結這篇文章：[當前文章]`;
       this.#globalService.aiChatTrigger.next(message);
     }
   }

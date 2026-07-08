@@ -27,8 +27,7 @@
                 <i class="bi bi-trash"></i>
               </button>
             }
-            <div class="al-message-bubble" [ngClass]="msg.sender === 'user' ? 'al-user-bubble' : 'al-ai-bubble'">
-              {{ msg.text }}
+            <div class="al-message-bubble" [ngClass]="msg.sender === 'user' ? 'al-user-bubble' : 'al-ai-bubble'" [innerHTML]="msg.safeHtml || msg.text">
             </div>
             @if (msg.sender === 'ai') {
               <button class="al-delete-msg-btn" (click)="deleteMessage(msg.id)" title="刪除此對話">
@@ -52,6 +51,9 @@
         <div class="al-chat-suggestions">
           <button class="al-suggestion-btn" (click)="askAiToSummarize()">
             <i class="bi bi-robot"></i> 總結本篇文章
+          </button>
+          <button class="al-suggestion-btn" (click)="tagCurrentArticle()">
+            <i class="bi bi-tag"></i> 標註本文
           </button>
         </div>
       }
