@@ -94,8 +94,10 @@ export class EditArticleComponent {
 
   private initPage(): void {
     this.#route.paramMap.subscribe(params => {
-      const articleId = params.get('id');
-      this.checkIsValidAuthor(articleId ?? '').subscribe({
+      const idParam = params.get('id');
+      const articleId = AppUtil.decodeBase64Id(idParam ?? '');
+      
+      this.checkIsValidAuthor(articleId).subscribe({
         next: _res => {
           this.goAddOrEditArticle(articleId);
         },

@@ -15,6 +15,7 @@ import { SEOService } from '../../shared/services/seo.service';
 import { RouterService } from '../../shared/services/router.service';
 import { ApiArticleFilesService } from '../../shared/services/api/api-article-files/api-article-files.service';
 import { forkJoin } from 'rxjs';
+import { AppUtil } from '../../shared/utils/app.util';
 
 @Component({
   selector: 'app-view-article',
@@ -93,12 +94,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
       const id = params.get('id');
       const isPrivate = this.#router.url.includes('view-private-article');
       if (id) {
-        let decodedId = id;
-        try {
-          decodedId = atob(id);
-        } catch (e) {
-          // fallback in case it's not base64 encoded
-        }
+        const decodedId = AppUtil.decodeBase64Id(id);
         this.apiGetArticleContents(decodedId, isPrivate || false);
       }
     });

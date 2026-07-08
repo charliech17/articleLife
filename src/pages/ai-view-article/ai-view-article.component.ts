@@ -7,10 +7,10 @@ import { ArticleTypePublic, IArticleDetails } from '../../shared/models/article.
 import { SEOService } from '../../shared/services/seo.service';
 import { ScrollService } from '../../shared/services/scroll.service';
 import hljs from 'highlight.js';
-import { marked } from 'marked';
 import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 import { parseMarkdownArticle, parseMarkdownIntro } from '../../shared/utils/markdown.util';
-import { ArticleOutlineService, IArticleOutline } from '../../shared/services/article-outline.service';
+import { ArticleOutlineService } from '../../shared/services/article-outline.service';
+import { AppUtil } from '../../shared/utils/app.util';
 
 @Component({
   selector: 'app-ai-view-article',
@@ -61,11 +61,11 @@ export class AiViewArticleComponent implements OnDestroy {
     const createdTime = this.$$articleDetails().createdTime;
     return createdTime ? new Date(createdTime) : new Date();
   });
-  
+
   $articleIntroHtml = computed(() => {
     const intro = this.$$articleDetails().intro;
     if (!intro) return null;
-    
+
     const parsedHtml = parseMarkdownIntro(intro);
     return this.getInnerHtml(parsedHtml);
   });
@@ -87,12 +87,7 @@ export class AiViewArticleComponent implements OnDestroy {
     this.#route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        let decodedId = id;
-        try {
-          decodedId = atob(id);
-        } catch (e) {
-          // fallback in case it's not base64 encoded
-        }
+        const decodedId = AppUtil.decodeBase64Id(id);
         this.apiGetArticleContents(decodedId);
       }
     });
