@@ -1,7 +1,7 @@
 import { afterNextRender, ChangeDetectorRef, Component, inject } from '@angular/core';
 import { TranslateDirective } from '../../shared/language';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { ClassicEditor } from 'ckeditor5';
+import type { ClassicEditor } from 'ckeditor5';
 import { HttpClient } from '@angular/common/http';
 
 @Component({

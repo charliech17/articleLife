@@ -22,7 +22,10 @@
     "lib": [
       "ES2022",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@coder-josh/ckeditor5-wrapper": ["../article-life-ckeditor5/dist/ckeditor5-wrapper"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

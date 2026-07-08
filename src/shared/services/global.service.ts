@@ -1,4 +1,4 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID, NgZone } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -17,21 +17,25 @@ export class GlobalService {
   private readonly FETCH_COOLDOWN = 60000; // 60 秒
   private readonly STORAGE_KEY = 'last_user_fetch_time';
 
+  #ngZone = inject(NgZone);
+
   constructor() {
     if (isPlatformBrowser(this.#platformId)) {
       this.callApiWhenReloadOrLogin();
       
-      // 每 5 秒檢查一次是否需要打 API
-      this.#checkInterval = setInterval(() => {
-        this.checkAndFetchUser();
-      }, 5000);
-      
-      // 當使用者回到網頁時，如果距離上次打 API 已經超過 10 秒，就馬上打一次
-      window.addEventListener('focus', () => {
-        const lastFetchTime = parseInt(sessionStorage.getItem(this.STORAGE_KEY) || '0', 10);
-        if (Date.now() - lastFetchTime > 10000) { 
-          this.callApiWhenReloadOrLogin();
-        }
+      this.#ngZone.runOutsideAngular(() => {
+        // 每 5 秒檢查一次是否需要打 API
+        this.#checkInterval = setInterval(() => {
+          this.checkAndFetchUser();
+        }, 5000);
+        
+        // 當使用者回到網頁時，如果距離上次打 API 已經超過 10 秒，就馬上打一次
+        window.addEventListener('focus', () => {
+          const lastFetchTime = parseInt(sessionStorage.getItem(this.STORAGE_KEY) || '0', 10);
+          if (Date.now() - lastFetchTime > 10000) { 
+            this.#ngZone.run(() => this.callApiWhenReloadOrLogin());
+          }
+        });
       });
     } else {
       this.#globalStore.setStoreFinishedInit();
@@ -47,7 +51,7 @@ export class GlobalService {
     const lastFetchTime = parseInt(sessionStorage.getItem(this.STORAGE_KEY) || '0', 10);
     // 如果距離上次打 API 已經超過 60 秒，就打 API
     if (Date.now() - lastFetchTime >= this.FETCH_COOLDOWN) {
-      this.callApiWhenReloadOrLogin();
+      this.#ngZone.run(() => this.callApiWhenReloadOrLogin());
     }
   }
 

@@ -1,5 +1,5 @@
 <div class="cus-edit-container">
-  @if (isLoading) {
+  @if ($isLoading()) {
     載入中...
   } @else {
     <app-action-section
@@ -28,15 +28,17 @@
     </div>
     <div class="mt-3">
       @if (editorUploadImplInstance) {
-        <app-editor
+        <app-ckeditor5-wrapper
           class="al-ckeditor"
           (optEditorChange)="handleUpdateEditor($event)"
           [inputEditor]="{
             initContent: $$currentArticleDetails().articleContent,
             uploadId: $$currentArticleDetails().id,
             instance: editorUploadImplInstance,
+            videoUploadUrl: baseApiUrl + '/api/files/upload',
+            getHeadersFn: getHeadersFn
           }"
-        ></app-editor>
+        ></app-ckeditor5-wrapper>
       }
     </div>
   }

@@ -1,7 +1,7 @@
 import { ArticleTypePrivate, ArticleTypePublic } from './../../shared/models/article.models';
 import { Component, effect, HostListener, inject, signal } from '@angular/core';
 import { TextareaComponent } from '../../shared/edit-components/textarea/textarea.component';
-import { EditorComponent } from '../../shared/edit-components/editor/editor.component';
+import { EditorComponent, EditorUploadImpl } from '@coder-josh/ckeditor5-wrapper';
 import { EditTitleComponent } from '../../shared/edit-components/edit-title/edit-title.component';
 import { ActionSectionComponent } from '../../shared/edit-components/action-section/action-section.component';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
@@ -17,8 +17,9 @@ import { ApiArticleCategoriesService } from '../../shared/services/api/api-artic
 import { of, switchMap, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GlobalStore } from '../../shared/stores/global.store';
-import { EditorUploadImpl } from '../../shared/edit-components/editor/editor-upload-impl';
 import { EnvService } from '../../shared/services/env.service';
+import { AppUtil } from '../../shared/utils/app.util';
+import { API_CONSTANTS } from '../../config/api.constants';
 
 @Component({
   selector: 'app-edit-article',
@@ -54,8 +55,14 @@ export class EditArticleComponent {
   $$allCategories = signal<IArticleCategory[]>([]);
   $$currSelectedCategories = signal<IArticleCategory[]>([]);
   $isEditArticle = signal<boolean>(false);
-  isLoading = true;
+  $isLoading = signal<boolean>(true);
   editorUploadImplInstance: EditorUploadImpl | null = null;
+
+  get baseApiUrl() { return this.#envService.baseApiUrl; }
+
+  getHeadersFn = () => ({
+    [API_CONSTANTS.X_XSRF_TOKEN]: AppUtil.getCookie(API_CONSTANTS.XSRF_TOKEN) || '',
+  });
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
@@ -118,7 +125,7 @@ export class EditArticleComponent {
       this.$isEditArticle.set(true);
       this.apiLoadArticle(articleId);
     } else {
-      this.isLoading = false;
+      this.$isLoading.set(false);
       this.apiGetAllCategories(null);
       this.setAuthorId();
     }
@@ -128,12 +135,13 @@ export class EditArticleComponent {
     this.#apiArticleService.getEditArticle(id).subscribe({
       next: (res: IArticleDetails) => {
         this.$$currentArticleDetails.update(prev => ({ ...prev, ...res }));
-        this.isLoading = false;
+        this.$isLoading.set(false);
         this.apiGetAllCategories(res);
 
         this.editorUploadImplInstance = new EditorUploadImpl(
+          `${this.#envService.baseApiUrl}/api/files/upload`,
           res.id.toString(),
-          this.#envService.baseApiUrl,
+          this.getHeadersFn,
           this.uploadSuccessCallback.bind(this),
         );
       },
@@ -205,7 +213,10 @@ export class EditArticleComponent {
       },
     });
 
-    dialogRef.afterClosed().subscribe((categories: IConfirmCategories) => {
+    dialogRef.afterClosed().subscribe((categories: IConfirmCategories | undefined) => {
+      if (!categories) {
+        return;
+      }
       if (!categories.selectedCategories.length) {
         alert('selected categories is null, cannot proceed');
         return;
@@ -213,13 +224,13 @@ export class EditArticleComponent {
 
       this.$$currSelectedCategories.set(categories.selectedCategories);
       const extField1Obj: ExtField1JSON = { isCarouselEnabled: categories.isCarouselEnabled };
-      
-      this.$$currentArticleDetails.update(prev => ({ 
-        ...prev, 
+
+      this.$$currentArticleDetails.update(prev => ({
+        ...prev,
         articleType: categories.selectedArticleType,
         extField1: JSON.stringify(extField1Obj)
       }));
-      
+
       this.updateMetaDataOrCreateArticle(categories);
       this.saveArticle();
     });
