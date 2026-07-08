@@ -407,3 +407,48 @@
     }
   }
 }
+
+.al-chat-suggestions {
+  padding: 12px 16px 0;
+  background: white;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  border-top: 1px solid #f1f5f9;
+  
+  :host-context([data-bs-theme="dark"]) & {
+    background: #1f2937;
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.al-suggestion-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+
+  :host-context([data-bs-theme="dark"]) & {
+    background: #374151;
+    border-color: #4b5563;
+    color: #cbd5e1;
+
+    &:hover {
+      background: #4b5563;
+      color: #f1f5f9;
+    }
+  }
+}

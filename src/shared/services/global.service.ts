@@ -4,9 +4,11 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiAuthService } from './api/api-auth/auth.service';
 import { GlobalStore } from '../stores/global.store';
+import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
+  aiChatTrigger = new Subject<string>();
   #apiAuthService = inject(ApiAuthService);
   #globalStore = inject(GlobalStore);
   #platformId = inject(PLATFORM_ID);

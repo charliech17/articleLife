@@ -1,7 +1,10 @@
-import { Component, OnInit, signal, ViewChild, ElementRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, signal, ViewChild, ElementRef, inject, PLATFORM_ID, OnDestroy } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiAiService } from '../../../../shared/services/api/api-ai/api-ai.service';
+import { GlobalService } from '../../../../shared/services/global.service';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter, Subscription } from 'rxjs';
 
 export interface ChatMessage {
   id: string;
@@ -17,11 +20,16 @@ export interface ChatMessage {
   templateUrl: './ai-chat.component.html',
   styleUrl: './ai-chat.component.scss'
 })
-export class AiChatComponent implements OnInit {
+export class AiChatComponent implements OnInit, OnDestroy {
 
   #apiAiService = inject(ApiAiService);
+  #globalService = inject(GlobalService);
+  #platformId = inject(PLATFORM_ID);
+  #router = inject(Router);
 
   $isOpen = signal<boolean>(false);
+  $isArticlePage = signal<boolean>(false);
+  #routerSub?: Subscription;
   $messages = signal<ChatMessage[]>([]);
   $inputText = signal<string>('');
   $isTyping = signal<boolean>(false);
@@ -34,6 +42,23 @@ export class AiChatComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.#platformId)) {
+      this.#globalService.aiChatTrigger.subscribe(msg => {
+        this.$isOpen.set(true);
+        this.$inputText.set(msg);
+        this.scrollToBottomWithDelay();
+        // Optional: wait a moment and send automatically
+        setTimeout(() => this.sendMessage(), 100);
+      });
+      
+      this.checkIfArticlePage(window.location.pathname);
+      this.#routerSub = this.#router.events.pipe(
+        filter(event => event instanceof NavigationEnd)
+      ).subscribe((event: any) => {
+        this.checkIfArticlePage(event.urlAfterRedirects);
+      });
+    }
+
     if (typeof localStorage !== 'undefined') {
       const saved = localStorage.getItem(this.STORAGE_KEY);
       if (saved) {
@@ -62,6 +87,26 @@ export class AiChatComponent implements OnInit {
 
   private generateId(): string {
     return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+  }
+
+  ngOnDestroy(): void {
+    if (this.#routerSub) {
+      this.#routerSub.unsubscribe();
+    }
+  }
+
+  private checkIfArticlePage(url: string) {
+    this.$isArticlePage.set(url.includes('/view-article') || url.includes('/ai-view-article'));
+  }
+
+  askAiToSummarize() {
+    if (isPlatformBrowser(this.#platformId)) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('title');
+      const message = `請總結這篇文章：${url.href}`;
+      this.$inputText.set(message);
+      this.sendMessage();
+    }
   }
 
   private saveHistory(msgs: ChatMessage[]) {

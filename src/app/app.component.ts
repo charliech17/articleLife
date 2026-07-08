@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { AllLayoutsComponent } from '../shared/layouts/all-layouts/all-layouts.component';
 import { GlobalService } from '../shared/services/global.service';
 import { ThemeService } from '../shared/services/theme.service';
+import { AiChatComponent } from '../pages/home/components/ai-chat/ai-chat.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, AllLayoutsComponent],
+  imports: [RouterOutlet, AllLayoutsComponent, AiChatComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

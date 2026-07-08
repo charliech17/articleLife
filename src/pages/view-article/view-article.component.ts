@@ -1,4 +1,5 @@
 import { GlobalStore } from './../../shared/stores/global.store';
+import { GlobalService } from './../../shared/services/global.service';
 import { AfterViewInit, Component, computed, effect, ElementRef, inject, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiArticleService } from '../../shared/services/api/api-article/api-article.service';
@@ -37,6 +38,7 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
   #routerService = inject(RouterService);
   #platformId = inject(PLATFORM_ID);
   #seoService = inject(SEOService);
+  #globalService = inject(GlobalService);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
 
@@ -65,6 +67,15 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
         this.isCopied.set(true);
         setTimeout(() => this.isCopied.set(false), 2000);
       });
+    }
+  }
+
+  askAi(): void {
+    if (isPlatformBrowser(this.#platformId)) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('title');
+      const message = `請總結這篇文章：${url.href}`;
+      this.#globalService.aiChatTrigger.next(message);
     }
   }
 

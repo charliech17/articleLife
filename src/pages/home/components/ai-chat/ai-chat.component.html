@@ -48,6 +48,14 @@
         }
       </div>
 
+      @if ($isArticlePage()) {
+        <div class="al-chat-suggestions">
+          <button class="al-suggestion-btn" (click)="askAiToSummarize()">
+            <i class="bi bi-robot"></i> 總結本篇文章
+          </button>
+        </div>
+      }
+
       <div class="al-chat-input-area">
         <textarea 
           class="al-chat-input" 

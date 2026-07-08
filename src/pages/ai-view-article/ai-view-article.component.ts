@@ -11,6 +11,7 @@ import { CategoriesPipe } from '../../shared/filters/categories.pipe';
 import { parseMarkdownArticle, parseMarkdownIntro } from '../../shared/utils/markdown.util';
 import { ArticleOutlineService } from '../../shared/services/article-outline.service';
 import { AppUtil } from '../../shared/utils/app.util';
+import { GlobalService } from '../../shared/services/global.service';
 
 @Component({
   selector: 'app-ai-view-article',
@@ -28,6 +29,7 @@ export class AiViewArticleComponent implements OnDestroy {
   #scrollService = inject(ScrollService);
   #platformId = inject(PLATFORM_ID);
   #articleOutlineService = inject(ArticleOutlineService);
+  #globalService = inject(GlobalService);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
 
@@ -55,6 +57,15 @@ export class AiViewArticleComponent implements OnDestroy {
         this.isCopied.set(true);
         setTimeout(() => this.isCopied.set(false), 2000);
       });
+    }
+  }
+
+  askAi(): void {
+    if (isPlatformBrowser(this.#platformId)) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('title');
+      const message = `請總結這篇文章：${url.href}`;
+      this.#globalService.aiChatTrigger.next(message);
     }
   }
 
