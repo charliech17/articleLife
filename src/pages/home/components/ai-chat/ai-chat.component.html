@@ -13,13 +13,23 @@
 
       <div class="al-chat-messages" #chatMessagesContainer>
         @for (msg of $messages(); track msg.id) {
-          <div class="al-message-row" [ngClass]="msg.sender === 'user' ? 'al-user-row' : 'al-ai-row'">
+          <div class="al-message-row al-message-row-hoverable" [ngClass]="msg.sender === 'user' ? 'al-user-row' : 'al-ai-row'">
             @if (msg.sender === 'ai') {
               <div class="al-avatar al-ai-avatar"><i class="bi bi-robot"></i></div>
+            }
+            @if (msg.sender === 'user') {
+              <button class="al-delete-msg-btn" (click)="deleteMessage(msg.id)" title="刪除此對話">
+                <i class="bi bi-trash"></i>
+              </button>
             }
             <div class="al-message-bubble" [ngClass]="msg.sender === 'user' ? 'al-user-bubble' : 'al-ai-bubble'">
               {{ msg.text }}
             </div>
+            @if (msg.sender === 'ai') {
+              <button class="al-delete-msg-btn" (click)="deleteMessage(msg.id)" title="刪除此對話">
+                <i class="bi bi-trash"></i>
+              </button>
+            }
           </div>
         }
         

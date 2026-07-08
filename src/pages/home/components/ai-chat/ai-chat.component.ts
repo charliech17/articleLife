@@ -28,18 +28,50 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
 
   @ViewChild('chatMessagesContainer') private chatMessagesContainer!: ElementRef;
 
+  private readonly STORAGE_KEY = 'al_ai_chat_history';
+  private readonly MAX_HISTORY = 20;
+
   constructor() { }
 
   ngOnInit(): void {
-    // Initial greeting
+    const saved = localStorage.getItem(this.STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this.$messages.set(parsed);
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to parse chat history', e);
+      }
+    }
+
+    // Initial greeting if no history
     this.$messages.set([
       {
-        id: Date.now().toString(),
+        id: this.generateId(),
         sender: 'ai',
         text: '你好！我是 ArticleLife 助理，有什麼我可以幫忙的嗎？',
         timestamp: new Date()
       }
     ]);
+  }
+
+  private generateId(): string {
+    return Date.now().toString(36) + Math.random().toString(36).substring(2, 9);
+  }
+
+  private saveHistory(msgs: ChatMessage[]) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(msgs));
+  }
+
+  deleteMessage(id: string) {
+    this.$messages.update(msgs => {
+      const newMsgs = msgs.filter(m => m.id !== id);
+      this.saveHistory(newMsgs);
+      return newMsgs;
+    });
   }
 
   ngAfterViewChecked() {
@@ -56,13 +88,17 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
 
     // Add user message
     const userMsg: ChatMessage = {
-      id: Date.now().toString(),
+      id: this.generateId(),
       sender: 'user',
       text: text,
       timestamp: new Date()
     };
 
-    this.$messages.update(msgs => [...msgs, userMsg]);
+    this.$messages.update(msgs => {
+      const newMsgs = [...msgs, userMsg].slice(-this.MAX_HISTORY);
+      this.saveHistory(newMsgs);
+      return newMsgs;
+    });
     this.$inputText.set('');
     this.$isTyping.set(true);
 
@@ -70,23 +106,31 @@ export class AiChatComponent implements OnInit, AfterViewChecked {
     this.#apiAiService.chat(text).subscribe({
       next: (res) => {
         const aiMsg: ChatMessage = {
-          id: Date.now().toString(),
+          id: this.generateId(),
           sender: 'ai',
           text: res.responseData || '不好意思，我現在有點無法回答您的問題。',
           timestamp: new Date()
         };
-        this.$messages.update(msgs => [...msgs, aiMsg]);
+        this.$messages.update(msgs => {
+          const newMsgs = [...msgs, aiMsg].slice(-this.MAX_HISTORY);
+          this.saveHistory(newMsgs);
+          return newMsgs;
+        });
         this.$isTyping.set(false);
       },
       error: (err) => {
         console.error('Failed to get AI response', err);
         const aiMsg: ChatMessage = {
-          id: Date.now().toString(),
+          id: this.generateId(),
           sender: 'ai',
           text: '很抱歉，伺服器連線出現問題，請稍後再試！',
           timestamp: new Date()
         };
-        this.$messages.update(msgs => [...msgs, aiMsg]);
+        this.$messages.update(msgs => {
+          const newMsgs = [...msgs, aiMsg].slice(-this.MAX_HISTORY);
+          this.saveHistory(newMsgs);
+          return newMsgs;
+        });
         this.$isTyping.set(false);
       }
     });
