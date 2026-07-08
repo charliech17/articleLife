@@ -10,4 +10,62 @@ $cus-gray: #ccc;
 .cus-edit-container {
   margin-top: map.get(shared.$spacers, 5);
   padding: map.get(shared.$spacers, 2);
+
+  :host-context([data-bs-theme="dark"]) & {
+    ::ng-deep {
+      /* CKEditor Dark Mode Overrides */
+      .ck.ck-editor__main > .ck-editor__editable {
+        background-color: #1f2937 !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: #d1d5db !important;
+        box-shadow: none !important;
+
+        &.ck-focused {
+          border-color: #4f46e5 !important;
+        }
+
+        h2, h3, h4, h5, h6 {
+          color: #f9fafb !important;
+        }
+      }
+
+      .ck.ck-toolbar {
+        background-color: #374151 !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .ck.ck-button {
+        color: #d1d5db !important;
+        &:hover {
+          background-color: #4b5563 !important;
+        }
+        &.ck-on {
+          background-color: #4f46e5 !important;
+          color: #ffffff !important;
+        }
+      }
+
+      .ck.ck-dropdown__panel {
+        background-color: #374151 !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+      }
+
+      .ck.ck-list {
+        background-color: #374151 !important;
+      }
+
+      .ck.ck-list__item > .ck-button {
+        color: #d1d5db !important;
+        &:hover {
+          background-color: #4b5563 !important;
+        }
+      }
+      
+      .ck.ck-input {
+        background-color: #1f2937 !important;
+        border-color: #4b5563 !important;
+        color: #f9fafb !important;
+      }
+    }
+  }
 }

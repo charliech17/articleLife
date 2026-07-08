@@ -11,6 +11,21 @@ $cus-gray: #ccc;
   width: 100%;
   resize: none; // 禁止調整大小
   overflow: hidden; // 隱藏滾動條
+  background-color: #ffffff;
+  color: #111827;
+  transition: background-color 0.2s ease, color 0.2s ease;
+
+  &:focus {
+    outline: none;
+  }
+
+  :host-context([data-bs-theme="dark"]) & {
+    background-color: #1f2937;
+    color: #f9fafb;
+    border-radius: 8px; // 稍微加個圓角比較好看
+    padding: 8px;
+    margin-left: -8px; // 補償 padding 造成的位移
+  }
 }
 
 // ** 這裡若重新命名，需要同步在component.ts中重新命名 **
@@ -20,6 +35,10 @@ $cus-gray: #ccc;
 
   &::placeholder {
     color: $cus-gray;
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #6b7280;
+    }
   }
 }
 
@@ -29,5 +48,9 @@ $cus-gray: #ccc;
 
   &::placeholder {
     color: $cus-gray;
+
+    :host-context([data-bs-theme="dark"]) & {
+      color: #6b7280;
+    }
   }
 }

@@ -26,5 +26,17 @@ $colors: (
 
   .cus-edit-title__color-#{$name} {
     color: $color;
+
+    :host-context([data-bs-theme="dark"]) & {
+      @if $name == 'black' {
+        color: #f9fafb;
+      } @else if $name == 'blue' {
+        color: #818cf8; // Lighter purple/blue
+      } @else if $name == 'red' {
+        color: #f87171;
+      } @else if $name == 'green' {
+        color: #4ade80;
+      }
+    }
   }
 }
