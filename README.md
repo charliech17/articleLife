@@ -1,6 +1,7 @@
 <div align="center">
   <h1>🎨 ArticleLife - 前端專案 (Frontend)</h1>
   <p><b>基於 Angular 22 與 Server-Side Rendering (SSR) 打造的現代化文章平台</b></p>
+  <p>🔗 <b>線上預覽：</b> <a href="https://josh-lifesharing.com/articleLife/home">https://josh-lifesharing.com/articleLife/home</a></p>
 </div>
 
 ---
