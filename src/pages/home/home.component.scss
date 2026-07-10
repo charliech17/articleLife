@@ -10,42 +10,49 @@
   padding: 32px 24px;
 
   @include media-breakpoint-up(md) {
-    padding: 64px 8%;
+    padding: 36px 8% 64px;
   }
 }
 
 .al-widgets-header {
-  position: relative;
-  text-align: center;
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 
-  .al-page-title {
-    margin-bottom: 0;
+  // 桌面版兩張卡片各有標題，此列整個隱藏
+  @include media-breakpoint-up(md) {
+    display: none;
+  }
+
+  // 低調的小節標籤：短橫線 + 字距拉開的小字
+  .al-widgets-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--al-muted);
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      background: var(--al-accent);
+    }
   }
 
   .mobile-collapse-btn {
-    display: none;
     background: var(--al-surface-2);
     border: none;
     padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
+    border-radius: var(--al-radius-sm);
+    font-size: 0.85rem;
     font-weight: 500;
     color: var(--al-accent);
     cursor: pointer;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-
-    @include media-breakpoint-down(md) {
-      display: inline-block;
-    }
-
-    :host-context([data-bs-theme="dark"]) & {
-      background: var(--al-surface-2);
-      color: var(--al-accent-soft);
-    }
   }
 }
 
@@ -69,7 +76,9 @@
     flex-direction: row;
     align-items: stretch;
     overflow: visible;
-    
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+
     .al-widget {
       flex: 1;
       min-width: 0;
@@ -81,7 +90,7 @@
   border: 0;
   height: 1px;
   background: linear-gradient(to right, transparent, var(--al-border-strong), transparent);
-  margin: 40px auto 60px;
+  margin: 28px auto 44px;
   max-width: 480px;
   position: relative;
   overflow: visible;
@@ -101,7 +110,7 @@
 
 .al-page-title {
   text-align: center;
-  font-size: 1.9rem;
+  font-size: 1.5rem;
   font-weight: 600;
   font-family: var(--al-font-serif);
   letter-spacing: 0.15em;

@@ -34,6 +34,10 @@
   --al-shadow-sm: 0 1px 3px rgba(62, 48, 30, 0.08);
   --al-shadow-md: 0 6px 20px rgba(62, 48, 30, 0.1);
 
+  /* 股市漲跌（台股慣例：漲紅跌綠） */
+  --al-up: #bf3b2f;
+  --al-down: #2f7d5c;
+
   /* 字體 */
   --al-font-serif: 'zen-old-mincho', 'Noto Serif TC', 'Songti TC', serif;
   --al-font-sans: 'Noto Sans TC', -apple-system, sans-serif;
@@ -80,6 +84,9 @@
   --al-border-strong: #5c4f38;
   --al-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
   --al-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+
+  --al-up: #f08a7d;
+  --al-down: #5ec9a0;
 
   --bs-body-bg: var(--al-bg);
   --bs-body-color: var(--al-ink-soft);

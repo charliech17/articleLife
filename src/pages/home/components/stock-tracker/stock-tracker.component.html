@@ -1,9 +1,7 @@
 <div class="al-stock-tracker">
   <div class="stock-header">
     <div class="title-wrapper">
-      <h3 class="stock-title">
-        📈 每日市場指標
-      </h3>
+      <h3 class="stock-title">每日市場指標</h3>
       <span class="update-time" *ngIf="stocks().length > 0">
         最後更新: {{ stocks()[0].timestamp | date:'MM/dd HH:mm:ss' }}
       </span>
