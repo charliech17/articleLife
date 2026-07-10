@@ -12,6 +12,7 @@ import { parseMarkdownArticle, parseMarkdownIntro } from '../../shared/utils/mar
 import { ArticleOutlineService } from '../../shared/services/article-outline.service';
 import { AppUtil } from '../../shared/utils/app.util';
 import { GlobalService } from '../../shared/services/global.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-ai-view-article',
@@ -46,6 +47,8 @@ export class AiViewArticleComponent implements OnDestroy {
     articleType: ArticleTypePublic,
     extField1: null,
   });
+
+  $$fileFirstImageUrl = signal<string | null>(null);
 
   isCopied = signal<boolean>(false);
 
@@ -105,8 +108,11 @@ export class AiViewArticleComponent implements OnDestroy {
   }
 
   apiGetArticleContents(id: string): void {
-    this.#apiAiArticleService.getAiArticleById(id).subscribe({
-      next: (articleContent: any) => {
+    forkJoin({
+      articleContent: this.#apiAiArticleService.getAiArticleById(id),
+      articleFiles: this.#apiAiArticleService.getAiArticleFilesByArticleIds([Number(id)])
+    }).subscribe({
+      next: ({ articleContent, articleFiles }) => {
         this.$$articleDetails.set({
           id: articleContent.id,
           title: articleContent.title,
@@ -120,6 +126,9 @@ export class AiViewArticleComponent implements OnDestroy {
           articleType: ArticleTypePublic,
           extField1: null
         });
+
+        const firstImage = articleFiles && articleFiles.length > 0 ? articleFiles[0].fileUrl : null;
+        this.$$fileFirstImageUrl.set(firstImage);
 
         this.updateSeoMetaTags();
       },
@@ -138,7 +147,7 @@ export class AiViewArticleComponent implements OnDestroy {
       keywords: 'AI, 文章',
       ogTitle: title,
       ogDescription: intro || 'AI 文章',
-      ogImage: '',
+      ogImage: this.$$fileFirstImageUrl() || '',
     });
   }
 

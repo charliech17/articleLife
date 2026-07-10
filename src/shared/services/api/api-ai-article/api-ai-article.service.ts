@@ -19,6 +19,7 @@ export interface AiArticleDetails {
   createdTime: string;
   categoryId: number;
   viewTimes: number;
+  category?: AiArticleCategory;
 }
 
 @Injectable({
