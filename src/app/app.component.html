@@ -3,4 +3,21 @@
     <router-outlet />
   </app-all-layouts>
   <app-ai-chat></app-ai-chat>
+
+  @if($showAiButton()) {
+  <div 
+    class="floating-ai-group" 
+    [style.top.px]="$aiButtonPos().top" 
+    [style.left.px]="$aiButtonPos().left"
+    (mousedown)="$event.preventDefault()"
+    (touchstart)="$event.preventDefault()">
+    <button class="floating-ai-btn secondary" (click)="sendToAi($event, false)">
+      📝 填入對話框
+    </button>
+    <div class="divider"></div>
+    <button class="floating-ai-btn primary" (click)="sendToAi($event, true)">
+      🚀 直接詢問
+    </button>
+  </div>
+  }
 </main>

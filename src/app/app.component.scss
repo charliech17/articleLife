@@ -1,0 +1,61 @@
+.floating-ai-group {
+  position: absolute;
+  z-index: 9999;
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  transform: translate(-50%, 0);
+  animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translate(-50%, -2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .floating-ai-btn {
+    background: transparent;
+    color: #333;
+    border: none;
+    padding: 8px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+
+    &.primary {
+      background: linear-gradient(135deg, #6e8efb, #a777e3);
+      color: white;
+
+      &:hover {
+        background: linear-gradient(135deg, #5c7de6, #9263cf);
+      }
+    }
+  }
+
+  .divider {
+    width: 1px;
+    background: #e0e0e0;
+  }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}

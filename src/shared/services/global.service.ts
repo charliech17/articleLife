@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
-  aiChatTrigger = new Subject<string>();
+  aiChatTrigger = new Subject<{ text: string, autoSend?: boolean } | string>();
   #apiAuthService = inject(ApiAuthService);
   #globalStore = inject(GlobalStore);
   #platformId = inject(PLATFORM_ID);

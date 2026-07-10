@@ -48,11 +48,16 @@ export class AiChatComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (isPlatformBrowser(this.#platformId)) {
       this.#globalService.aiChatTrigger.subscribe(msg => {
+        const text = typeof msg === 'string' ? msg : msg.text;
+        const autoSend = typeof msg === 'string' ? true : (msg.autoSend !== false);
+
         this.$isOpen.set(true);
-        this.$inputText.set(msg);
+        this.$inputText.set(text);
         this.scrollToBottomWithDelay();
         // Optional: wait a moment and send automatically
-        setTimeout(() => this.sendMessage(), 100);
+        if (autoSend) {
+          setTimeout(() => this.sendMessage(), 100);
+        }
       });
       
       this.checkIfArticlePage(window.location.pathname);
