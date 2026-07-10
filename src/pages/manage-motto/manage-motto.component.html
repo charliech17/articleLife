@@ -26,7 +26,7 @@
   </mat-card>
 
   <mat-card class="table-card mt-4 mat-elevation-z3">
-    <table mat-table [dataSource]="mottos" class="full-width-table">
+    <table mat-table [dataSource]="mottos()" class="full-width-table">
       
       <!-- ID Column -->
       <ng-container matColumnDef="id">
@@ -61,7 +61,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
     
-    <div *ngIf="!mottos || mottos.length === 0" class="no-data">
+    <div *ngIf="!mottos() || mottos().length === 0" class="no-data">
       目前沒有座右銘資料 (No mottos found).
     </div>
   </mat-card>

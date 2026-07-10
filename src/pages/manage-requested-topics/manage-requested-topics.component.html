@@ -1,0 +1,56 @@
+<div class="manage-topics-container">
+  <h2 class="page-title">AI 今日主題管理 (Manage AI Requested Topics)</h2>
+
+  <mat-card class="mat-elevation-z3">
+    <mat-card-content>
+      <table mat-table [dataSource]="categories()" class="mat-elevation-z0">
+        
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> ID </th>
+          <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="categoryName">
+          <th mat-header-cell *matHeaderCellDef> 分類名稱 </th>
+          <td mat-cell *matCellDef="let element"> {{element.categoryName}} </td>
+        </ng-container>
+
+        <!-- Topic Column -->
+        <ng-container matColumnDef="requestedTopic">
+          <th mat-header-cell *matHeaderCellDef> 今日主題 </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container *ngIf="editingId !== element.id">
+              {{element.requestedTopic || '(未設定)'}}
+            </ng-container>
+            <ng-container *ngIf="editingId === element.id">
+              <mat-form-field appearance="outline" class="topic-input">
+                <mat-label>輸入主題</mat-label>
+                <input matInput [(ngModel)]="editingTopic" placeholder="例如：春天的風景">
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> 動作 </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container *ngIf="editingId !== element.id">
+              <button mat-button color="primary" (click)="startEdit(element)">編輯主題</button>
+              <button mat-button color="warn" (click)="clearTopic(element.id)" *ngIf="element.requestedTopic">清除主題</button>
+            </ng-container>
+            <ng-container *ngIf="editingId === element.id">
+              <button mat-button color="primary" (click)="saveTopic(element.id)">儲存</button>
+              <button mat-button (click)="cancelEdit()">取消</button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

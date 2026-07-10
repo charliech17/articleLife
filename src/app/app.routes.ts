@@ -43,5 +43,10 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('../pages/manage-categories/manage-categories.component').then(m => m.ManageCategoriesComponent),
   },
+  {
+    path: 'manage/requested-topics',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-requested-topics/manage-requested-topics.component').then(m => m.ManageRequestedTopicsComponent),
+  },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];

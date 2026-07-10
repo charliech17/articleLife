@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -27,7 +27,7 @@ import { IMotto, IMottoDTO } from '../../shared/models/motto.models';
 export class ManageMottoComponent implements OnInit {
   #mottoService = inject(ApiMottoService);
   
-  mottos: IMotto[] = [];
+  mottos = signal<IMotto[]>([]);
   displayedColumns: string[] = ['id', 'motto', 'reference', 'actions'];
   
   // Form model
@@ -41,7 +41,7 @@ export class ManageMottoComponent implements OnInit {
   loadMottos(): void {
     this.#mottoService.getAllMottos().subscribe({
       next: (mottos) => {
-        this.mottos = mottos || [];
+        this.mottos.set(mottos || []);
       },
       error: (err) => {
         console.error('Failed to load mottos', err);

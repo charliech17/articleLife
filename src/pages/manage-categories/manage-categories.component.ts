@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,7 +27,7 @@ import { IArticleCategory, IArticleCategoryDTO } from '../../shared/models/artic
 export class ManageCategoriesComponent implements OnInit {
   #apiCategory = inject(ApiArticleCategoriesService);
 
-  categories: IArticleCategory[] = [];
+  categories = signal<IArticleCategory[]>([]);
   displayedColumns: string[] = ['categoryId', 'categoryName', 'description', 'order', 'actions'];
 
   currentCategory: IArticleCategoryDTO & { categoryId?: string } = {
@@ -45,15 +45,15 @@ export class ManageCategoriesComponent implements OnInit {
   loadCategories(): void {
     this.#apiCategory.getAllArticleCategories().subscribe({
       next: (data) => {
-        this.categories = data || [];
+        this.categories.set(data || []);
       },
       error: (err) => {
         console.error('Failed to load categories', err);
         // Fallback for UI testing since API is not ready
-        this.categories = [
+        this.categories.set([
           { categoryId: '1', categoryName: '技術 (Tech)', description: '技術相關文章', order: 1 },
           { categoryId: '2', categoryName: '生活 (Life)', description: '生活點滴', order: 2 }
-        ];
+        ]);
       }
     });
   }
@@ -68,10 +68,11 @@ export class ManageCategoriesComponent implements OnInit {
         error: (err) => {
           console.error('Failed to update category', err);
           // Mock behavior for UI testing
-          const index = this.categories.findIndex(c => c.categoryId === this.currentCategory.categoryId);
+          const index = this.categories().findIndex(c => c.categoryId === this.currentCategory.categoryId);
           if (index !== -1) {
-            this.categories[index] = { ...this.currentCategory } as IArticleCategory;
-            this.categories = [...this.categories]; // trigger change detection
+            const currentArray = [...this.categories()];
+            currentArray[index] = { ...this.currentCategory } as IArticleCategory;
+            this.categories.set(currentArray); // trigger change detection
           }
           this.resetForm();
         }
@@ -85,7 +86,7 @@ export class ManageCategoriesComponent implements OnInit {
         error: (err) => {
           console.error('Failed to create category', err);
           // Mock behavior for UI testing
-          this.categories = [...this.categories, { ...this.currentCategory, categoryId: Math.random().toString(36).substring(7) } as IArticleCategory];
+          this.categories.set([...this.categories(), { ...this.currentCategory, categoryId: Math.random().toString(36).substring(7) } as IArticleCategory]);
           this.resetForm();
         }
       });
@@ -106,7 +107,7 @@ export class ManageCategoriesComponent implements OnInit {
         error: (err) => {
           console.error('Failed to delete category', err);
           // Mock behavior for UI testing
-          this.categories = this.categories.filter(c => c.categoryId !== id);
+          this.categories.set(this.categories().filter(c => c.categoryId !== id));
         }
       });
     }
