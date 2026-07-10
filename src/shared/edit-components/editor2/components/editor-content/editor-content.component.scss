@@ -13,7 +13,7 @@
   padding: 5px 10px;
   margin-right: 5px;
   border: 1px solid transparent;
-  background-color: #fff;
+  background-color: var(--al-surface);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -38,14 +38,14 @@
 }
 
 .custom-editor:focus-within {
-  border-color: #007bff;
+  border-color: var(--al-accent);
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 /* 【新增】圖片縮放覆蓋層的樣式 */
 .image-resizer {
   position: absolute; /* 絕對定位，以便覆蓋在圖片上 */
-  border: 2px solid #007bff; /* 藍色外框，表示選中 */
+  border: 2px solid var(--al-accent); /* 藍色外框，表示選中 */
   z-index: 10;
   /* 讓點擊事件可以穿透到下方的圖片，除非點到控制點 */
   pointer-events: none;
@@ -56,8 +56,8 @@
   position: absolute;
   width: 12px;
   height: 12px;
-  background-color: #fff;
-  border: 2px solid #007bff;
+  background-color: var(--al-surface);
+  border: 2px solid var(--al-accent);
   border-radius: 2px;
   /* 重新啟用這個元素的點擊事件 */
   pointer-events: auto;

@@ -5,14 +5,14 @@
   
   .al-outline-title {
     font-size: 0.8rem;
-    color: #6b7280;
+    color: var(--al-muted);
     letter-spacing: 1.5px;
     font-weight: 700;
     margin-bottom: 1.2rem;
     display: flex;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #9ca3af;
+      color: var(--al-muted);
     }
     align-items: center;
     gap: 8px;
@@ -20,7 +20,7 @@
     
     i {
       font-size: 1.1rem;
-      color: #4f46e5;
+      color: var(--al-accent);
     }
   }
 
@@ -37,7 +37,7 @@
       bottom: 4px;
       left: 7px;
       width: 2px;
-      background: linear-gradient(to bottom, rgba(79, 70, 229, 0.2), rgba(236, 72, 153, 0.1));
+      background: linear-gradient(to bottom, rgba(var(--al-accent-rgb), 0.2), rgba(var(--al-accent-2-rgb), 0.1));
       border-radius: 2px;
     }
   }
@@ -46,7 +46,7 @@
     position: relative;
     padding: 8px 12px 8px 28px;
     font-size: 0.9rem;
-    color: #6b7280;
+    color: var(--al-muted);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0 12px 12px 0;
     margin-bottom: 4px;
@@ -67,18 +67,18 @@
       box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
 
       :host-context([data-bs-theme="dark"]) & {
-        background-color: #4b5563;
+        background-color: var(--al-surface-3);
         border-color: #1f2937;
         box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
       }
     }
 
     &:hover {
-      background-color: rgba(79, 70, 229, 0.04);
-      color: #374151;
+      background-color: rgba(var(--al-accent-rgb), 0.04);
+      color: var(--al-ink-soft);
       
       &::before {
-        background-color: #a5b4fc;
+        background-color: var(--al-accent-soft);
         transform: translateY(-50%) scale(1.3);
       }
       
@@ -87,25 +87,25 @@
       }
 
       :host-context([data-bs-theme="dark"]) & {
-        background-color: rgba(79, 70, 229, 0.2);
-        color: #d1d5db;
+        background-color: rgba(var(--al-accent-rgb), 0.2);
+        color: var(--al-ink-soft);
         
         &::before {
-          background-color: #6366f1;
+          background-color: var(--al-accent);
         }
       }
     }
 
     &.active {
-      color: #4f46e5;
+      color: var(--al-accent);
       font-weight: 600;
-      background-color: rgba(79, 70, 229, 0.08);
+      background-color: rgba(var(--al-accent-rgb), 0.08);
 
       &::before {
-        background-color: #4f46e5;
+        background-color: var(--al-accent);
         border-color: #ffffff;
         transform: translateY(-50%) scale(1.5);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        box-shadow: 0 0 0 3px rgba(var(--al-accent-rgb), 0.15);
       }
       
       .al-outline-link {
@@ -113,7 +113,7 @@
       }
 
       :host-context([data-bs-theme="dark"]) & {
-        background-color: rgba(79, 70, 229, 0.3);
+        background-color: rgba(var(--al-accent-rgb), 0.3);
         
         &::before {
           border-color: #1f2937;
@@ -123,7 +123,7 @@
 
     &.al-outline-level-1 {
       font-weight: 700;
-      color: #111827;
+      color: var(--al-ink);
       padding-left: 20px;
       margin-bottom: 8px;
       font-size: 0.95rem;
@@ -131,35 +131,35 @@
       border-bottom: 1px solid rgba(0,0,0,0.05);
 
       :host-context([data-bs-theme="dark"]) & {
-        color: #f9fafb;
+        color: var(--al-ink);
         border-bottom-color: rgba(255, 255, 255, 0.1);
       }
 
       &::before {
         width: 10px;
         height: 10px;
-        background-color: #ec4899;
+        background-color: var(--al-accent-2);
         left: 0px;
       }
 
       &.active {
-        color: #ec4899;
+        color: var(--al-accent-2);
         background-color: transparent;
         &::before {
-          background-color: #ec4899;
-          box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+          background-color: var(--al-accent-2);
+          box-shadow: 0 0 0 3px rgba(var(--al-accent-2-rgb), 0.15);
         }
       }
 
       &:hover {
         background-color: transparent;
-        color: #ec4899;
+        color: var(--al-accent-2);
         &::before {
           background-color: #fbcfe8;
         }
 
         :host-context([data-bs-theme="dark"]) & {
-          color: #f472b6;
+          color: var(--al-accent-2-soft);
           &::before {
             background-color: #be185d;
           }
@@ -168,7 +168,7 @@
 
       &.active {
         :host-context([data-bs-theme="dark"]) & {
-          color: #f472b6;
+          color: var(--al-accent-2-soft);
         }
       }
     }

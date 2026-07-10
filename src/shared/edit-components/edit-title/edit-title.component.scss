@@ -17,7 +17,7 @@
 
 $colors: (
   'black': #000000,
-  'blue': #007bff,
+  'blue': var(--al-accent),
   'red': #ff0000,
   'green': #28a745,
 );
@@ -31,9 +31,9 @@ $colors: (
 
     :host-context([data-bs-theme="dark"]) & {
       @if $name == 'black' {
-        color: #f9fafb;
+        color: var(--al-ink);
       } @else if $name == 'blue' {
-        color: #818cf8; // Lighter purple/blue
+        color: var(--al-accent-soft); // Lighter purple/blue
       } @else if $name == 'red' {
         color: #f87171;
       } @else if $name == 'green' {

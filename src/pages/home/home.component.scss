@@ -25,13 +25,13 @@
 
   .mobile-collapse-btn {
     display: none;
-    background: #f3f4f6;
+    background: var(--al-surface-2);
     border: none;
     padding: 6px 12px;
     border-radius: 6px;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #4f46e5;
+    color: var(--al-accent);
     cursor: pointer;
     position: absolute;
     right: 0;
@@ -43,8 +43,8 @@
     }
 
     :host-context([data-bs-theme="dark"]) & {
-      background: #374151;
-      color: #818cf8;
+      background: var(--al-surface-2);
+      color: var(--al-accent-soft);
     }
   }
 }
@@ -79,31 +79,47 @@
 
 .al-section-divider {
   border: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.08), transparent);
-  margin: 40px 0 60px 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--al-border-strong), transparent);
+  margin: 40px auto 60px;
+  max-width: 480px;
+  position: relative;
+  overflow: visible;
+
+  // 分隔線中央的菱形墨點
+  &::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    background: var(--al-accent);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
 }
 
 .al-page-title {
   text-align: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: 1.9rem;
+  font-weight: 600;
+  font-family: var(--al-font-serif);
+  letter-spacing: 0.15em;
+  color: var(--al-ink);
   margin-bottom: 40px;
   position: relative;
 
-  :host-context([data-bs-theme="dark"]) & {
-    color: #f9fafb;
+  // 雜誌式引號標題：「標題」
+  &::before {
+    content: '「';
+    color: var(--al-accent);
+    margin-right: 0.1em;
   }
 
   &::after {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background-color: #4f46e5;
-    margin: 16px auto 0;
-    border-radius: 2px;
+    content: '」';
+    color: var(--al-accent);
+    margin-left: 0.1em;
   }
 }
 
@@ -113,19 +129,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  background: var(--al-surface);
+  border-radius: var(--al-radius);
+  box-shadow: var(--al-shadow-sm);
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-
-  :host-context([data-bs-theme="dark"]) & {
-    background: #1f2937;
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  }
+  border: 1px solid var(--al-border);
 
   @include media-breakpoint-down(md) {
     margin-bottom: 80px; /* 留出空白讓懸浮按鈕不會擋住 */
@@ -133,18 +143,18 @@
 }
 
 .al-btn-pagination {
-  background-color: #f3f4f6;
+  background-color: var(--al-surface-2);
   border: none;
   padding: 10px 20px;
   border-radius: 8px;
   font-weight: 500;
-  color: #374151;
+  color: var(--al-ink-soft);
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background-color: #e5e7eb;
-    color: #111827;
+    background-color: var(--al-surface-3);
+    color: var(--al-ink);
   }
 
   &:disabled {
@@ -153,12 +163,12 @@
   }
 
   :host-context([data-bs-theme="dark"]) & {
-    background-color: #374151;
-    color: #e5e7eb;
+    background-color: var(--al-surface-2);
+    color: var(--al-ink-soft);
 
     &:hover:not(:disabled) {
-      background-color: #4b5563;
-      color: #f9fafb;
+      background-color: var(--al-surface-3);
+      color: var(--al-ink);
     }
   }
 }
@@ -168,17 +178,17 @@
   align-items: center;
   gap: 8px;
   font-weight: 500;
-  color: #6b7280;
+  color: var(--al-muted);
 
   :host-context([data-bs-theme="dark"]) & {
-    color: #9ca3af;
+    color: var(--al-muted);
   }
 
   .al-pagination-input {
     width: 48px;
     height: 36px;
     text-align: center;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--al-border);
     border-radius: 6px;
     font-family: inherit;
     font-size: 0.9rem;
@@ -187,17 +197,17 @@
 
     &:focus {
       outline: none;
-      border-color: #4f46e5;
-      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+      border-color: var(--al-accent);
+      box-shadow: 0 0 0 2px rgba(var(--al-accent-rgb), 0.2);
     }
 
     :host-context([data-bs-theme="dark"]) & {
-      border-color: #4b5563;
-      background-color: #374151;
+      border-color: var(--al-border);
+      background-color: var(--al-surface-2);
       
       &:focus {
-        border-color: #818cf8;
-        box-shadow: 0 0 0 2px rgba(129, 140, 248, 0.2);
+        border-color: var(--al-accent-soft);
+        box-shadow: 0 0 0 2px rgba(var(--al-accent-rgb), 0.2);
       }
     }
   }

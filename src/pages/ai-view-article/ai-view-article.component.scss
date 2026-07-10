@@ -2,7 +2,7 @@
 @use 'sass:map';
 
 .cus-view-article-container {
-  background-color: #ffffff;
+  background-color: var(--al-surface);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -10,7 +10,7 @@
   margin-bottom: 32px;
 
   :host-context([data-bs-theme="dark"]) & {
-    background-color: #1f2937;
+    background-color: var(--al-surface);
     border-color: rgba(255, 255, 255, 0.1);
   }
 
@@ -24,12 +24,12 @@
   .cus-article-title {
     font-size: 2rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--al-ink);
     line-height: 1.3;
     margin-bottom: 8px;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #f9fafb;
+      color: var(--al-ink);
     }
 
     @include shared.media-breakpoint-up(md) {
@@ -39,47 +39,47 @@
 
   .cus-article-meta {
     font-size: 0.9rem;
-    color: #6b7280;
-    border-bottom: 1px solid #e5e7eb;
+    color: var(--al-muted);
+    border-bottom: 1px solid var(--al-border);
     padding-bottom: 16px;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #9ca3af;
-      border-bottom-color: #374151;
+      color: var(--al-muted);
+      border-bottom-color: var(--al-border);
     }
 
     .al-meta-item {
       display: inline-flex;
       align-items: center;
-      background-color: #f3f4f6;
+      background-color: var(--al-surface-2);
       padding: 6px 14px;
       border-radius: 9999px;
       font-weight: 500;
-      color: #4b5563;
+      color: var(--al-ink-soft);
 
       :host-context([data-bs-theme="dark"]) & {
-        background-color: #374151;
-        color: #d1d5db;
+        background-color: var(--al-surface-2);
+        color: var(--al-ink-soft);
       }
 
       &.al-copy-btn {
         border-radius: 6px;
-        border: 1px solid #d1d5db;
+        border: 1px solid var(--al-border);
         cursor: pointer;
         transition: all 0.2s ease;
         padding: 4px 12px;
-        background-color: #f9fafb;
+        background-color: var(--al-surface-2);
         
         &:hover {
-          background-color: #e5e7eb;
+          background-color: var(--al-surface-3);
         }
 
         :host-context([data-bs-theme="dark"]) & {
-          border-color: #4b5563;
-          background-color: #374151;
-          color: #d1d5db;
+          border-color: var(--al-border);
+          background-color: var(--al-surface-2);
+          color: var(--al-ink-soft);
           &:hover {
-            background-color: #4b5563;
+            background-color: var(--al-surface-3);
           }
         }
       }
@@ -87,41 +87,41 @@
   }
 
   .cus-article-intro {
-    background-color: #f8fafc;
-    color: #334155;
+    background-color: var(--al-surface-2);
+    color: var(--al-ink-soft);
     padding: 20px 24px;
     border-radius: 0 12px 12px 0;
-    border-left: 4px solid #4f46e5;
+    border-left: 4px solid var(--al-accent);
     font-size: 1.05rem;
     line-height: 1.6;
     margin: 24px 0;
 
     :host-context([data-bs-theme="dark"]) & {
-      background-color: #374151;
-      color: #d1d5db;
+      background-color: var(--al-surface-2);
+      color: var(--al-ink-soft);
     }
     
     p { margin: 0; }
   }
 
   .cus-article-content {
-    color: #374151;
+    color: var(--al-ink-soft);
     font-size: 1.1rem;
     line-height: 1.8;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #d1d5db;
+      color: var(--al-ink-soft);
     }
     
     ::ng-deep {
       h2, h3, h4 {
-        color: #111827;
+        color: var(--al-ink);
         margin-top: 2em;
         margin-bottom: 1em;
         font-weight: 600;
 
         :host-context([data-bs-theme="dark"]) & {
-          color: #f9fafb;
+          color: var(--al-ink);
         }
       }
       
@@ -148,18 +148,18 @@
 
   .cus-divider {
     border: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--al-border);
     margin: 40px 0;
     opacity: 1;
 
     :host-context([data-bs-theme="dark"]) & {
-      border-top-color: #374151;
+      border-top-color: var(--al-border);
     }
   }
 
   .ck-content ::ng-deep pre {
-    background-color: #1e293b;
-    color: #f8fafc;
+    background-color: var(--al-surface);
+    color: var(--al-ink);
     padding: 20px;
     border-radius: 12px;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);

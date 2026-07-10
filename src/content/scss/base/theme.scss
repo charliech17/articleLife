@@ -1,0 +1,149 @@
+/* ============================================================
+ * articleLife 設計 Token — 溫暖文藝雜誌風
+ * 亮色：米白紙感 + 墨色文字 + 柿朱強調色
+ * 暗色：暖夜色 + 米色文字 + 柔化柿色
+ * 所有元件請優先使用這些變數，勿再硬編 hex。
+ * ============================================================ */
+
+:root,
+[data-bs-theme='light'] {
+  /* 背景層次 */
+  --al-bg: #f5efe4;            /* 頁面：米色紙 */
+  --al-surface: #fffcf5;       /* 卡片：暖白 */
+  --al-surface-2: #f0e8d8;     /* 次要填色 */
+  --al-surface-3: #e6dbc6;     /* hover 填色 */
+
+  /* 文字 */
+  --al-ink: #2e2822;           /* 標題／主文字：墨色 */
+  --al-ink-soft: #4d443a;      /* 內文 */
+  --al-muted: #8a7d6b;         /* 次要資訊 */
+  --al-on-accent: #fff9ef;     /* 強調色上的文字 */
+
+  /* 強調色：柿朱（主）、墨藍（輔） */
+  --al-accent: #b3502a;
+  --al-accent-strong: #943f1f;
+  --al-accent-soft: #cd7a55;
+  --al-accent-rgb: 179, 80, 42;
+  --al-accent-2: #44618e;
+  --al-accent-2-soft: #7c94ba;
+  --al-accent-2-rgb: 68, 97, 142;
+
+  /* 邊框與陰影 */
+  --al-border: #e0d4bd;
+  --al-border-strong: #c9b998;
+  --al-shadow-sm: 0 1px 3px rgba(62, 48, 30, 0.08);
+  --al-shadow-md: 0 6px 20px rgba(62, 48, 30, 0.1);
+
+  /* 字體 */
+  --al-font-serif: 'zen-old-mincho', 'Noto Serif TC', 'Songti TC', serif;
+  --al-font-sans: 'Noto Sans TC', -apple-system, sans-serif;
+
+  /* 幾何 */
+  --al-radius-sm: 6px;
+  --al-radius: 10px;
+  --al-radius-lg: 14px;
+
+  /* Bootstrap 變數對應 */
+  --bs-body-bg: var(--al-bg);
+  --bs-body-color: var(--al-ink-soft);
+  --bs-heading-color: var(--al-ink);
+  --bs-border-color: var(--al-border);
+  --bs-primary: var(--al-accent);
+  --bs-link-color: var(--al-accent);
+  --bs-link-hover-color: var(--al-accent-strong);
+  --bs-secondary-bg: var(--al-surface-2);
+  --bs-tertiary-bg: var(--al-surface-3);
+
+  color-scheme: light;
+}
+
+[data-bs-theme='dark'] {
+  --al-bg: #1b1712;
+  --al-surface: #262019;
+  --al-surface-2: #322a20;
+  --al-surface-3: #3e3527;
+
+  --al-ink: #ede3d0;
+  --al-ink-soft: #cfc3ac;
+  --al-muted: #998c76;
+  --al-on-accent: #fff6ea;
+
+  --al-accent: #dd8455;
+  --al-accent-strong: #eb9d73;
+  --al-accent-soft: #b96a41;
+  --al-accent-rgb: 221, 132, 85;
+  --al-accent-2: #8ba7d1;
+  --al-accent-2-soft: #6b87b1;
+  --al-accent-2-rgb: 139, 167, 209;
+
+  --al-border: #423927;
+  --al-border-strong: #5c4f38;
+  --al-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --al-shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+
+  --bs-body-bg: var(--al-bg);
+  --bs-body-color: var(--al-ink-soft);
+  --bs-heading-color: var(--al-ink);
+  --bs-border-color: var(--al-border);
+  --bs-primary: var(--al-accent);
+  --bs-link-color: var(--al-accent);
+  --bs-link-hover-color: var(--al-accent-strong);
+  --bs-secondary-bg: var(--al-surface-2);
+  --bs-tertiary-bg: var(--al-surface-3);
+
+  color-scheme: dark;
+}
+
+/* ---------- 全域基調 ---------- */
+
+body {
+  background-color: var(--al-bg);
+  /* 細緻紙纖維紋理（純 CSS，無圖檔） */
+  background-image:
+    radial-gradient(rgba(var(--al-accent-rgb), 0.025) 1px, transparent 1px),
+    radial-gradient(rgba(62, 48, 30, 0.02) 1px, transparent 1px);
+  background-size: 24px 24px, 32px 32px;
+  background-position: 0 0, 12px 16px;
+  color: var(--al-ink-soft);
+  font-family: var(--al-font-serif);
+  letter-spacing: 0.02em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--al-font-serif);
+  color: var(--al-ink);
+  letter-spacing: 0.04em;
+}
+
+::selection {
+  background: rgba(var(--al-accent-rgb), 0.25);
+  color: var(--al-ink);
+}
+
+/* 引言：雜誌式引用 */
+blockquote {
+  border-left: 3px solid var(--al-accent);
+  padding-left: 1rem;
+  color: var(--al-muted);
+}
+
+/* 捲軸 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--al-border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--al-border-strong);
+  border-radius: 5px;
+  border: 2px solid var(--al-bg);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

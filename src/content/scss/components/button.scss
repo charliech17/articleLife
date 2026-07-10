@@ -1,21 +1,24 @@
 @use 'shared' as shared;
 
+// 雜誌風按鈕：沉穩、扁平、細節在邊框與字距
+
 @mixin al-btn-base {
-  background-color: #ffffff;
-  color: #4b5563;
-  border: 1px solid #d1d5db;
-  border-radius: 9999px;
+  background-color: var(--al-surface);
+  color: var(--al-ink-soft);
+  border: 1px solid var(--al-border-strong);
+  border-radius: var(--al-radius-sm);
   padding: 6px 16px;
   font-size: 0.9rem;
   font-weight: 500;
+  font-family: var(--al-font-serif);
+  letter-spacing: 0.05em;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 
   &:hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
-    color: #111827;
+    border-color: var(--al-accent);
+    color: var(--al-accent);
+    background-color: var(--al-surface);
   }
 }
 
@@ -24,39 +27,44 @@
 }
 
 .al-btn-primary {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  border: none;
-  border-radius: 8px;
+  background: var(--al-accent);
+  color: var(--al-on-accent);
+  border: 1px solid var(--al-accent);
+  border-radius: var(--al-radius-sm);
   padding: 8px 20px;
   font-size: 0.95rem;
   font-weight: 600;
+  font-family: var(--al-font-serif);
+  letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  box-shadow: var(--al-shadow-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   &:hover {
-    background: linear-gradient(135deg, #4338ca, #4f46e5);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
+    background: var(--al-accent-strong);
+    border-color: var(--al-accent-strong);
+    box-shadow: var(--al-shadow-md);
   }
 
   &:active {
-    transform: translateY(0);
+    transform: translateY(1px);
+    box-shadow: none;
   }
 }
 
 .al-btn-secondary {
-  background: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid transparent;
-  border-radius: 8px;
+  background: transparent;
+  color: var(--al-ink-soft);
+  border: 1px solid var(--al-border-strong);
+  border-radius: var(--al-radius-sm);
   padding: 8px 20px;
   font-size: 0.95rem;
   font-weight: 600;
+  font-family: var(--al-font-serif);
+  letter-spacing: 0.08em;
   cursor: pointer;
   transition: all 0.2s ease;
   display: inline-flex;
@@ -64,18 +72,8 @@
   justify-content: center;
 
   &:hover {
-    background: #e5e7eb;
-    color: #1f2937;
-  }
-
-  :host-context([data-bs-theme="dark"]) & {
-    background: #374151;
-    color: #d1d5db;
-    border: 1px solid #4b5563;
-    
-    &:hover {
-      background: #4b5563;
-      color: #f9fafb;
-    }
+    border-color: var(--al-accent);
+    color: var(--al-accent);
+    background: rgba(var(--al-accent-rgb), 0.06);
   }
 }

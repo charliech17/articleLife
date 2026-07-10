@@ -4,27 +4,18 @@
 .cus-default-layout-container {
   width: 100%;
   min-height: 100vh;
-  background-color: #f8f9fa; // Match global body bg
-
-  :host-context([data-bs-theme="dark"]) & {
-    background-color: #121212;
-  }
+  background-color: var(--al-bg); // 米色紙頁面底
 
   @include shared.media-breakpoint-up(md) {
     display: flex;
   }
 
   .cus-side-nav-container {
-    background-color: #ffffff;
-    box-shadow: 2px 0 16px rgba(0,0,0,0.04);
-    border-right: 1px solid rgba(0,0,0,0.05);
+    background-color: var(--al-surface);
+    box-shadow: var(--al-shadow-sm);
+    border-right: 1px solid var(--al-border);
     z-index: 10;
     position: relative;
-
-    :host-context([data-bs-theme="dark"]) & {
-      background-color: #1f2937;
-      border-right-color: rgba(255, 255, 255, 0.1);
-    }
 
     @include shared.media-breakpoint-up(md) {
       width: 320px;
@@ -38,11 +29,11 @@
         width: 4px; /* 極細捲軸 */
       }
       &::-webkit-scrollbar-thumb {
-        background-color: rgba(79, 70, 229, 0.25); /* 淡淡的主題色 */
+        background-color: rgba(var(--al-accent-rgb), 0.25); /* 淡淡的主題色 */
         border-radius: 4px;
         
         &:hover {
-          background-color: rgba(79, 70, 229, 0.6); /* 滑鼠游標經過時加深 */
+          background-color: rgba(var(--al-accent-rgb), 0.6); /* 滑鼠游標經過時加深 */
         }
       }
       &::-webkit-scrollbar-track {

@@ -2,22 +2,18 @@
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 body {
-  font-family: 'Inter', 'Noto Sans TC', sans-serif;
-  background-color: var(--bs-body-bg, #f8f9fa);
-  color: var(--bs-body-color, #333333);
+  font-family: var(--al-font-serif);
+  background-color: var(--al-bg);
+  color: var(--al-ink-soft);
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-[data-bs-theme="dark"] body {
-  background-color: #121212;
-  color: #e0e0e0;
-}
-
 h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
-  color: var(--bs-heading-color, #1a1a1a);
+  font-family: var(--al-font-serif);
+  color: var(--al-ink);
 }
 
 /* Authentication Pages Global Styles */
@@ -37,7 +33,7 @@ h1, h2, h3, h4, h5, h6 {
 .al-auth-card {
   width: 100%;
   max-width: 420px;
-  background: var(--bs-body-bg, linear-gradient(to right bottom, #ffffff, #f9fafb));
+  background: var(--bs-body-bg, linear-gradient(to right bottom, var(--al-surface), var(--al-surface-2)));
   border-radius: 16px;
   padding: 40px 32px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
@@ -45,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
   box-sizing: border-box;
 
   [data-bs-theme="dark"] & {
-    background: #1f2937;
+    background: var(--al-surface);
     border-color: rgba(255, 255, 255, 0.1);
   }
 
@@ -56,23 +52,23 @@ h1, h2, h3, h4, h5, h6 {
   .al-auth-title {
     font-size: 1.75rem;
     font-weight: 700;
-    color: #111827;
+    color: var(--al-ink);
     text-align: center;
     margin-bottom: 24px;
 
     [data-bs-theme="dark"] & {
-      color: #f9fafb;
+      color: var(--al-ink);
     }
   }
   
   .al-auth-subtitle {
     text-align: center;
-    color: #6b7280;
+    color: var(--al-muted);
     margin-bottom: 24px;
     font-size: 0.95rem;
 
     [data-bs-theme="dark"] & {
-      color: #9ca3af;
+      color: var(--al-muted);
     }
   }
 
@@ -83,38 +79,38 @@ h1, h2, h3, h4, h5, h6 {
       display: block;
       font-size: 0.9rem;
       font-weight: 600;
-      color: #374151;
+      color: var(--al-ink-soft);
       margin-bottom: 8px;
 
       [data-bs-theme="dark"] & {
-        color: #d1d5db;
+        color: var(--al-ink-soft);
       }
     }
 
     .al-auth-input {
       width: 100%;
       padding: 12px 16px;
-      border: 1px solid var(--bs-border-color, #d1d5db);
+      border: 1px solid var(--bs-border-color, var(--al-border));
       border-radius: 8px;
       font-size: 1rem;
-      color: var(--bs-body-color, #1f2937);
-      background-color: var(--bs-body-bg, #ffffff);
+      color: var(--bs-body-color, var(--al-ink));
+      background-color: var(--bs-body-bg, var(--al-surface));
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
       [data-bs-theme="dark"] & {
-        background-color: #374151;
-        border-color: #4b5563;
-        color: #d1d5db;
+        background-color: var(--al-surface-2);
+        border-color: var(--al-border);
+        color: var(--al-ink-soft);
       }
 
       &::placeholder {
-        color: #9ca3af;
+        color: var(--al-muted);
       }
 
       &:focus {
         outline: none;
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        border-color: var(--al-accent);
+        box-shadow: 0 0 0 3px rgba(var(--al-accent-rgb), 0.1);
       }
     }
   }
@@ -137,13 +133,13 @@ h1, h2, h3, h4, h5, h6 {
     transition: all 0.2s ease;
     
     &.primary {
-      background-color: #4f46e5;
-      color: white;
+      background-color: var(--al-accent);
+      color: var(--al-on-accent);
       
       &:hover {
-        background-color: #4338ca;
+        background-color: var(--al-accent-strong);
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+        box-shadow: 0 4px 12px rgba(var(--al-accent-rgb), 0.2);
       }
       
       &:active {
@@ -152,21 +148,21 @@ h1, h2, h3, h4, h5, h6 {
     }
 
     &.secondary {
-      background-color: #f3f4f6;
-      color: #4b5563;
+      background-color: var(--al-surface-2);
+      color: var(--al-ink-soft);
       
       &:hover {
-        background-color: #e5e7eb;
-        color: #1f2937;
+        background-color: var(--al-surface-3);
+        color: var(--al-ink);
       }
 
       [data-bs-theme="dark"] & {
-        background-color: #374151;
-        color: #d1d5db;
+        background-color: var(--al-surface-2);
+        color: var(--al-ink-soft);
 
         &:hover {
-          background-color: #4b5563;
-          color: #f9fafb;
+          background-color: var(--al-surface-3);
+          color: var(--al-ink);
         }
       }
     }
@@ -177,7 +173,7 @@ h1, h2, h3, h4, h5, h6 {
 .image-source-caption {
   text-align: center;
   font-size: 12px;
-  color: #6b7280;
+  color: var(--al-muted);
   margin-top: 4px;
   margin-bottom: 16px;
   font-style: italic;

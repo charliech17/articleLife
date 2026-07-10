@@ -33,8 +33,8 @@
     width: 60px;
     height: 60px;
     font-size: 2rem;
-    background-color: #374151;
-    color: white;
+    background-color: var(--al-surface-2);
+    color: var(--al-on-accent);
     border: none;
     border-radius: 50%;
     cursor: pointer;
@@ -53,7 +53,7 @@
       background-color: #fef08a;
       border-color: #eab308;
       box-shadow: 0 0 20px 5px rgba(250, 204, 21, 0.5);
-      color: #1f2937;
+      color: var(--al-ink);
     }
   }
 }
@@ -100,7 +100,7 @@
   position: relative;
   width: 50px;
   height: 60px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, var(--al-accent), var(--al-accent));
   border-radius: 8px 8px 0 0;
   border: 2px solid #312e81;
   border-bottom: none;
@@ -118,7 +118,7 @@
 
   &.nearby {
     animation: arcade-bounce 1s infinite;
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+    box-shadow: 0 0 15px rgba(var(--al-accent-rgb), 0.8);
   }
 
   .arcade-screen {
@@ -131,14 +131,14 @@
     justify-content: center;
     align-items: center;
     font-size: 1.2rem;
-    border: 2px solid #a5b4fc;
+    border: 2px solid var(--al-accent-soft);
   }
 
   .arcade-controls {
     margin-top: auto;
     width: 100%;
     height: 12px;
-    background: #3730a3;
+    background: var(--al-accent-strong);
     display: flex;
     justify-content: center;
     gap: 4px;
@@ -163,7 +163,7 @@
     top: -85px;
     left: 50%;
     transform: translateX(-50%);
-    background: white;
+    background: var(--al-surface);
     color: #333;
     padding: 6px 12px;
     border-radius: 8px;
@@ -189,7 +189,7 @@
     }
 
     .game-name {
-      color: #4f46e5;
+      color: var(--al-accent);
       font-size: 0.95rem;
     }
 
@@ -252,7 +252,7 @@
     position: absolute;
     top: -90px;
     z-index: 10;
-    background: white;
+    background: var(--al-surface);
     color: #333;
     padding: 6px 12px;
     border-radius: 8px;
@@ -353,7 +353,7 @@
       justify-content: center;
       align-items: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      color: #374151;
+      color: var(--al-ink-soft);
 
       &:active {
         background: rgba(209, 213, 219, 0.9);
@@ -386,7 +386,7 @@
     height: 70px;
     border-radius: 50%;
     background: rgba(239, 68, 68, 0.8);
-    color: white;
+    color: var(--al-on-accent);
     font-weight: bold;
     font-size: 1.1rem;
     border: 3px solid rgba(220, 38, 38, 0.9);

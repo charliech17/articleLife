@@ -1,5 +1,5 @@
-// Modern color palette
-$al-color-blue: #4f46e5; // Indigo 600
-$al-color-dark: #0f172a; // Slate 900
-$al-color-gray: #64748b; // Slate 500
-$al-color-light: #f8f9fa;
+// 溫暖文藝雜誌風調色盤（SCSS 端；執行期請優先用 var(--al-*)）
+$al-color-blue: #b3502a; // 主強調色：柿朱（沿用舊變數名以免破壞既有引用）
+$al-color-dark: #2e2822; // 墨色
+$al-color-gray: #8a7d6b; // 暖灰
+$al-color-light: #f5efe4; // 米色紙

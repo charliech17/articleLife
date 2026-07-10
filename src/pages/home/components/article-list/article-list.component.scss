@@ -11,16 +11,26 @@
 }
 
 .cus-article__container {
-  background-color: #ffffff;
-  border-radius: 16px;
+  background-color: var(--al-surface);
+  border-radius: var(--al-radius-lg);
   padding: 24px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--al-shadow-sm);
+  border: 1px solid var(--al-border);
+  position: relative;
 
-  :host-context([data-bs-theme="dark"]) & {
-    background-color: #1f2937;
-    border-color: rgba(255, 255, 255, 0.1);
+  // 目錄頁感：左側柿朱書籤線，hover 時浮現
+  &::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 16px;
+    bottom: 16px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: var(--al-accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
 
   @include media-breakpoint-up(md) {
@@ -37,29 +47,36 @@
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--al-border-strong);
+    box-shadow: var(--al-shadow-md);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .al-article-title {
+      color: var(--al-accent);
+    }
   }
 
   .al-article-title {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
+    font-family: var(--al-font-serif);
+    letter-spacing: 0.03em;
     margin-bottom: 12px;
-    color: #111827;
-    line-height: 1.3;
-
-    :host-context([data-bs-theme="dark"]) & {
-      color: #f9fafb;
-    }
+    color: var(--al-ink);
+    line-height: 1.4;
+    transition: color 0.25s ease;
   }
 
   .al-article-meta {
     font-size: 0.875rem;
-    color: #6b7280;
+    color: var(--al-muted);
     margin-bottom: 16px;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #9ca3af;
+      color: var(--al-muted);
     }
     display: flex;
     flex-wrap: wrap;
@@ -75,12 +92,12 @@
 
   .al-article-intro {
     font-size: 1rem;
-    color: #4b5563;
+    color: var(--al-ink-soft);
     line-height: 1.6;
     margin: 0;
 
     :host-context([data-bs-theme="dark"]) & {
-      color: #d1d5db;
+      color: var(--al-ink-soft);
     }
 
     display: -webkit-box;
@@ -120,10 +137,10 @@
     height: 200px;
     border-radius: 12px;
     overflow: hidden;
-    background-color: #f3f4f6;
+    background-color: var(--al-surface-2);
 
     :host-context([data-bs-theme="dark"]) & {
-      background-color: #374151;
+      background-color: var(--al-surface-2);
     }
   }
 

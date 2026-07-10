@@ -8,7 +8,7 @@ $cus-gray: #ccc;
 }
 
 .cus-edit-container {
-  background-color: #ffffff;
+  background-color: var(--al-surface);
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -23,62 +23,62 @@ $cus-gray: #ccc;
   }
 
   :host-context([data-bs-theme="dark"]) & {
-    background-color: #1f2937;
+    background-color: var(--al-surface);
     border-color: rgba(255, 255, 255, 0.1);
 
     ::ng-deep {
       /* CKEditor Dark Mode Overrides */
       .ck.ck-editor__main > .ck-editor__editable {
-        background-color: #1f2937 !important;
+        background-color: var(--al-surface) !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
-        color: #d1d5db !important;
+        color: var(--al-ink-soft) !important;
         box-shadow: none !important;
 
         &.ck-focused {
-          border-color: #4f46e5 !important;
+          border-color: var(--al-accent) !important;
         }
 
         h2, h3, h4, h5, h6 {
-          color: #f9fafb !important;
+          color: var(--al-ink) !important;
         }
       }
 
       .ck.ck-toolbar {
-        background-color: #374151 !important;
+        background-color: var(--al-surface-2) !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
       }
 
       .ck.ck-button {
-        color: #d1d5db !important;
+        color: var(--al-ink-soft) !important;
         &:hover {
-          background-color: #4b5563 !important;
+          background-color: var(--al-surface-3) !important;
         }
         &.ck-on {
-          background-color: #4f46e5 !important;
-          color: #ffffff !important;
+          background-color: var(--al-accent) !important;
+          color: var(--al-on-accent) !important;
         }
       }
 
       .ck.ck-dropdown__panel {
-        background-color: #374151 !important;
+        background-color: var(--al-surface-2) !important;
         border-color: rgba(255, 255, 255, 0.1) !important;
       }
 
       .ck.ck-list {
-        background-color: #374151 !important;
+        background-color: var(--al-surface-2) !important;
       }
 
       .ck.ck-list__item > .ck-button {
-        color: #d1d5db !important;
+        color: var(--al-ink-soft) !important;
         &:hover {
-          background-color: #4b5563 !important;
+          background-color: var(--al-surface-3) !important;
         }
       }
       
       .ck.ck-input {
-        background-color: #1f2937 !important;
-        border-color: #4b5563 !important;
-        color: #f9fafb !important;
+        background-color: var(--al-surface) !important;
+        border-color: var(--al-border) !important;
+        color: var(--al-ink) !important;
       }
     }
   }
