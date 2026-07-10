@@ -11,11 +11,11 @@
     [style.left.px]="$aiButtonPos().left"
     (mousedown)="$event.preventDefault()"
     (touchstart)="$event.preventDefault()">
-    <button class="floating-ai-btn secondary" (click)="sendToAi($event, false)">
+    <button class="floating-ai-btn secondary" (click)="sendToAi($event, false)" (touchend)="sendToAi($event, false)">
       📝 填入對話框
     </button>
     <div class="divider"></div>
-    <button class="floating-ai-btn primary" (click)="sendToAi($event, true)">
+    <button class="floating-ai-btn primary" (click)="sendToAi($event, true)" (touchend)="sendToAi($event, true)">
       🚀 直接詢問
     </button>
   </div>

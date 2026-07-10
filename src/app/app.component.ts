@@ -70,7 +70,7 @@ export class AppComponent {
     }, 10);
   }
 
-  sendToAi(event: MouseEvent, autoSend: boolean) {
+  sendToAi(event: Event, autoSend: boolean) {
     event.stopPropagation();
     event.preventDefault();
     if (this.selectedText) {
