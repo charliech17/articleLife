@@ -260,3 +260,114 @@
     }
   }
 
+
+/* ---------- 新聞摘要彈窗 ---------- */
+.al-news-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 24, 18, 0.55);
+  backdrop-filter: blur(3px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.al-news-modal {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: var(--al-surface);
+  border: 1px solid var(--al-border);
+  border-top: 3px solid var(--al-accent);
+  border-radius: var(--al-radius-lg);
+  box-shadow: var(--al-shadow-md);
+  padding: 28px;
+  animation: modalSlideUp 0.25s ease-out;
+
+  .al-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background: transparent;
+    border: none;
+    color: var(--al-muted);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: var(--al-radius-sm);
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: var(--al-accent);
+      background: var(--al-surface-2);
+    }
+  }
+
+  .al-modal-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+
+    .al-date {
+      display: inline-block;
+      padding: 2px 10px;
+      background: rgba(var(--al-accent-rgb), 0.12);
+      color: var(--al-accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: var(--al-radius-sm);
+    }
+
+    .al-time {
+      font-size: 0.8rem;
+      color: var(--al-muted);
+    }
+  }
+
+  .al-modal-title {
+    font-family: var(--al-font-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--al-ink);
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    margin: 0 0 14px;
+    padding-right: 24px;
+  }
+
+  .al-modal-summary {
+    font-size: 0.95rem;
+    color: var(--al-ink-soft);
+    line-height: 1.8;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  .al-modal-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

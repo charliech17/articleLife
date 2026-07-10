@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, signal, inject, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ApiNewsService, DailyNews } from '../../../../shared/services/api/api-news/api-news.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -18,6 +18,9 @@ export class DailyNewsComponent implements OnInit, OnDestroy {
 
   // Use signal for data
   $$newsList = signal<DailyNews[]>([]);
+
+  // 摘要彈窗目前顯示的新聞
+  $$selectedNews = signal<DailyNews | null>(null);
 
   constructor() { }
 
@@ -72,6 +75,19 @@ export class DailyNewsComponent implements OnInit, OnDestroy {
 
   onReadMore(event: Event, news: DailyNews) {
     event.preventDefault();
+    this.$$selectedNews.set(news);
+  }
+
+  closeSummary() {
+    this.$$selectedNews.set(null);
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closeSummary();
+  }
+
+  goToSource(news: DailyNews) {
     if (news.url && news.url !== '#') {
       const isMobile = AppUtil.isMobileDevice();
       const targetName = isMobile ? '_blank' : 'newsPopup';
@@ -80,8 +96,6 @@ export class DailyNewsComponent implements OnInit, OnDestroy {
       const left = (window.innerWidth / 2) - (width / 2);
       const top = (window.innerHeight / 2) - (height / 2);
       window.open(news.url, targetName, `width=${width},height=${height},top=${top},left=${left}`);
-    } else {
-      alert(`即將前往閱讀: ${news.title}`);
     }
   }
 }

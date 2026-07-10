@@ -26,3 +26,27 @@
     </div>
   </div>
 </div>
+
+<!-- 新聞摘要彈窗 -->
+@if ($$selectedNews(); as news) {
+  <div class="al-news-modal-backdrop" (click)="closeSummary()">
+    <div class="al-news-modal" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <button class="al-modal-close" aria-label="關閉" (click)="closeSummary()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+      <div class="al-modal-meta">
+        <span class="al-date">{{ news.publishedDate | date:'yyyy/MM/dd' }}</span>
+        <span class="al-time">{{ news.publishedDate | date:'HH:mm:ss' }}</span>
+      </div>
+      <h4 class="al-modal-title">{{ news.title }}</h4>
+      <p class="al-modal-summary">{{ news.summary }}</p>
+      @if (news.url && news.url !== '#') {
+        <div class="al-modal-actions">
+          <button class="al-btn-primary" (click)="goToSource(news)">
+            前往新聞原文 <i class="bi bi-box-arrow-up-right ms-1"></i>
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+}
