@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ISponsorCheckoutDTO, ISponsorCheckoutResponse, ISponsorOrderStatus } from '../../../models/sponsor.models';
+import { ISponsorCheckoutDTO, ISponsorCheckoutResponse, ISponsorOrder, ISponsorOrderStatus } from '../../../models/sponsor.models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiSponsorService {
@@ -14,5 +14,9 @@ export class ApiSponsorService {
 
   getOrderStatus(merchantTradeNo: string): Observable<ISponsorOrderStatus> {
     return this.#http.get<ISponsorOrderStatus>(`${this.apiUrl}/order/${merchantTradeNo}`);
+  }
+
+  getAdminOrders(): Observable<ISponsorOrder[]> {
+    return this.#http.get<ISponsorOrder[]>(`${this.apiUrl}/admin`);
   }
 }

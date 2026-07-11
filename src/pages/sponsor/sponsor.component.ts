@@ -42,7 +42,7 @@ export class SponsorComponent {
   sponsorForm = this.#fb.group({
     customAmount: [null as number | null, [Validators.min(10), Validators.max(100000)]],
     sponsorName: ['', [Validators.maxLength(100)]],
-    email: ['', [Validators.email, Validators.maxLength(255)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(255)]],
     message: ['', [Validators.maxLength(500)]]
   });
 
@@ -90,7 +90,7 @@ export class SponsorComponent {
       amount,
       type: this.$$type(),
       sponsorName: value.sponsorName || null,
-      email: value.email || null,
+      email: value.email!,
       message: value.message || null
     }).subscribe({
       next: (res) => {

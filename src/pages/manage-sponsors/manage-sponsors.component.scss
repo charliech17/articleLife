@@ -1,0 +1,104 @@
+.manage-sponsors-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .page-title {
+    margin: 0 0 16px;
+    color: var(--al-ink);
+  }
+
+  .filter-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: var(--al-surface);
+
+    .filter-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+
+      .total-amount {
+        font-weight: 500;
+        color: var(--al-ink);
+      }
+    }
+  }
+
+  // Material tokens 直接用 --al-* 變數，深淺色自動切換
+  .filter-card,
+  .table-card {
+    --mat-button-toggle-background-color: var(--al-surface-2);
+    --mat-button-toggle-text-color: var(--al-ink);
+    --mat-button-toggle-selected-state-background-color: var(--al-accent);
+    --mat-button-toggle-selected-state-text-color: #fff;
+    --mat-button-toggle-divider-color: var(--al-border-strong);
+    --mat-button-toggle-state-layer-color: var(--al-ink);
+    --mat-table-background-color: var(--al-surface);
+    --mat-table-header-headline-color: var(--al-ink);
+    --mat-table-row-item-label-text-color: var(--al-ink-soft);
+    --mat-table-row-item-outline-color: var(--al-border);
+  }
+
+  .table-card {
+    padding: 16px;
+    background-color: var(--al-surface);
+
+    .hint-text {
+      text-align: center;
+      color: var(--al-muted);
+      padding: 24px 0;
+      margin: 0;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    .sponsors-table {
+      width: 100%;
+      min-width: 900px;
+    }
+
+    .mono {
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+
+    .message-cell {
+      max-width: 240px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+
+      &.paid {
+        background: rgba(46, 125, 50, 0.15);
+        color: #2e7d32;
+      }
+
+      &.pending {
+        background: rgba(245, 124, 0, 0.15);
+        color: #f57c00;
+      }
+
+      &.failed {
+        background: rgba(211, 47, 47, 0.15);
+        color: #d32f2f;
+      }
+    }
+  }
+}

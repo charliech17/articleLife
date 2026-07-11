@@ -9,6 +9,34 @@
     max-width: 560px;
     padding: 32px;
     height: fit-content;
+    background-color: var(--al-surface);
+    color: var(--al-ink);
+
+    // Material design tokens 直接用 --al-* 變數，
+    // --al-* 會隨 [data-bs-theme] 自動切換，深淺色都適用
+    // outlined 輸入框
+    --mat-form-field-outlined-outline-color: var(--al-border-strong);
+    --mat-form-field-outlined-hover-outline-color: var(--al-ink-soft);
+    --mat-form-field-outlined-focus-outline-color: var(--al-accent);
+    --mat-form-field-outlined-input-text-color: var(--al-ink);
+    --mat-form-field-outlined-input-text-placeholder-color: var(--al-muted);
+    --mat-form-field-outlined-label-text-color: var(--al-muted);
+    --mat-form-field-outlined-hover-label-text-color: var(--al-ink-soft);
+    --mat-form-field-outlined-focus-label-text-color: var(--al-accent);
+    --mat-form-field-outlined-caret-color: var(--al-accent);
+
+    // 單次贊助 / 每月定期 toggle
+    --mat-button-toggle-background-color: var(--al-surface-2);
+    --mat-button-toggle-text-color: var(--al-ink);
+    --mat-button-toggle-selected-state-background-color: var(--al-accent);
+    --mat-button-toggle-selected-state-text-color: #fff;
+    --mat-button-toggle-divider-color: var(--al-border-strong);
+    --mat-button-toggle-state-layer-color: var(--al-ink);
+
+    // 返回首頁（stroked button）
+    --mat-button-outlined-label-text-color: var(--al-ink);
+    --mat-button-outlined-outline-color: var(--al-border-strong);
+    --mat-button-outlined-state-layer-color: var(--al-ink);
   }
 
   .sponsor-visual {
@@ -21,11 +49,12 @@
   .page-title {
     text-align: center;
     margin: 0 0 4px;
+    color: var(--al-ink);
   }
 
   .page-subtitle {
     text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--al-muted);
     margin: 0 0 20px;
   }
 
@@ -38,7 +67,7 @@
   .type-hint {
     text-align: center;
     font-size: 0.85rem;
-    color: rgba(0, 0, 0, 0.55);
+    color: var(--al-muted);
     margin: 4px 0 16px;
   }
 
@@ -51,15 +80,17 @@
 
     .amount-btn {
       padding: 10px 18px;
-      border: 1px solid rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--al-border);
       border-radius: 20px;
       background: transparent;
       cursor: pointer;
       font-size: 0.95rem;
+      color: var(--al-ink);
       transition: all 0.15s ease;
 
       &:hover {
         border-color: #3f51b5;
+        color: #3f51b5;
       }
 
       &.selected {
@@ -90,10 +121,45 @@
     }
   }
 
-  .secure-hint {
+  .disclaimer-section {
+    margin-top: 24px;
+    padding: 16px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 8px;
+
+    :host-context([data-bs-theme="dark"]) & {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: var(--al-muted);
+      margin: 0 0 8px;
+      line-height: 1.5;
+      text-align: left;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .contact-section {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--al-border);
     text-align: center;
-    font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.5);
-    margin: 16px 0 0;
+    font-size: 0.85rem;
+    color: var(--al-muted);
+
+    a {
+      color: #3f51b5;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

@@ -66,6 +66,11 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/sponsor/sponsor.component').then(m => m.SponsorComponent),
   },
   {
+    path: 'manage/sponsors',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-sponsors/manage-sponsors.component').then(m => m.ManageSponsorsComponent),
+  },
+  {
     path: 'sponsor/result',
     loadComponent: () => import('../pages/sponsor-result/sponsor-result.component').then(m => m.SponsorResultComponent),
   },

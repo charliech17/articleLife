@@ -10,6 +10,11 @@
     padding: 40px 32px;
     height: fit-content;
     text-align: center;
+    background-color: var(--al-surface);
+    color: var(--al-ink);
+    --mat-button-outlined-label-text-color: var(--al-ink);
+    --mat-button-outlined-outline-color: var(--al-border-strong);
+    --mat-button-outlined-state-layer-color: var(--al-ink);
   }
 
   .spinner {
@@ -24,10 +29,11 @@
 
   .page-title {
     margin: 0 0 12px;
+    color: var(--al-ink);
   }
 
   .result-text {
-    color: rgba(0, 0, 0, 0.65);
+    color: var(--al-ink-soft);
     margin: 0 0 24px;
     line-height: 1.7;
   }

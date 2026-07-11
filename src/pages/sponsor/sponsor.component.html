@@ -12,10 +12,12 @@
     </div>
 
     @if ($$type() === 'RECURRING') {
-    <p class="type-hint">每月定期贊助僅支援信用卡付款；Apple Pay 僅支援單次贊助。可隨時聯絡我取消。</p>
+    <div class="not-open-msg" style="text-align: center; padding: 40px 0; color: var(--al-muted);">
+      <p style="font-size: 2.5rem; margin-bottom: 12px; margin-top: 0;">🚧</p>
+      <p style="margin: 0; font-size: 1.1rem;">目前尚未開放此功能</p>
+    </div>
     } @else {
     <p class="type-hint">支援信用卡與 Apple Pay（Apple Pay 需使用 Safari 或 iPhone）。</p>
-    }
 
     <div class="amount-options">
       @for (amount of presetAmounts; track amount) {
@@ -45,8 +47,11 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>信箱（選填）</mat-label>
-        <input matInput formControlName="email" type="email" placeholder="方便我向你道謝">
+        <mat-label>信箱（必填）</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="付款成功後會寄贊助確認信到這裡">
+        @if (sponsorForm.controls.email.hasError('required') && sponsorForm.controls.email.touched) {
+        <mat-error>請填寫信箱，以便寄送贊助確認信</mat-error>
+        }
         @if (sponsorForm.controls.email.hasError('email')) {
         <mat-error>信箱格式不正確</mat-error>
         }
@@ -67,10 +72,20 @@
       <div class="actions">
         <button mat-stroked-button type="button" (click)="goHome()">返回首頁</button>
         <button mat-flat-button color="primary" type="submit" [disabled]="$$submitting()">
-          {{ $$submitting() ? '前往付款中...' : ($$type() === 'RECURRING' ? '💖 每月贊助 NT$ ' + (finalAmount || '—') : '💖 贊助 NT$ ' + (finalAmount || '—')) }}
+          {{ $$submitting() ? '前往付款中...' : '💖 贊助 NT$ ' + (finalAmount || '—') }}
         </button>
       </div>
-      <p class="secure-hint">🔒 付款將透過綠界科技（ECPay）安全處理，本站不會接觸你的卡號。</p>
+      
+      <div class="disclaimer-section">
+        <p>ℹ️ <strong>退款政策：</strong>本專案屬無償支持性質，贊助款項一經綠界金流授權扣款完成，恕不接受退款，請確認後再行操作。</p>
+        <p>🔒 <strong>資安宣告：</strong>本站採用綠界 ECPay 第三方金流服務，您的信用卡資訊將透過 SSL 加密連線直接傳輸至金流閘道。本網站不會紀錄、留存或攔截您的完整信用卡號，請安心使用。</p>
+        <p>⚠️ <strong>防詐騙提醒：</strong>本站與綠界科技絕對不會主動致電要求您前往 ATM 進行任何設定、解除分期付款或匯款。若接獲可疑電話，請撥打 165 反詐騙專線。</p>
+      </div>
     </form>
+    }
+
+    <div class="contact-section">
+      若有任何贊助相關問題，請來信至：<a href="mailto:kcchang1994@gmail.com">kcchang1994@gmail.com</a>
+    </div>
   </mat-card>
 </div>

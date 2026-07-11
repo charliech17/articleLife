@@ -1,0 +1,79 @@
+<div class="manage-sponsors-container">
+  <h2 class="page-title">贊助訂單管理 (Manage Sponsors)</h2>
+
+  <mat-card class="filter-card mat-elevation-z2">
+    <div class="filter-row">
+      <mat-button-toggle-group [value]="statusFilter()" (change)="setStatusFilter($event.value)" aria-label="狀態篩選">
+        <mat-button-toggle value="ALL">全部</mat-button-toggle>
+        <mat-button-toggle value="PAID">已付款</mat-button-toggle>
+        <mat-button-toggle value="PENDING">待付款</mat-button-toggle>
+        <mat-button-toggle value="FAILED">失敗</mat-button-toggle>
+      </mat-button-toggle-group>
+
+      <div class="filter-actions">
+        <span class="total-amount">已入帳總額：NT$ {{ totalPaidAmount() | number }}</span>
+        <button mat-flat-button color="primary" (click)="loadOrders()">重新整理</button>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="table-card mat-elevation-z2">
+    @if (loading()) {
+    <p class="hint-text">載入中...</p>
+    } @else if (filteredOrders().length === 0) {
+    <p class="hint-text">沒有符合條件的贊助訂單</p>
+    } @else {
+    <div class="table-wrapper">
+      <table mat-table [dataSource]="filteredOrders()" class="sponsors-table">
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>建立時間</th>
+          <td mat-cell *matCellDef="let order">{{ order.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="merchantTradeNo">
+          <th mat-header-cell *matHeaderCellDef>訂單編號</th>
+          <td mat-cell *matCellDef="let order" class="mono">{{ order.merchantTradeNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="sponsorName">
+          <th mat-header-cell *matHeaderCellDef>贊助者</th>
+          <td mat-cell *matCellDef="let order">{{ order.sponsorName || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>信箱</th>
+          <td mat-cell *matCellDef="let order">{{ order.email || '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>金額</th>
+          <td mat-cell *matCellDef="let order">NT$ {{ order.amount | number }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>方式</th>
+          <td mat-cell *matCellDef="let order">{{ typeText(order) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>狀態</th>
+          <td mat-cell *matCellDef="let order">
+            <span class="status-badge" [class.paid]="order.status === 'PAID'"
+              [class.pending]="order.status === 'PENDING'" [class.failed]="order.status === 'FAILED'">
+              {{ statusText(order.status) }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="message">
+          <th mat-header-cell *matHeaderCellDef>留言</th>
+          <td mat-cell *matCellDef="let order" class="message-cell">{{ order.message || '-' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+    }
+  </mat-card>
+</div>
