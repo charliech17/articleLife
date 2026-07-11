@@ -1,0 +1,62 @@
+<div class="wishing-well-container">
+  @if ($$viewState() === 'form') {
+  <mat-card class="wish-card mat-elevation-z3">
+    <div class="well-visual">
+      <div class="well-roof"></div>
+      <div class="well-body">⛲</div>
+      <div class="well-sparkles"><span>✨</span><span>✨</span><span>✨</span></div>
+    </div>
+
+    <h2 class="page-title">許願池</h2>
+    <p class="page-subtitle">告訴我你希望這個網站有什麼新功能吧！（每天最多許願 3 次）</p>
+
+    <form [formGroup]="wishForm" (ngSubmit)="submitWish()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>期望的功能（必填）</mat-label>
+        <textarea matInput formControlName="wishContent" rows="5"
+          placeholder="例如：希望可以有深色模式..."></textarea>
+        @if (wishForm.controls.wishContent.hasError('required') && wishForm.controls.wishContent.touched) {
+        <mat-error>請填寫期望的功能</mat-error>
+        }
+        @if (wishForm.controls.wishContent.hasError('maxlength')) {
+        <mat-error>內容過長（最多 2000 字）</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>姓名（選填）</mat-label>
+        <input matInput formControlName="wisherName" placeholder="怎麼稱呼你？">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>聯絡信箱（選填）</mat-label>
+        <input matInput formControlName="contactEmail" type="email" placeholder="完成時通知你">
+        @if (wishForm.controls.contactEmail.hasError('email')) {
+        <mat-error>信箱格式不正確</mat-error>
+        }
+      </mat-form-field>
+
+      @if ($$errorMsg()) {
+      <p class="error-msg">{{ $$errorMsg() }}</p>
+      }
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="goHome()">返回首頁</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="$$submitting()">
+          {{ $$submitting() ? '許願中...' : '🪙 投入願望' }}
+        </button>
+      </div>
+    </form>
+  </mat-card>
+  } @else {
+  <mat-card class="wish-card thanks-card mat-elevation-z3">
+    <div class="thanks-icon">🌠</div>
+    <h2 class="page-title">許願成功！</h2>
+    <p class="thanks-text">謝謝你的許願，你的願望已經投入許願池。<br>我會認真考慮實現它的！</p>
+    <div class="actions center">
+      <button mat-stroked-button type="button" (click)="wishAgain()">再許一個願</button>
+      <button mat-flat-button color="primary" type="button" (click)="goHome()">返回首頁</button>
+    </div>
+  </mat-card>
+  }
+</div>

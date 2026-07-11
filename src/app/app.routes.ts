@@ -48,5 +48,14 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('../pages/manage-requested-topics/manage-requested-topics.component').then(m => m.ManageRequestedTopicsComponent),
   },
+  {
+    path: 'wishing-well',
+    loadComponent: () => import('../pages/wishing-well/wishing-well.component').then(m => m.WishingWellComponent),
+  },
+  {
+    path: 'manage/wishes',
+    canActivate: [adminGuard],
+    loadComponent: () => import('../pages/manage-wishes/manage-wishes.component').then(m => m.ManageWishesComponent),
+  },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];

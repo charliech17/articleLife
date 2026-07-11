@@ -7,7 +7,22 @@
 <div class="al-arcades-container">
   @for (game of $$miniGames(); track game.id) {
   <div class="al-arcade-wrapper" [style.transform]="'translate(' + game.x + 'px, ' + game.y + 'px)'">
-    <div class="al-arcade-machine" 
+    @if (game.id === 'wishing-well') {
+    <!-- 許願池 -->
+    <div class="al-wishing-well"
+         [class.nearby]="$$nearbyGame()?.id === game.id"
+         (click)="openGame(game)">
+      <div class="well-icon">{{ game.icon }}</div>
+      <div class="well-sparkle">✨</div>
+      @if ($$nearbyGame()?.id === game.id) {
+      <div class="arcade-prompt">
+        {{ game.actionText || '前往遊玩' }}<br><span class="game-name">{{ game.name }}</span><br>
+        <span class="enter-hint">(按 Enter 或點擊)</span>
+      </div>
+      }
+    </div>
+    } @else {
+    <div class="al-arcade-machine"
          [class.nearby]="$$nearbyGame()?.id === game.id"
          (click)="openGame(game)">
       <div class="arcade-screen">{{ game.icon }}</div>
@@ -18,11 +33,12 @@
       </div>
       @if ($$nearbyGame()?.id === game.id) {
       <div class="arcade-prompt">
-        前往遊玩<br><span class="game-name">{{ game.name }}</span><br>
+        {{ game.actionText || '前往遊玩' }}<br><span class="game-name">{{ game.name }}</span><br>
         <span class="enter-hint">(按 Enter 或點擊)</span>
       </div>
       }
     </div>
+    }
   </div>
   }
 </div>

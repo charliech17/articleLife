@@ -1,0 +1,67 @@
+<div class="manage-wishes-container">
+  <h2 class="page-title">許願池管理 (Manage Wishes)</h2>
+
+  <mat-card class="filter-card mat-elevation-z2">
+    <div class="filter-row">
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>開始日期</mat-label>
+        <input matInput type="date" [(ngModel)]="startDate">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="date-field">
+        <mat-label>結束日期</mat-label>
+        <input matInput type="date" [(ngModel)]="endDate">
+      </mat-form-field>
+
+      <div class="filter-actions">
+        <button mat-flat-button color="primary" (click)="loadWishes()">查詢</button>
+        <button mat-stroked-button (click)="clearFilter()">清除篩選</button>
+      </div>
+    </div>
+  </mat-card>
+
+  <mat-card class="table-card mat-elevation-z2">
+    @if (loading()) {
+    <p class="hint-text">載入中...</p>
+    } @else if (wishes().length === 0) {
+    <p class="hint-text">目前沒有未完成的許願項目 🎉</p>
+    } @else {
+    <table mat-table [dataSource]="wishes()" class="wishes-table">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <td mat-cell *matCellDef="let wish">{{ wish.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>許願時間</th>
+        <td mat-cell *matCellDef="let wish">{{ wish.createdAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="wishContent">
+        <th mat-header-cell *matHeaderCellDef>期望的功能</th>
+        <td mat-cell *matCellDef="let wish" class="wish-content-cell">{{ wish.wishContent }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="wisherName">
+        <th mat-header-cell *matHeaderCellDef>姓名</th>
+        <td mat-cell *matCellDef="let wish">{{ wish.wisherName || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="contactEmail">
+        <th mat-header-cell *matHeaderCellDef>聯絡信箱</th>
+        <td mat-cell *matCellDef="let wish">{{ wish.contactEmail || '-' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>操作</th>
+        <td mat-cell *matCellDef="let wish">
+          <button mat-stroked-button color="primary" (click)="markCompleted(wish)">標記完成</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    }
+  </mat-card>
+</div>

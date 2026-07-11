@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, signal, HostListener } from '@angular/core';
 import { isPlatformBrowser, NgClass } from '@angular/common';
+import { Router } from '@angular/router';
 
 export interface MiniGame {
   id: string;
@@ -8,6 +9,8 @@ export interface MiniGame {
   x: number;
   y: number;
   icon: string;
+  internal?: boolean; // true 時走站內路由，不開新視窗
+  actionText?: string; // 提示文字，預設「前往遊玩」
 }
 
 @Component({
@@ -19,6 +22,7 @@ export interface MiniGame {
 })
 export class MiniGamesComponent implements OnInit, OnDestroy {
   #platformId = inject(PLATFORM_ID);
+  #router = inject(Router);
 
   $$isLightOn = signal<boolean>(true);
   $$isFlickering = signal<boolean>(false);
@@ -36,6 +40,16 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       x: 77,
       y: -72,
       icon: '🐦'
+    },
+    {
+      id: 'wishing-well',
+      name: '許願池',
+      url: '/wishing-well',
+      x: -95,
+      y: -72,
+      icon: '⛲',
+      internal: true,
+      actionText: '前往許願'
     }
   ]);
   $$nearbyGame = signal<MiniGame | null>(null);
@@ -214,7 +228,12 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   }
 
   openGame(game: MiniGame) {
-    if (isPlatformBrowser(this.#platformId)) {
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+    if (game.internal) {
+      this.#router.navigate([game.url]);
+    } else {
       window.open(game.url, '_blank');
     }
   }
