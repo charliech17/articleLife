@@ -1,0 +1,526 @@
+.game-map-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+
+  .map-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+
+    .back-btn {
+      background: var(--al-surface);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 6px 14px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--al-ink, #333);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+      transition: transform 0.15s;
+
+      &:hover {
+        transform: translateX(-2px);
+      }
+    }
+
+    .map-title {
+      margin: 0;
+      flex: 1;
+      text-align: center;
+      color: var(--al-ink, #333);
+    }
+
+    .map-hints {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      color: #777;
+
+      .key {
+        display: inline-block;
+        background: var(--al-surface);
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 6px;
+        font-size: 0.72rem;
+        font-weight: bold;
+        color: var(--al-ink, #333);
+      }
+    }
+  }
+
+  /* ===== 羊皮紙地圖本體 ===== */
+  .map-arena {
+    position: relative;
+    width: 100%;
+    height: min(62vh, 560px);
+    min-height: 380px;
+    outline: none;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 10px;
+    border: 3px solid #b08d57;
+    box-shadow:
+      inset 0 0 60px rgba(139, 105, 60, 0.25),
+      inset 0 0 8px rgba(139, 105, 60, 0.3),
+      0 8px 24px rgba(0, 0, 0, 0.15);
+    /* 泛黃羊皮紙質感 */
+    background:
+      radial-gradient(ellipse at 20% 30%, rgba(196, 164, 110, 0.18), transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(196, 164, 110, 0.15), transparent 50%),
+      radial-gradient(ellipse at 60% 20%, rgba(255, 255, 255, 0.25), transparent 45%),
+      repeating-linear-gradient(45deg, rgba(160, 120, 60, 0.03) 0 3px, transparent 3px 6px),
+      #ede0c4;
+
+    &:focus {
+      border-color: var(--al-accent, #b45309);
+      box-shadow:
+        inset 0 0 60px rgba(139, 105, 60, 0.25),
+        0 0 0 3px rgba(var(--al-accent-rgb, 180, 83, 9), 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  .map-corner {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border: 3px solid rgba(139, 105, 60, 0.55);
+    z-index: 1;
+
+    &.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+    &.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+    &.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+    &.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+  }
+
+  /* 藏寶圖虛線路徑 */
+  .map-paths {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    path {
+      fill: none;
+      stroke: rgba(139, 90, 43, 0.5);
+      stroke-width: 2.5;
+      stroke-dasharray: 7 8;
+      stroke-linecap: round;
+    }
+  }
+
+  /* 裝飾物 */
+  .deco {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    filter: sepia(0.3) saturate(0.85);
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.15);
+
+    &.compass {
+      top: 6%;
+      right: 5%;
+      font-size: 2.2rem;
+      animation: deco-sway 6s ease-in-out infinite;
+    }
+
+    &.tree {
+      font-size: 1.8rem;
+
+      &.t1 { top: 12%; left: 30%; }
+      &.t2 { top: 48%; left: 6%; font-size: 2rem; }
+      &.t3 { bottom: 12%; right: 12%; }
+      &.t4 { top: 55%; right: 30%; font-size: 1.5rem; }
+    }
+
+    &.mountain {
+      top: 8%;
+      left: 48%;
+      font-size: 2.4rem;
+    }
+
+    &.flower {
+      font-size: 1.1rem;
+
+      &.f1 { top: 72%; left: 24%; }
+      &.f2 { top: 52%; left: 40%; }
+    }
+
+    &.boat {
+      bottom: 14%;
+      left: 62%;
+      font-size: 1.6rem;
+      animation: deco-sway 4s ease-in-out infinite;
+    }
+
+    &.firefly {
+      color: #d9a441;
+      font-size: 0.8rem;
+      animation: firefly-glow 2.6s ease-in-out infinite;
+
+      &.fy1 { top: 30%; left: 55%; animation-delay: 0s; }
+      &.fy2 { top: 65%; right: 22%; animation-delay: 0.9s; }
+      &.fy3 { top: 20%; left: 12%; animation-delay: 1.8s; }
+    }
+  }
+
+  .pond {
+    position: absolute;
+    bottom: 10%;
+    left: 56%;
+    width: 18%;
+    height: 14%;
+    background: radial-gradient(ellipse at center, rgba(126, 168, 190, 0.55), rgba(126, 168, 190, 0.25));
+    border-radius: 50%;
+    border: 2px solid rgba(96, 130, 150, 0.35);
+    pointer-events: none;
+
+    .pond-ripple {
+      position: absolute;
+      inset: 20%;
+      border: 1.5px solid rgba(255, 255, 255, 0.45);
+      border-radius: 50%;
+      animation: pond-ripple 3s ease-out infinite;
+    }
+  }
+
+  /* ===== 地點 ===== */
+  .map-location {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    z-index: 2;
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(1.1);
+    }
+
+    .loc-x {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      color: rgba(178, 34, 34, 0.7);
+      font-weight: bold;
+      font-size: 0.9rem;
+      transform: rotate(12deg);
+    }
+
+    .loc-icon {
+      font-size: 2.4rem;
+      line-height: 1;
+      filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.25));
+      transition: transform 0.2s;
+    }
+
+    .loc-sign {
+      margin-top: 4px;
+      background: linear-gradient(#a9803f, #8a6832);
+      color: #fdf6e3;
+      font-size: 0.72rem;
+      font-weight: bold;
+      padding: 3px 10px;
+      border-radius: 4px;
+      border: 1px solid #6e5226;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      white-space: nowrap;
+      position: relative;
+
+      /* 木牌的釘子 */
+      &::before,
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3px;
+        height: 3px;
+        background: #4e3a1a;
+        border-radius: 50%;
+      }
+
+      &::before { left: 3px; }
+      &::after { right: 3px; }
+    }
+
+    &.nearby {
+      .loc-icon {
+        animation: loc-bounce 1s infinite;
+      }
+    }
+
+    .loc-prompt {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--al-surface, #fff);
+      color: #333;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      white-space: nowrap;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+      animation: prompt-pop-in 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      pointer-events: none;
+      z-index: 5;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px 6px 0;
+        border-style: solid;
+        border-color: var(--al-surface, #fff) transparent transparent transparent;
+        display: block;
+      }
+
+      .loc-name {
+        color: var(--al-accent, #b45309);
+        font-size: 0.95rem;
+      }
+
+      .enter-hint {
+        font-size: 0.7rem;
+        color: #666;
+        font-weight: normal;
+      }
+    }
+  }
+
+  /* ===== 人物 ===== */
+  .map-character {
+    position: absolute;
+    z-index: 3;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+
+    .al-character-sprite {
+      width: 64px;
+      height: 64px;
+      background-image: url('../../assets/sprite.png');
+      background-repeat: no-repeat;
+      display: block;
+      transform-origin: bottom center;
+      image-rendering: pixelated;
+      background-size: 384px 256px;
+
+      &.state-idle {
+        animation: sprite-idle 0.5s steps(2) infinite;
+        background-position: 0px 0px;
+      }
+
+      &.state-ready {
+        animation: sprite-ready 0.4s steps(3) infinite;
+        background-position: 0px -64px;
+      }
+
+      &.state-walk {
+        animation: sprite-walk 0.6s steps(6) infinite;
+        background-position: 0px -128px;
+      }
+
+      &.state-attack {
+        animation: sprite-attack 0.5s steps(6) forwards;
+        background-position: 0px -192px;
+      }
+    }
+
+    .al-chat-bubble {
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      z-index: 10;
+      background: var(--al-surface, #fff);
+      color: #333;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      white-space: nowrap;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      animation: prompt-pop-in 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 6px 6px 0;
+        border-style: solid;
+        border-color: var(--al-surface, #fff) transparent transparent transparent;
+        display: block;
+      }
+    }
+
+    .al-dust-trail {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 20px;
+      pointer-events: none;
+      z-index: -1;
+
+      .dust {
+        position: absolute;
+        bottom: 5px;
+        left: 20px;
+        width: 12px;
+        height: 12px;
+        background: rgba(160, 130, 90, 0.6);
+        border-radius: 50%;
+        animation: dust-fade 0.5s linear infinite;
+
+        &.d1 { animation-delay: 0s; }
+        &.d2 { animation-delay: 0.15s; left: 30px; bottom: 8px; width: 8px; height: 8px; }
+        &.d3 { animation-delay: 0.3s; left: 10px; bottom: 2px; width: 10px; height: 10px; }
+      }
+    }
+  }
+
+  /* ===== 手機版操作 ===== */
+  .map-mobile-controls {
+    display: none;
+    margin-top: 16px;
+    justify-content: space-between;
+    align-items: center;
+
+    @media (max-width: 768px) {
+      display: flex;
+    }
+
+    .dpad {
+      position: relative;
+      width: 140px;
+      height: 140px;
+
+      .dpad-btn {
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        background: var(--al-surface, #fff);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        font-size: 16px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: var(--al-ink-soft, #555);
+
+        &:active {
+          background: rgba(209, 213, 219, 0.9);
+        }
+
+        &.up { top: 0; left: 48px; }
+        &.right { top: 48px; right: 0; }
+        &.down { bottom: 0; left: 48px; }
+        &.left { top: 48px; left: 0; }
+      }
+    }
+
+    .interact-btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--al-accent, #b45309);
+      color: var(--al-on-accent, #fff);
+      font-weight: bold;
+      font-size: 1rem;
+      border: 3px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
+  }
+}
+
+/* Animations */
+@keyframes sprite-idle {
+  100% { background-position: -128px 0px; }
+}
+
+@keyframes sprite-ready {
+  100% { background-position: -192px -64px; }
+}
+
+@keyframes sprite-walk {
+  100% { background-position: -384px -128px; }
+}
+
+@keyframes sprite-attack {
+  100% { background-position: -384px -192px; }
+}
+
+@keyframes prompt-pop-in {
+  0% {
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dust-fade {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-15px, -10px) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@keyframes loc-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes deco-sway {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+
+@keyframes firefly-glow {
+  0%, 100% {
+    opacity: 0.2;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes pond-ripple {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}

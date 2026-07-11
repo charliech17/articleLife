@@ -1,17 +1,7 @@
 import { Component, inject, OnInit, OnDestroy, PLATFORM_ID, signal, HostListener } from '@angular/core';
 import { isPlatformBrowser, NgClass } from '@angular/common';
 import { Router } from '@angular/router';
-
-export interface MiniGame {
-  id: string;
-  name: string;
-  url: string;
-  x: number;
-  y: number;
-  icon: string;
-  internal?: boolean; // true 時走站內路由，不開新視窗
-  actionText?: string; // 提示文字，預設「前往遊玩」
-}
+import { GAME_WORLD_ITEMS, GameWorldItem } from '../../../../shared/config/game-world.config';
 
 @Component({
   selector: 'app-mini-games',
@@ -24,6 +14,8 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   #platformId = inject(PLATFORM_ID);
   #router = inject(Router);
 
+  gameItems = GAME_WORLD_ITEMS;
+
   $$isLightOn = signal<boolean>(true);
   $$isFlickering = signal<boolean>(false);
   $$showLight = signal<boolean>(false);
@@ -31,28 +23,8 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   $$characterState = signal<'idle' | 'ready' | 'walk' | 'attack'>('idle');
   $$characterDirection = signal<number>(1);
   $$chatBubble = signal<string>(''); // For the fun feature
-
-  $$miniGames = signal<MiniGame[]>([
-    {
-      id: 'flappybird',
-      name: 'Flappy Bird',
-      url: 'https://josh-lifesharing.com/flappybird',
-      x: 77,
-      y: -72,
-      icon: '🐦'
-    },
-    {
-      id: 'wishing-well',
-      name: '許願池',
-      url: '/wishing-well',
-      x: -95,
-      y: -72,
-      icon: '⛲',
-      internal: true,
-      actionText: '前往許願'
-    }
-  ]);
-  $$nearbyGame = signal<MiniGame | null>(null);
+  $$isFocused = signal<boolean>(false);
+  $$showGamePopover = signal<boolean>(false);
 
   $$mouseX = signal<number>(0);
   $$mouseY = signal<number>(0);
@@ -77,7 +49,6 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
           this.$$characterPos.set(JSON.parse(pos));
         } catch (e) { }
       }
-      this.checkProximity();
     }
   }
 
@@ -109,16 +80,26 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   }
 
   onCharacterKeyDown(event: KeyboardEvent): void {
-    if (this.$$characterState() === 'attack') {
+    // 快捷鍵 1: Ctrl+Shift+G 進入遊戲地圖頁
+    if (event.ctrlKey && event.shiftKey && (event.key === 'G' || event.key === 'g')) {
       event.preventDefault();
+      this.goToGameMap();
       return;
     }
 
-    if (event.key === 'Enter') {
-      const nearby = this.$$nearbyGame();
-      if (nearby) {
-        this.openGame(nearby);
-      }
+    // 快捷鍵 2: Shift+G（含 Shift+Space+G）開啟遊戲選單
+    if (event.shiftKey && (event.key === 'G' || event.key === 'g')) {
+      event.preventDefault();
+      this.toggleGamePopover();
+      return;
+    }
+
+    if (event.key === 'Escape') {
+      this.$$showGamePopover.set(false);
+      return;
+    }
+
+    if (this.$$characterState() === 'attack') {
       event.preventDefault();
       return;
     }
@@ -131,6 +112,11 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
       this.startMoving();
       event.preventDefault();
     } else if (event.key === ' ' || event.key === 'Spacebar') {
+      if (event.shiftKey) {
+        // 按住 Shift 時保留給組合鍵（Shift+Space+G），不觸發攻擊
+        event.preventDefault();
+        return;
+      }
       this.$$characterState.set('attack');
       this.showChatBubble('喝啊！', 1000);
       setTimeout(() => {
@@ -151,6 +137,7 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   onCharacterBlur(): void {
     this.#keysDown.clear();
     this.$$characterState.set('idle');
+    this.$$isFocused.set(false);
     this.stopMoving();
     clearTimeout(this.#idleTimeout);
     this.$$chatBubble.set('zzZ...');
@@ -158,9 +145,10 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
   }
 
   onCharacterFocus(): void {
+    this.$$isFocused.set(true);
     if (this.$$characterState() !== 'attack') {
       this.$$characterState.set('ready');
-      this.showChatBubble('準備戰鬥！', 1500);
+      this.showChatBubble('要來玩點什麼嗎？', 1500);
     }
   }
 
@@ -185,7 +173,6 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
 
       if (moved) {
         this.$$characterPos.set({ ...pos });
-        this.checkProximity();
         if (isPlatformBrowser(this.#platformId)) {
           localStorage.setItem('al_character_pos', JSON.stringify(this.$$characterPos()));
         }
@@ -210,31 +197,28 @@ export class MiniGamesComponent implements OnInit, OnDestroy {
     }
   }
 
-  checkProximity() {
-    const pos = this.$$characterPos();
-    let found: MiniGame | null = null;
-    for (const game of this.$$miniGames()) {
-      const dx = pos.x - game.x;
-      const dy = pos.y - game.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 60) {
-        found = game;
-        break;
-      }
-    }
-    if (this.$$nearbyGame()?.id !== found?.id) {
-      this.$$nearbyGame.set(found);
-    }
+  toggleGamePopover(): void {
+    this.$$showGamePopover.update(show => !show);
   }
 
-  openGame(game: MiniGame) {
+  closeGamePopover(): void {
+    this.$$showGamePopover.set(false);
+  }
+
+  goToGameMap(): void {
+    this.$$showGamePopover.set(false);
+    this.#router.navigate(['game-map']);
+  }
+
+  openItem(item: GameWorldItem): void {
+    this.$$showGamePopover.set(false);
     if (!isPlatformBrowser(this.#platformId)) {
       return;
     }
-    if (game.internal) {
-      this.#router.navigate([game.url]);
+    if (item.internal) {
+      this.#router.navigate([item.url]);
     } else {
-      window.open(game.url, '_blank');
+      window.open(item.url, '_blank');
     }
   }
 }

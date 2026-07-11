@@ -49,6 +49,10 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/manage-requested-topics/manage-requested-topics.component').then(m => m.ManageRequestedTopicsComponent),
   },
   {
+    path: 'game-map',
+    loadComponent: () => import('../pages/game-map/game-map.component').then(m => m.GameMapComponent),
+  },
+  {
     path: 'wishing-well',
     loadComponent: () => import('../pages/wishing-well/wishing-well.component').then(m => m.WishingWellComponent),
   },

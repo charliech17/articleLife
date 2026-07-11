@@ -1,0 +1,97 @@
+<div class="game-map-page">
+  <div class="map-header">
+    <button class="back-btn" (click)="goHome()">← 返回首頁</button>
+    <h2 class="map-title">🗺️ Josh 的冒險小島</h2>
+    <div class="map-hints">
+      <span class="key">↑↓←→</span> 移動
+      <span class="key">Enter</span> 互動
+      <span class="key">Esc</span> 離開
+    </div>
+  </div>
+
+  <div #arena class="map-arena" tabindex="0" (keydown)="onKeyDown($event)" (keyup)="onKeyUp($event)"
+    (focus)="onFocus()" (blur)="onBlur()">
+
+    <!-- 羊皮紙邊角裝飾 -->
+    <div class="map-corner tl"></div>
+    <div class="map-corner tr"></div>
+    <div class="map-corner bl"></div>
+    <div class="map-corner br"></div>
+
+    <!-- 藏寶圖虛線路徑 -->
+    <svg class="map-paths" viewBox="0 0 100 100" preserveAspectRatio="none">
+      <path d="M 14 26 C 20 45, 26 52, 32 62" vector-effect="non-scaling-stroke" />
+      <path d="M 32 62 C 45 55, 58 42, 72 30" vector-effect="non-scaling-stroke" />
+      <path d="M 72 30 C 55 22, 30 20, 14 26" vector-effect="non-scaling-stroke" />
+    </svg>
+
+    <!-- 裝飾物 -->
+    <div class="deco compass">🧭</div>
+    <div class="deco tree t1">🌲</div>
+    <div class="deco tree t2">🌳</div>
+    <div class="deco tree t3">🌴</div>
+    <div class="deco tree t4">🌲</div>
+    <div class="deco mountain">⛰️</div>
+    <div class="deco flower f1">🌼</div>
+    <div class="deco flower f2">🌷</div>
+    <div class="deco boat">⛵</div>
+    <div class="pond">
+      <div class="pond-ripple"></div>
+    </div>
+    <div class="deco firefly fy1">✦</div>
+    <div class="deco firefly fy2">✦</div>
+    <div class="deco firefly fy3">✦</div>
+
+    <!-- 地點 -->
+    @for (loc of locations; track loc.id) {
+    <div class="map-location" [ngClass]="'loc-' + loc.id" [class.nearby]="$$nearby()?.id === loc.id"
+      [style.left.%]="loc.mapX" [style.top.%]="loc.mapY" (click)="interact(loc)">
+      <div class="loc-x">✕</div>
+      <div class="loc-icon">{{ loc.icon }}</div>
+      <div class="loc-sign">{{ loc.name }}</div>
+      @if ($$nearby()?.id === loc.id) {
+      <div class="loc-prompt">
+        {{ loc.actionText }}<br><span class="loc-name">{{ loc.name }}</span><br>
+        <span class="enter-hint">(按 Enter 或點擊)</span>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- 人物 -->
+    <div class="map-character" [style.left.px]="$$pos().x" [style.top.px]="$$pos().y">
+      @if ($$bubble()) {
+      <div class="al-chat-bubble">{{ $$bubble() }}</div>
+      }
+      @if ($$state() === 'walk') {
+      <div class="al-dust-trail" [style.transform]="'scaleX(' + $$direction() + ')'">
+        <div class="dust d1"></div>
+        <div class="dust d2"></div>
+        <div class="dust d3"></div>
+      </div>
+      }
+      <div class="al-character-sprite" [ngClass]="'state-' + $$state()"
+        [style.transform]="'scale(' + ($$direction() * 2) + ', 2)'"></div>
+    </div>
+  </div>
+
+  <!-- 手機版操作控制 -->
+  <div class="map-mobile-controls">
+    <div class="dpad">
+      <button class="dpad-btn up" (touchstart)="simulateKey('ArrowUp', true, $event)"
+        (touchend)="simulateKey('ArrowUp', false, $event)"
+        (touchcancel)="simulateKey('ArrowUp', false, $event)">▲</button>
+      <button class="dpad-btn right" (touchstart)="simulateKey('ArrowRight', true, $event)"
+        (touchend)="simulateKey('ArrowRight', false, $event)"
+        (touchcancel)="simulateKey('ArrowRight', false, $event)">▶</button>
+      <button class="dpad-btn down" (touchstart)="simulateKey('ArrowDown', true, $event)"
+        (touchend)="simulateKey('ArrowDown', false, $event)"
+        (touchcancel)="simulateKey('ArrowDown', false, $event)">▼</button>
+      <button class="dpad-btn left" (touchstart)="simulateKey('ArrowLeft', true, $event)"
+        (touchend)="simulateKey('ArrowLeft', false, $event)"
+        (touchcancel)="simulateKey('ArrowLeft', false, $event)">◀</button>
+    </div>
+    <button class="interact-btn" (touchstart)="simulateKey('Enter', true, $event)"
+      (touchend)="simulateKey('Enter', false, $event)">互動</button>
+  </div>
+</div>
