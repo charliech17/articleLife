@@ -1,0 +1,76 @@
+<div class="sponsor-container">
+  <mat-card class="sponsor-card mat-elevation-z3">
+    <div class="sponsor-visual">☕</div>
+    <h2 class="page-title">贊助這個專案</h2>
+    <p class="page-subtitle">如果這個網站對你有幫助，歡迎請我喝杯咖啡，支持我繼續開發新功能！</p>
+
+    <div class="type-toggle">
+      <mat-button-toggle-group [value]="$$type()" (change)="setType($event.value)" aria-label="贊助方式">
+        <mat-button-toggle value="ONE_TIME">單次贊助</mat-button-toggle>
+        <mat-button-toggle value="RECURRING">每月定期</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+
+    @if ($$type() === 'RECURRING') {
+    <p class="type-hint">每月定期贊助僅支援信用卡付款；Apple Pay 僅支援單次贊助。可隨時聯絡我取消。</p>
+    } @else {
+    <p class="type-hint">支援信用卡與 Apple Pay（Apple Pay 需使用 Safari 或 iPhone）。</p>
+    }
+
+    <div class="amount-options">
+      @for (amount of presetAmounts; track amount) {
+      <button type="button" class="amount-btn"
+        [class.selected]="!$$isCustomAmount() && $$selectedAmount() === amount"
+        (click)="selectPreset(amount)">
+        NT$ {{ amount }}
+      </button>
+      }
+      <button type="button" class="amount-btn" [class.selected]="$$isCustomAmount()" (click)="selectCustom()">
+        自訂金額
+      </button>
+    </div>
+
+    <form [formGroup]="sponsorForm" (ngSubmit)="submit()">
+      @if ($$isCustomAmount()) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>自訂金額（10 ~ 100,000 元）</mat-label>
+        <input matInput formControlName="customAmount" type="number" min="10" max="100000" placeholder="輸入金額">
+        <span matTextPrefix>NT$&nbsp;</span>
+      </mat-form-field>
+      }
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>名稱（選填）</mat-label>
+        <input matInput formControlName="sponsorName" placeholder="怎麼稱呼你？">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>信箱（選填）</mat-label>
+        <input matInput formControlName="email" type="email" placeholder="方便我向你道謝">
+        @if (sponsorForm.controls.email.hasError('email')) {
+        <mat-error>信箱格式不正確</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>想說的話（選填）</mat-label>
+        <textarea matInput formControlName="message" rows="3" placeholder="留言給我吧！"></textarea>
+        @if (sponsorForm.controls.message.hasError('maxlength')) {
+        <mat-error>留言過長（最多 500 字）</mat-error>
+        }
+      </mat-form-field>
+
+      @if ($$errorMsg()) {
+      <p class="error-msg">{{ $$errorMsg() }}</p>
+      }
+
+      <div class="actions">
+        <button mat-stroked-button type="button" (click)="goHome()">返回首頁</button>
+        <button mat-flat-button color="primary" type="submit" [disabled]="$$submitting()">
+          {{ $$submitting() ? '前往付款中...' : ($$type() === 'RECURRING' ? '💖 每月贊助 NT$ ' + (finalAmount || '—') : '💖 贊助 NT$ ' + (finalAmount || '—')) }}
+        </button>
+      </div>
+      <p class="secure-hint">🔒 付款將透過綠界科技（ECPay）安全處理，本站不會接觸你的卡號。</p>
+    </form>
+  </mat-card>
+</div>

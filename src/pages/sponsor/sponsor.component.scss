@@ -1,0 +1,99 @@
+.sponsor-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 16px;
+  min-height: 70vh;
+
+  .sponsor-card {
+    width: 100%;
+    max-width: 560px;
+    padding: 32px;
+    height: fit-content;
+  }
+
+  .sponsor-visual {
+    text-align: center;
+    font-size: 3.5rem;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .page-title {
+    text-align: center;
+    margin: 0 0 4px;
+  }
+
+  .page-subtitle {
+    text-align: center;
+    color: rgba(0, 0, 0, 0.6);
+    margin: 0 0 20px;
+  }
+
+  .type-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .type-hint {
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.55);
+    margin: 4px 0 16px;
+  }
+
+  .amount-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 20px;
+
+    .amount-btn {
+      padding: 10px 18px;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+
+      &:hover {
+        border-color: #3f51b5;
+      }
+
+      &.selected {
+        background: #3f51b5;
+        border-color: #3f51b5;
+        color: #fff;
+      }
+    }
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .error-msg {
+    color: #d32f2f;
+    text-align: center;
+    margin: 0 0 12px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    button[type='submit'] {
+      flex: 1;
+    }
+  }
+
+  .secure-hint {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 16px 0 0;
+  }
+}

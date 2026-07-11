@@ -1,0 +1,48 @@
+<div class="sponsor-result-container">
+  <mat-card class="result-card mat-elevation-z3">
+    @switch ($$viewState()) {
+    @case ('loading') {
+    <mat-spinner diameter="48" class="spinner"></mat-spinner>
+    <h2 class="page-title">確認付款結果中...</h2>
+    <p class="result-text">正在向金流確認你的付款狀態，請稍候。</p>
+    }
+    @case ('paid') {
+    <div class="result-icon">🎉</div>
+    <h2 class="page-title">贊助成功，非常感謝！</h2>
+    <p class="result-text">
+      已收到你的贊助 NT$ {{ $$order()?.amount }}
+      @if ($$order()?.type === 'RECURRING') {（每月定期）}。<br>
+      你的支持是我持續開發的最大動力！
+    </p>
+    <div class="actions">
+      <button mat-flat-button color="primary" type="button" (click)="goHome()">返回首頁</button>
+    </div>
+    }
+    @case ('pending') {
+    <div class="result-icon">⏳</div>
+    <h2 class="page-title">付款結果確認中</h2>
+    <p class="result-text">尚未收到金流的付款確認，可能會延遲幾分鐘。<br>如果你已完成付款，不用擔心，系統稍後會自動入帳。</p>
+    <div class="actions">
+      <button mat-flat-button color="primary" type="button" (click)="goHome()">返回首頁</button>
+    </div>
+    }
+    @case ('failed') {
+    <div class="result-icon">😢</div>
+    <h2 class="page-title">付款未完成</h2>
+    <p class="result-text">這次付款沒有成功，可能是取消付款或卡片問題。<br>若想再試一次，隨時歡迎！</p>
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="goHome()">返回首頁</button>
+      <button mat-flat-button color="primary" type="button" (click)="goSponsor()">再試一次</button>
+    </div>
+    }
+    @case ('notFound') {
+    <div class="result-icon">❓</div>
+    <h2 class="page-title">找不到訂單資訊</h2>
+    <p class="result-text">無法取得這筆贊助的資訊。若你已完成付款但看到此畫面，請與我聯絡。</p>
+    <div class="actions">
+      <button mat-flat-button color="primary" type="button" (click)="goHome()">返回首頁</button>
+    </div>
+    }
+    }
+  </mat-card>
+</div>

@@ -61,5 +61,13 @@ export const routes: Routes = [
     canActivate: [adminGuard],
     loadComponent: () => import('../pages/manage-wishes/manage-wishes.component').then(m => m.ManageWishesComponent),
   },
+  {
+    path: 'sponsor',
+    loadComponent: () => import('../pages/sponsor/sponsor.component').then(m => m.SponsorComponent),
+  },
+  {
+    path: 'sponsor/result',
+    loadComponent: () => import('../pages/sponsor-result/sponsor-result.component').then(m => m.SponsorResultComponent),
+  },
   { path: 'poc', loadComponent: () => import('../pages/poc/poc.component').then(m => m.PocComponent) },
 ];
