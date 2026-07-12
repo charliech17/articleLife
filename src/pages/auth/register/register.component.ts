@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit {
       next: res => {
         const isNewUser = res.responseData;
         alert(isNewUser ? '使用 Google 註冊成功，已自動登入' : '此 Google 帳號已註冊過，已為您登入');
-        this.#globalService.callApiWhenReloadOrLogin();
+        this.#globalService.callApiWhenReloadOrLogin(true);
         this.#router.navigate(['/']);
       },
       error: err => {

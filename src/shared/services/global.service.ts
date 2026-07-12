@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ApiAuthService } from './api/api-auth/auth.service';
 import { GlobalStore } from '../stores/global.store';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class GlobalService {
@@ -18,6 +18,7 @@ export class GlobalService {
   #isFetching = false;
   private readonly FETCH_COOLDOWN = 60000; // 60 秒
   private readonly STORAGE_KEY = 'last_user_fetch_time';
+  private fetchSubscription?: Subscription;
 
   #ngZone = inject(NgZone);
 
@@ -57,9 +58,17 @@ export class GlobalService {
     }
   }
 
-  callApiWhenReloadOrLogin(): void {
-    if (!isPlatformBrowser(this.#platformId) || this.#isFetching) {
+  callApiWhenReloadOrLogin(force: boolean = false): void {
+    if (!isPlatformBrowser(this.#platformId)) {
       return;
+    }
+
+    if (this.#isFetching && !force) {
+      return;
+    }
+
+    if (force && this.fetchSubscription) {
+      this.fetchSubscription.unsubscribe();
     }
 
     this.#isFetching = true;
@@ -67,7 +76,7 @@ export class GlobalService {
     // 先標記時間，避免短時間內重複觸發
     sessionStorage.setItem(this.STORAGE_KEY, Date.now().toString());
 
-    this.#apiAuthService.getUserInfo().subscribe({
+    this.fetchSubscription = this.#apiAuthService.getUserInfo().subscribe({
       next: res => {
         this.#isFetching = false;
         this.#globalStore.setUserInfo(res);

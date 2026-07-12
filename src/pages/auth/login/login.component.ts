@@ -1,5 +1,6 @@
 import { GlobalService } from './../../../shared/services/global.service';
-import { AfterViewInit, Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,6 +19,7 @@ export class LoginComponent implements AfterViewInit {
   #router = inject(Router);
   #globalService = inject(GlobalService);
   #googleSigninService = inject(GoogleSigninService);
+  #platformId = inject(PLATFORM_ID);
 
   @ViewChild('googleBtn') googleBtn?: ElementRef<HTMLElement>;
 
@@ -25,6 +27,22 @@ export class LoginComponent implements AfterViewInit {
   pwdControl = new FormControl('', { nonNullable: true });
   authCodeControl = new FormControl('', { nonNullable: true });
   pressedCtrl = false;
+
+  ngOnInit(): void {
+    // 處理標準 OAuth2 隱含授權流程回傳的 id_token（iOS 裝置的 Google 登入備案機制）
+    if (isPlatformBrowser(this.#platformId)) {
+      const hash = window.location.hash;
+      if (hash && hash.includes('id_token=')) {
+        const params = new URLSearchParams(hash.substring(1)); // 移除前綴的 # 符號
+        const idToken = params.get('id_token');
+        if (idToken) {
+          // 清除網址列中的 hash，避免使用者重新整理頁面時重複觸發登入流程
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+          this.handleGoogleLogin(idToken);
+        }
+      }
+    }
+  }
 
   ngAfterViewInit(): void {
     if (this.googleBtn) {
@@ -36,7 +54,7 @@ export class LoginComponent implements AfterViewInit {
     this.#apiAuthService.googleAuth(credential).subscribe({
       next: res => {
         alert('Google 登入成功');
-        this.#globalService.callApiWhenReloadOrLogin();
+        this.#globalService.callApiWhenReloadOrLogin(true);
         this.#router.navigate(['/']);
       },
       error: err => {
@@ -65,7 +83,7 @@ export class LoginComponent implements AfterViewInit {
       .subscribe({
         next: res => {
           alert('Login success');
-          this.#globalService.callApiWhenReloadOrLogin();
+          this.#globalService.callApiWhenReloadOrLogin(true);
           this.#router.navigate(['/']);
         },
         error: err => {
