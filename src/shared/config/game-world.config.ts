@@ -29,6 +29,17 @@ export const GAME_WORLD_ITEMS: GameWorldItem[] = [
     actionText: '前往遊玩'
   },
   {
+    id: 'knowledge-map',
+    name: '知識星圖',
+    description: '讀完 AI 文章，點亮你的知識之星',
+    icon: '🔭',
+    url: '/knowledge-map',
+    internal: true,
+    mapX: 52,
+    mapY: 40,
+    actionText: '觀星去'
+  },
+  {
     id: 'wishing-well',
     name: '許願池',
     description: '許下你想要的新功能',

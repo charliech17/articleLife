@@ -1,0 +1,60 @@
+<div class="knowledge-map-page">
+  <div class="map-header">
+    <button class="back-btn" (click)="goGameMap()">← 返回小島</button>
+    <h2 class="map-title">🌌 知識星圖</h2>
+    <button class="back-btn" (click)="goHome()">回首頁</button>
+  </div>
+
+  <div class="sky-arena">
+    <!-- 背景星塵 -->
+    <div class="stardust s1"></div>
+    <div class="stardust s2"></div>
+    <div class="stardust s3"></div>
+
+    <div class="sky-progress">
+      <div class="progress-label">
+        <span class="progress-icon">✨</span>
+        已點亮 <strong>{{ $totalReadCount() }}</strong> / {{ $totalCount() }} 顆知識之星（{{ $totalProgress() }}%）
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width.%]="$totalProgress()"></div>
+      </div>
+      <p class="progress-hint">把 AI 文章讀到最後，就能點亮對應的星星！</p>
+    </div>
+
+    @if ($$loading()) {
+      <div class="sky-loading">🔭 正在觀測星空…</div>
+    } @else if ($groups().length === 0) {
+      <div class="sky-loading">這片星空還沒有星星，晚點再來看看吧。</div>
+    } @else {
+      @for (group of $groups(); track group.category.id) {
+        <section class="constellation">
+          <div class="constellation-header">
+            <h3 class="constellation-name">
+              {{ group.category.categoryName }}
+              @if (isGroupCompleted(group)) {
+                <span class="constellation-badge" title="此星座已全部點亮">🏆 星座完成</span>
+              }
+            </h3>
+            <span class="constellation-count">{{ groupReadCount(group) }} / {{ group.nodes.length }}</span>
+          </div>
+
+          <div class="constellation-nodes">
+            @for (node of group.nodes; track node.id) {
+              <button class="star-node" [class.lit]="isRead(node.id)" (click)="openArticle(node)" [title]="node.title">
+                <span class="star-orb">
+                  @if (isRead(node.id)) {
+                    ⭐
+                  } @else {
+                    <span class="star-dim">✦</span>
+                  }
+                </span>
+                <span class="star-title">{{ node.title }}</span>
+              </button>
+            }
+          </div>
+        </section>
+      }
+    }
+  </div>
+</div>

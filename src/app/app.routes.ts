@@ -53,6 +53,10 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/game-map/game-map.component').then(m => m.GameMapComponent),
   },
   {
+    path: 'knowledge-map',
+    loadComponent: () => import('../pages/knowledge-map/knowledge-map.component').then(m => m.KnowledgeMapComponent),
+  },
+  {
     path: 'wishing-well',
     loadComponent: () => import('../pages/wishing-well/wishing-well.component').then(m => m.WishingWellComponent),
   },

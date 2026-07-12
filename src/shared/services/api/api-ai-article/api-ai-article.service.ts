@@ -14,6 +14,14 @@ export interface AiArticleCategoryAdmin extends AiArticleCategory {
   requestedTopic?: string;
 }
 
+/** 知識地圖節點（輕量，不含文章內容） */
+export interface AiArticleMapNode {
+  id: number;
+  title: string;
+  categoryId: number;
+  createdTime: string;
+}
+
 export interface AiArticleDetails {
   id: number;
   title: string;
@@ -45,6 +53,10 @@ export class ApiAiArticleService {
     }
 
     return this.#http.get(`api/ai-articles/list`, { params });
+  }
+
+  getAiArticleMapNodes(): Observable<AiArticleMapNode[]> {
+    return this.#http.get<AiArticleMapNode[]>(`api/ai-articles/map-nodes`);
   }
 
   getAiArticleById(id: string | number): Observable<AiArticleDetails> {

@@ -12,6 +12,7 @@ import { parseMarkdownArticle, parseMarkdownIntro } from '../../shared/utils/mar
 import { ArticleOutlineService } from '../../shared/services/article-outline.service';
 import { AppUtil } from '../../shared/utils/app.util';
 import { GlobalService } from '../../shared/services/global.service';
+import { ReadingProgressService } from '../../shared/services/reading-progress.service';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -31,8 +32,14 @@ export class AiViewArticleComponent implements OnDestroy {
   #platformId = inject(PLATFORM_ID);
   #articleOutlineService = inject(ArticleOutlineService);
   #globalService = inject(GlobalService);
+  #readingProgressService = inject(ReadingProgressService);
 
   @ViewChild('contentContainer') contentContainer!: ElementRef;
+
+  /** 剛點亮知識節點的提示 */
+  $$justLitNode = signal<boolean>(false);
+  #scrollListener: (() => void) | null = null;
+  #litToastTimer: ReturnType<typeof setTimeout> | null = null;
 
   $$articleDetails = signal<IArticleDetails>({
     id: -1,
@@ -87,6 +94,7 @@ export class AiViewArticleComponent implements OnDestroy {
   constructor() {
     this.getArticleContents();
     this.setupOutline();
+    this.setupReadCompletionTracking();
 
     if (isPlatformBrowser(this.#platformId)) {
       this.#scrollService.scrollToTop();
@@ -95,6 +103,63 @@ export class AiViewArticleComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.#articleOutlineService.destroyOutline();
+    this.removeScrollListener();
+    if (this.#litToastTimer) {
+      clearTimeout(this.#litToastTimer);
+    }
+  }
+
+  /** 滾到文章底部才算讀完，點亮知識地圖節點 */
+  setupReadCompletionTracking(): void {
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+
+    effect(() => {
+      const article = this.$$articleDetails();
+      if (article.id === -1 || !article.articleContent) {
+        return;
+      }
+
+      this.removeScrollListener();
+
+      if (this.#readingProgressService.isRead(article.id)) {
+        return;
+      }
+
+      const listener = () => this.checkReadCompletion(article.id);
+      this.#scrollListener = listener;
+      window.addEventListener('scroll', listener, { passive: true });
+
+      // 內容渲染完後檢查一次（短文章不需滾動）
+      setTimeout(() => this.checkReadCompletion(article.id), 500);
+    });
+  }
+
+  checkReadCompletion(articleId: number): void {
+    const scrollBottom = window.innerHeight + window.scrollY;
+    const pageHeight = document.documentElement.scrollHeight;
+
+    if (scrollBottom >= pageHeight - 60) {
+      this.removeScrollListener();
+
+      const firstTime = this.#readingProgressService.markAsRead(articleId);
+      if (firstTime) {
+        this.$$justLitNode.set(true);
+        this.#litToastTimer = setTimeout(() => this.$$justLitNode.set(false), 6000);
+      }
+    }
+  }
+
+  removeScrollListener(): void {
+    if (this.#scrollListener && isPlatformBrowser(this.#platformId)) {
+      window.removeEventListener('scroll', this.#scrollListener);
+      this.#scrollListener = null;
+    }
+  }
+
+  goToKnowledgeMap(): void {
+    this.#router.navigate(['/knowledge-map']);
   }
 
   getArticleContents() {
