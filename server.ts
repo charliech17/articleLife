@@ -13,12 +13,12 @@ import QueryString from 'qs';
 const basePath = environment.baseHref || '/';
 const getCSP = (nonce: string) =>
   "default-src 'self';" +
-  `script-src 'self' 'nonce-${nonce}';` +
-  "frame-src 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com https://www.google.com/ https://maps.google.com/;" +
+  `script-src 'self' 'nonce-${nonce}' https://accounts.google.com/gsi/client;` +
+  "frame-src 'self' https://accounts.google.com/gsi/ https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/ https://josh-lifesharing.com https://www.google.com/ https://maps.google.com/;" +
   "img-src * data: blob:;" +
   "font-src 'self' https://fonts.gstatic.com;" +
   `connect-src http: https:;` +
-  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;` +
+  `style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com/gsi/style;` +
   "frame-ancestors 'self' https://www.facebook.com/ https://social-plugins.line.me/ https://www.youtube.com/;object-src 'none'";
 // The Express app is exported so that it can be used by serverless Functions.
 

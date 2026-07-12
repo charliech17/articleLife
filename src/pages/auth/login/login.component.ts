@@ -1,9 +1,10 @@
 import { GlobalService } from './../../../shared/services/global.service';
-import { Component, HostListener, inject } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.service';
+import { GoogleSigninService } from '../../../shared/services/google-signin.service';
 
 @Component({
   selector: 'app-login',
@@ -12,15 +13,37 @@ import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.servi
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements AfterViewInit {
   #apiAuthService = inject(ApiAuthService);
   #router = inject(Router);
   #globalService = inject(GlobalService);
+  #googleSigninService = inject(GoogleSigninService);
+
+  @ViewChild('googleBtn') googleBtn?: ElementRef<HTMLElement>;
 
   acctControl = new FormControl('', { nonNullable: true });
   pwdControl = new FormControl('', { nonNullable: true });
   authCodeControl = new FormControl('', { nonNullable: true });
   pressedCtrl = false;
+
+  ngAfterViewInit(): void {
+    if (this.googleBtn) {
+      this.#googleSigninService.renderButton(this.googleBtn.nativeElement, credential => this.handleGoogleLogin(credential));
+    }
+  }
+
+  handleGoogleLogin(credential: string): void {
+    this.#apiAuthService.googleAuth(credential).subscribe({
+      next: res => {
+        alert('Google 登入成功');
+        this.#globalService.callApiWhenReloadOrLogin();
+        this.#router.navigate(['/']);
+      },
+      error: err => {
+        alert('Google 登入失敗');
+      },
+    });
+  }
 
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {

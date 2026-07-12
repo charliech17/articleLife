@@ -167,6 +167,29 @@ h1, h2, h3, h4, h5, h6 {
       }
     }
   }
+
+  .al-auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0 16px;
+    color: var(--al-muted);
+    font-size: 0.875rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: var(--al-surface-3);
+    }
+  }
+
+  .al-google-btn-wrap {
+    display: flex;
+    justify-content: center;
+    min-height: 44px;
+  }
 }
 
 /* AI Generated Image Attribution Style */

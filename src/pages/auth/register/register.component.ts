@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.service';
+import { GoogleSigninService } from '../../../shared/services/google-signin.service';
+import { GlobalService } from '../../../shared/services/global.service';
 
 @Component({
   selector: 'app-register',
@@ -13,11 +15,20 @@ import { ApiAuthService } from '../../../shared/services/api/api-auth/auth.servi
 export class RegisterComponent implements OnInit {
   #router = inject(Router);
   #apiAuthService = inject(ApiAuthService);
+  #googleSigninService = inject(GoogleSigninService);
+  #globalService = inject(GlobalService);
 
   acctControl = new FormControl('', { nonNullable: true });
   pwdControl = new FormControl('', { nonNullable: true });
   confirmPwdControl = new FormControl('', { nonNullable: true });
   canRegister = false;
+
+  // canRegister 為 true 後按鈕容器才會出現在 DOM，用 setter 接住再渲染 Google 按鈕
+  @ViewChild('googleBtn') set googleBtn(ref: ElementRef<HTMLElement> | undefined) {
+    if (ref) {
+      this.#googleSigninService.renderButton(ref.nativeElement, credential => this.handleGoogleRegister(credential));
+    }
+  }
 
   ngOnInit(): void {
     this.#apiAuthService.checkCanRegister().subscribe(res => {
@@ -35,6 +46,20 @@ export class RegisterComponent implements OnInit {
       },
       error: err => {
         alert('Register failed');
+      },
+    });
+  }
+
+  handleGoogleRegister(credential: string): void {
+    this.#apiAuthService.googleAuth(credential).subscribe({
+      next: res => {
+        const isNewUser = res.responseData;
+        alert(isNewUser ? '使用 Google 註冊成功，已自動登入' : '此 Google 帳號已註冊過，已為您登入');
+        this.#globalService.callApiWhenReloadOrLogin();
+        this.#router.navigate(['/']);
+      },
+      error: err => {
+        alert('Google 註冊失敗');
       },
     });
   }

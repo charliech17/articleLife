@@ -22,6 +22,11 @@ export class ApiAuthService {
     return this.#http.post(`${this.apiUrl}/register`, reqBody);
   }
 
+  /** Google 註冊/登入，成功後 session 已建立。responseData: true = 新註冊, false = 既有帳號登入 */
+  googleAuth(credential: string) {
+    return this.#http.post<{ responseData: boolean }>(`${this.apiUrl}/googleAuth`, { credential }, { withCredentials: true });
+  }
+
   login(reqBody: IAuthWithTwoFactor) {
     const data =
       `loginId=${encodeURIComponent(reqBody.loginId)}` +
