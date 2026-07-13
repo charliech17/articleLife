@@ -61,6 +61,10 @@ export const routes: Routes = [
     loadComponent: () => import('../pages/wishing-well/wishing-well.component').then(m => m.WishingWellComponent),
   },
   {
+    path: 'battle-arena',
+    loadComponent: () => import('../pages/battle-arena/battle-arena.component').then(m => m.BattleArenaComponent),
+  },
+  {
     path: 'manage/wishes',
     canActivate: [adminGuard],
     loadComponent: () => import('../pages/manage-wishes/manage-wishes.component').then(m => m.ManageWishesComponent),

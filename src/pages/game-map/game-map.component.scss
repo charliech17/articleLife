@@ -38,7 +38,7 @@
       align-items: center;
       gap: 6px;
       font-size: 0.8rem;
-      color: #777;
+      color: var(--al-ink-soft, #777);
 
       .key {
         display: inline-block;
@@ -265,7 +265,7 @@
       left: 50%;
       transform: translateX(-50%);
       background: var(--al-surface, #fff);
-      color: #333;
+      color: var(--al-ink, #333);
       padding: 6px 12px;
       border-radius: 8px;
       font-size: 0.85rem;
@@ -296,7 +296,7 @@
 
       .enter-hint {
         font-size: 0.7rem;
-        color: #666;
+        color: var(--al-ink-soft, #666);
         font-weight: normal;
       }
     }
@@ -347,7 +347,7 @@
       left: 50%;
       z-index: 10;
       background: var(--al-surface, #fff);
-      color: #333;
+      color: var(--al-ink, #333);
       padding: 6px 12px;
       border-radius: 8px;
       font-size: 0.85rem;

@@ -49,5 +49,16 @@ export const GAME_WORLD_ITEMS: GameWorldItem[] = [
     mapX: 32,
     mapY: 62,
     actionText: '前往許願'
+  },
+  {
+    id: 'battle-arena',
+    name: '文章擂台',
+    description: '每日同分類 AI 文章 PK，投票選出你的最愛',
+    icon: '⚔️',
+    url: '/battle-arena',
+    internal: true,
+    mapX: 68,
+    mapY: 62,
+    actionText: '前往觀戰'
   }
 ];

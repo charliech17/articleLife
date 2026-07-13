@@ -1,0 +1,132 @@
+<div class="battle-arena-container">
+  <h2 class="page-title">⚔️ 文章對戰</h2>
+  <p class="page-subtitle">每天一場同分類 AI 文章 PK，投下你的一票，週一結算週榜！</p>
+
+  @if ($$loading()) {
+  <p class="loading-text">對戰載入中...</p>
+  } @else if (!$$battle()) {
+  <mat-card class="empty-card mat-elevation-z2">
+    <p>今天還沒有對戰，晚點再來看看吧！</p>
+    <button mat-flat-button color="primary" (click)="goHome()">返回首頁</button>
+  </mat-card>
+  } @else {
+  @let battle = $$battle()!;
+
+  <div class="battle-stage">
+    <mat-card class="fighter-card mat-elevation-z3"
+      [class.winner]="$$showResult() && battle.votesA > battle.votesB"
+      [class.voted]="battle.votedArticleId === battle.articleA.id">
+      <div class="corner-badge corner-a">紅方</div>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleA.id)">{{ battle.articleA.title }}</h3>
+      @if (battle.articleA.categoryName) {
+      <p class="fighter-category">🏷️ {{ battle.articleA.categoryName }}</p>
+      }
+      @if (battle.articleA.intro) {
+      <p class="fighter-intro">{{ battle.articleA.intro }}</p>
+      }
+      <div class="fighter-actions">
+        <button mat-stroked-button (click)="viewArticle(battle.articleA.id)">閱讀文章</button>
+        @if (!$$showResult()) {
+        <button mat-flat-button color="warn" [disabled]="$$voting()" (click)="vote(battle.articleA.id)">
+          🔥 投給它
+        </button>
+        }
+      </div>
+      @if ($$showResult()) {
+      <div class="vote-result">
+        <span class="vote-count">{{ battle.votesA }} 票（{{ $$percentA() }}%）</span>
+        @if (battle.votedArticleId === battle.articleA.id) {
+        <span class="my-vote">✅ 你投的</span>
+        }
+      </div>
+      }
+    </mat-card>
+
+    <div class="vs-badge">VS</div>
+
+    <mat-card class="fighter-card mat-elevation-z3"
+      [class.winner]="$$showResult() && battle.votesB > battle.votesA"
+      [class.voted]="battle.votedArticleId === battle.articleB.id">
+      <div class="corner-badge corner-b">藍方</div>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleB.id)">{{ battle.articleB.title }}</h3>
+      @if (battle.articleB.categoryName) {
+      <p class="fighter-category">🏷️ {{ battle.articleB.categoryName }}</p>
+      }
+      @if (battle.articleB.intro) {
+      <p class="fighter-intro">{{ battle.articleB.intro }}</p>
+      }
+      <div class="fighter-actions">
+        <button mat-stroked-button (click)="viewArticle(battle.articleB.id)">閱讀文章</button>
+        @if (!$$showResult()) {
+        <button mat-flat-button color="primary" [disabled]="$$voting()" (click)="vote(battle.articleB.id)">
+          💧 投給它
+        </button>
+        }
+      </div>
+      @if ($$showResult()) {
+      <div class="vote-result">
+        <span class="vote-count">{{ battle.votesB }} 票（{{ $$percentB() }}%）</span>
+        @if (battle.votedArticleId === battle.articleB.id) {
+        <span class="my-vote">✅ 你投的</span>
+        }
+      </div>
+      }
+    </mat-card>
+  </div>
+
+  @if ($$showResult()) {
+  <div class="result-bar">
+    <div class="bar-a" [style.width.%]="$$percentA()"></div>
+    <div class="bar-b" [style.width.%]="$$percentB()"></div>
+  </div>
+  <p class="result-hint">共 {{ $$totalVotes() }} 票，今晚 12 點結算，明天有新的一場！</p>
+  } @else {
+  <p class="result-hint">投票後即可看到目前戰況 👀</p>
+  }
+
+  @if ($$errorMsg()) {
+  <p class="error-msg">{{ $$errorMsg() }}</p>
+  }
+  }
+
+  <section class="leaderboard-section">
+    <h3 class="section-title">🏆 本週勝場榜</h3>
+    @if ($$leaderboard().length === 0) {
+    <p class="empty-hint">本週還沒有結算結果，快來投下第一票！</p>
+    } @else {
+    <mat-card class="leaderboard-card mat-elevation-z2">
+      @for (entry of $$leaderboard(); track entry.articleId) {
+      <div class="leaderboard-row" (click)="viewArticle(entry.articleId)">
+        <span class="rank" [class.top]="$index < 3">
+          {{ $index === 0 ? '🥇' : $index === 1 ? '🥈' : $index === 2 ? '🥉' : $index + 1 }}
+        </span>
+        <span class="entry-title">{{ entry.title }}</span>
+        @if (entry.categoryName) {
+        <span class="entry-category">{{ entry.categoryName }}</span>
+        }
+        <span class="entry-stats">{{ entry.wins }} 勝・{{ entry.totalVotes }} 票</span>
+      </div>
+      }
+    </mat-card>
+    }
+  </section>
+
+  @if ($$recentBattles().length > 0) {
+  <section class="history-section">
+    <h3 class="section-title">📜 近期戰史</h3>
+    <mat-card class="history-card mat-elevation-z2">
+      @for (past of $$recentBattles(); track past.id) {
+      <div class="history-row">
+        <span class="history-date">{{ past.battleDate }}</span>
+        <span class="history-matchup">
+          <span [class.history-winner]="past.winnerArticleId === past.articleA.id">{{ past.articleA.title }}</span>
+          <span class="history-vs"> vs </span>
+          <span [class.history-winner]="past.winnerArticleId === past.articleB.id">{{ past.articleB.title }}</span>
+        </span>
+        <span class="history-score">{{ past.votesA }} : {{ past.votesB }}</span>
+      </div>
+      }
+    </mat-card>
+  </section>
+  }
+</div>
