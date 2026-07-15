@@ -10,13 +10,13 @@
 
   .page-subtitle {
     text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--al-muted);
     margin-bottom: 32px;
   }
 
   .loading-text {
     text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--al-muted);
     padding: 48px 0;
   }
 
@@ -25,6 +25,8 @@
     margin: 0 auto;
     padding: 32px;
     text-align: center;
+    background-color: var(--al-surface);
+    color: var(--al-ink);
 
     button {
       margin-top: 8px;
@@ -42,6 +44,8 @@
       padding: 28px 20px 20px;
       display: flex;
       flex-direction: column;
+      background-color: var(--al-surface);
+      color: var(--al-ink);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
 
       &:hover {
@@ -84,14 +88,14 @@
       }
 
       .fighter-category {
-        color: rgba(0, 0, 0, 0.54);
+        color: var(--al-muted);
         font-size: 0.85rem;
         margin: 0 0 8px;
       }
 
       .fighter-intro {
         flex: 1;
-        color: rgba(0, 0, 0, 0.72);
+        color: var(--al-ink-soft);
         font-size: 0.92rem;
         display: -webkit-box;
         -webkit-line-clamp: 4;
@@ -104,6 +108,11 @@
         gap: 8px;
         justify-content: space-between;
         margin-top: 12px;
+
+        button[mat-stroked-button] {
+          color: var(--al-ink);
+          border-color: var(--al-border-strong);
+        }
       }
 
       .vote-result {
@@ -127,7 +136,7 @@
       align-self: center;
       font-size: 1.6rem;
       font-weight: 800;
-      color: #616161;
+      color: var(--al-muted);
       flex-shrink: 0;
     }
   }
@@ -152,7 +161,7 @@
 
   .result-hint {
     text-align: center;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--al-muted);
     margin-top: 12px;
   }
 
@@ -169,10 +178,12 @@
   .leaderboard-card,
   .history-card {
     padding: 8px 0;
+    background-color: var(--al-surface);
+    color: var(--al-ink);
   }
 
   .empty-hint {
-    color: rgba(0, 0, 0, 0.54);
+    color: var(--al-muted);
   }
 
   .leaderboard-row {
@@ -183,7 +194,7 @@
     cursor: pointer;
 
     &:hover {
-      background: rgba(0, 0, 0, 0.04);
+      background: var(--al-surface-2);
     }
 
     .rank {
@@ -204,13 +215,13 @@
     }
 
     .entry-category {
-      color: rgba(0, 0, 0, 0.54);
+      color: var(--al-muted);
       font-size: 0.85rem;
     }
 
     .entry-stats {
       font-size: 0.85rem;
-      color: rgba(0, 0, 0, 0.72);
+      color: var(--al-ink-soft);
       flex-shrink: 0;
     }
   }
@@ -223,7 +234,7 @@
     font-size: 0.9rem;
 
     .history-date {
-      color: rgba(0, 0, 0, 0.54);
+      color: var(--al-muted);
       flex-shrink: 0;
     }
 
@@ -242,7 +253,7 @@
       }
 
       .history-vs {
-        color: rgba(0, 0, 0, 0.4);
+        color: var(--al-muted);
       }
     }
 
