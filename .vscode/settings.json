@@ -2,7 +2,15 @@
     "workbench.colorCustomizations": {
         "activityBar.background": "#362D00",
         "titleBar.activeBackground": "#4B3F00",
-        "titleBar.activeForeground": "#FFFAE3"
+        "titleBar.activeForeground": "#FFFAE3",
+        "titleBar.inactiveBackground": "#4C3F00",
+        "titleBar.inactiveForeground": "#FFFBE5",
+        "statusBar.background": "#4C3F00",
+        "statusBar.foreground": "#FFFBE5",
+        "statusBar.debuggingBackground": "#4C3F00",
+        "statusBar.debuggingForeground": "#FFFBE5",
+        "statusBar.noFolderBackground": "#4C3F00",
+        "statusBar.noFolderForeground": "#FFFBE5"
     },
     "cSpell.words": [
         "curr",
