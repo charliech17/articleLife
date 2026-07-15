@@ -12,6 +12,10 @@ import { map, of, Subject, switchMap, takeUntil, EMPTY } from 'rxjs';
 import { GlobalStore } from '../../shared/stores/global.store';
 import { ApiAiArticleService } from '../../shared/services/api/api-ai-article/api-ai-article.service';
 import { IAiArticleFile } from '../../shared/models/ai-article.models';
+import { MatDialog } from '@angular/material/dialog';
+import { ApiBattleService } from '../../shared/services/api/api-battle/api-battle.service';
+import { StorageService } from '../../shared/services/storage.service';
+import { BattleInviteDialogComponent } from './components/battle-invite-dialog/battle-invite-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +29,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   #apiArticleFilesService = inject(ApiArticleFilesService);
   #apiAiArticleService = inject(ApiAiArticleService);
   #platformId = inject(PLATFORM_ID);
+  #apiBattleService = inject(ApiBattleService);
+  #storageService = inject(StorageService);
+  #dialog = inject(MatDialog);
+
+  /** 邀請彈窗「今天已看過」的 localStorage 標記（存當日日期字串） */
+  #battleInviteSeenKey = 'battle-invite-seen';
 
   $$allArticles = signal<IArticleInfo[]>([]);
   $$privateArticles = signal<IArticleInfo[]>([]);
@@ -159,6 +169,45 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.maybeShowBattleInvite();
+  }
+
+  /**
+   * 進站時邀請使用者參加文章對戰。
+   * 判斷是否已參加：先看 localStorage（今天看過就不再跳），
+   * 否則向後端查詢（以 voterKey 或 IP 判斷今日是否已投票）。
+   */
+  private maybeShowBattleInvite(): void {
+    if (!isPlatformBrowser(this.#platformId)) {
+      return;
+    }
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (this.#storageService.getLocalItem(this.#battleInviteSeenKey) === today) {
+      return;
+    }
+
+    this.#apiBattleService.getParticipation().subscribe({
+      next: status => {
+        if (!status.hasBattle || status.participated) {
+          // 沒有對戰或今天已參加過，記錄後不再跳出
+          this.#storageService.setLocalItem(this.#battleInviteSeenKey, today);
+          return;
+        }
+        this.#storageService.setLocalItem(this.#battleInviteSeenKey, today);
+        this.#dialog.open(BattleInviteDialogComponent, {
+          data: {},
+          maxWidth: '640px',
+          width: '92vw',
+          autoFocus: false,
+          panelClass: 'al-dialog',
+          backdropClass: 'al-dialog-backdrop',
+        });
+      },
+      error: () => {
+        // 查詢失敗就安靜略過，不影響首頁
+      },
+    });
   }
 
   ngOnDestroy(): void {

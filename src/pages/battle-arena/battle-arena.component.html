@@ -17,7 +17,7 @@
       [class.winner]="$$showResult() && battle.votesA > battle.votesB"
       [class.voted]="battle.votedArticleId === battle.articleA.id">
       <div class="corner-badge corner-a">紅方</div>
-      <h3 class="fighter-title" (click)="viewArticle(battle.articleA.id)">{{ battle.articleA.title }}</h3>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleA.id, battle.articleA.title)">{{ battle.articleA.title }}</h3>
       @if (battle.articleA.categoryName) {
       <p class="fighter-category">🏷️ {{ battle.articleA.categoryName }}</p>
       }
@@ -25,7 +25,7 @@
       <p class="fighter-intro">{{ battle.articleA.intro }}</p>
       }
       <div class="fighter-actions">
-        <button mat-stroked-button (click)="viewArticle(battle.articleA.id)">閱讀文章</button>
+        <button mat-stroked-button (click)="viewArticle(battle.articleA.id, battle.articleA.title)">閱讀文章</button>
         @if (!$$showResult()) {
         <button mat-flat-button color="warn" [disabled]="$$voting()" (click)="vote(battle.articleA.id)">
           🔥 投給它
@@ -48,7 +48,7 @@
       [class.winner]="$$showResult() && battle.votesB > battle.votesA"
       [class.voted]="battle.votedArticleId === battle.articleB.id">
       <div class="corner-badge corner-b">藍方</div>
-      <h3 class="fighter-title" (click)="viewArticle(battle.articleB.id)">{{ battle.articleB.title }}</h3>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleB.id, battle.articleB.title)">{{ battle.articleB.title }}</h3>
       @if (battle.articleB.categoryName) {
       <p class="fighter-category">🏷️ {{ battle.articleB.categoryName }}</p>
       }
@@ -56,7 +56,7 @@
       <p class="fighter-intro">{{ battle.articleB.intro }}</p>
       }
       <div class="fighter-actions">
-        <button mat-stroked-button (click)="viewArticle(battle.articleB.id)">閱讀文章</button>
+        <button mat-stroked-button (click)="viewArticle(battle.articleB.id, battle.articleB.title)">閱讀文章</button>
         @if (!$$showResult()) {
         <button mat-flat-button color="primary" [disabled]="$$voting()" (click)="vote(battle.articleB.id)">
           💧 投給它
@@ -96,7 +96,7 @@
     } @else {
     <mat-card class="leaderboard-card mat-elevation-z2">
       @for (entry of $$leaderboard(); track entry.articleId) {
-      <div class="leaderboard-row" (click)="viewArticle(entry.articleId)">
+      <div class="leaderboard-row" (click)="viewArticle(entry.articleId, entry.title)">
         <span class="rank" [class.top]="$index < 3">
           {{ $index === 0 ? '🥇' : $index === 1 ? '🥈' : $index === 2 ? '🥉' : $index + 1 }}
         </span>

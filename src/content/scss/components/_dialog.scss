@@ -1,0 +1,45 @@
+// 對戰彈窗（首頁邀請、文章瀏覽）主題化
+// Material 用的是亮色 prebuilt 主題，暗色模式下面板仍是白底，
+// 這裡用 --al-* token 覆寫面板底色/文字，token 會隨 [data-bs-theme] 自動切換。
+// 使用方式：dialog.open(..., { panelClass: 'al-dialog' })
+
+// 遮罩：壓暗背景，讓後方內容不搶戲（暗色再加重並略帶模糊）
+.al-dialog-backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+[data-bs-theme='dark'] .al-dialog-backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.al-dialog {
+  .mat-mdc-dialog-surface {
+    // 面板用頁面底色，讓裡面的 surface 卡片能浮出來（暗色不再糊成一片）
+    background-color: var(--al-bg);
+    color: var(--al-ink-soft);
+    border: 1px solid var(--al-border);
+    border-radius: var(--al-radius-lg);
+  }
+
+  // 標題、內文、動作區塊統一吃 token
+  .mat-mdc-dialog-title {
+    color: var(--al-ink);
+  }
+
+  .mat-mdc-dialog-content {
+    color: var(--al-ink-soft);
+  }
+
+  // 外框按鈕（閱讀／稍後再說／關閉）在暗色面板上文字要看得見
+  .mat-mdc-outlined-button:not(:disabled) {
+    color: var(--al-ink);
+    border-color: var(--al-border-strong);
+
+    &:hover {
+      border-color: var(--al-accent);
+      color: var(--al-accent);
+    }
+  }
+}

@@ -1,0 +1,240 @@
+:host {
+  display: block;
+  // 陣營色（吃主題 token，暗色會自動轉亮）
+  --fa: var(--al-accent); // 紅方（柿朱）
+  --fb: var(--al-accent-2); // 藍方（墨藍）
+}
+
+.invite-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+
+  .invite-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: var(--al-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .close-btn {
+    flex: 0 0 auto;
+    border: none;
+    background: transparent;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--al-muted);
+    padding: 4px 6px;
+    border-radius: 6px;
+
+    &:hover {
+      background: var(--al-surface-3);
+      color: var(--al-ink);
+    }
+  }
+}
+
+.invite-content {
+  min-width: min(560px, 84vw);
+}
+
+.invite-subtitle {
+  margin: 0 0 18px;
+  color: var(--al-muted);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.invite-loading,
+.invite-empty {
+  text-align: center;
+  color: var(--al-muted);
+  padding: 28px 0;
+}
+
+.invite-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.fighter {
+  --side: var(--al-border-strong);
+  position: relative;
+  border: 1px solid var(--al-border);
+  border-top: 3px solid var(--side);
+  border-radius: var(--al-radius);
+  padding: 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  background: var(--al-surface);
+  box-shadow: var(--al-shadow-sm);
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+
+  &.fighter-a {
+    --side: var(--fa);
+  }
+
+  &.fighter-b {
+    --side: var(--fb);
+  }
+
+  // 「投給它」按鈕改用陣營主題色，取代 Material 預設的鮮紅/靛藍，暗色才不刺眼
+  .fighter-actions ::ng-deep .mat-mdc-unelevated-button:not(:disabled) {
+    --mdc-filled-button-container-color: var(--side);
+    --mdc-filled-button-label-text-color: var(--al-on-accent);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--al-shadow-md);
+  }
+
+  &.voted {
+    border-color: var(--side);
+    box-shadow: 0 0 0 2px var(--side);
+  }
+
+  &.winner {
+    border-color: var(--side);
+    box-shadow: 0 0 0 2px var(--side), var(--al-shadow-md);
+  }
+
+  .corner {
+    align-self: flex-start;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 12px;
+    border-radius: 999px;
+    color: var(--al-on-accent);
+    background: var(--side);
+  }
+
+  .fighter-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    cursor: pointer;
+    color: var(--al-ink);
+    transition: color 0.15s;
+
+    &:hover {
+      color: var(--side);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+
+  .fighter-category {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--al-muted);
+  }
+
+  .fighter-intro {
+    margin: 0;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--al-ink-soft);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .fighter-actions {
+    margin-top: auto;
+    padding-top: 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .vote-result {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--al-ink);
+
+    .my-vote {
+      color: var(--al-down);
+      margin-left: 4px;
+    }
+  }
+}
+
+.vs-badge {
+  align-self: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--al-border-strong);
+  background: var(--al-surface-2);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--al-muted);
+}
+
+.result-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 18px 0 8px;
+  background: var(--al-surface-3);
+
+  .bar-a {
+    background: var(--fa);
+  }
+
+  .bar-b {
+    background: var(--fb);
+  }
+}
+
+.result-hint {
+  text-align: center;
+  color: var(--al-muted);
+  font-size: 0.85rem;
+  margin: 8px 0 0;
+}
+
+.error-msg {
+  text-align: center;
+  color: var(--al-accent-strong);
+  font-size: 0.85rem;
+  margin: 8px 0 0;
+}
+
+.invite-actions {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+@media (max-width: 560px) {
+  .invite-stage {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .vs-badge {
+    justify-self: center;
+    width: 34px;
+    height: 34px;
+  }
+}

@@ -3,8 +3,10 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { ApiBattleService } from '../../shared/services/api/api-battle/api-battle.service';
 import { IBattle, IBattleLeaderboardEntry } from '../../shared/models/battle.models';
+import { ArticleReadDialogComponent } from './components/article-read-dialog/article-read-dialog.component';
 
 @Component({
   selector: 'app-battle-arena',
@@ -16,6 +18,7 @@ import { IBattle, IBattleLeaderboardEntry } from '../../shared/models/battle.mod
 export class BattleArenaComponent implements OnInit {
   #apiBattleService = inject(ApiBattleService);
   #router = inject(Router);
+  #dialog = inject(MatDialog);
 
   $$battle = signal<IBattle | null>(null);
   $$leaderboard = signal<IBattleLeaderboardEntry[]>([]);
@@ -80,8 +83,16 @@ export class BattleArenaComponent implements OnInit {
     });
   }
 
-  viewArticle(articleId: number): void {
-    this.#router.navigate(['ai-view-article', articleId]);
+  /** 以彈窗瀏覽文章內容，不離開對戰頁 */
+  viewArticle(articleId: number, title?: string): void {
+    this.#dialog.open(ArticleReadDialogComponent, {
+      data: { articleId, title },
+      maxWidth: '760px',
+      width: '92vw',
+      autoFocus: false,
+      panelClass: 'al-dialog',
+      backdropClass: 'al-dialog-backdrop',
+    });
   }
 
   winnerTitle(battle: IBattle): string {

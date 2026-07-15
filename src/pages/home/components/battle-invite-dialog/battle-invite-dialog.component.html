@@ -1,0 +1,101 @@
+<div class="invite-header">
+  <h2 class="invite-title" mat-dialog-title>⚔️ 今日文章對戰</h2>
+  <button class="close-btn" type="button" aria-label="關閉" (click)="close()">✕</button>
+</div>
+
+<mat-dialog-content class="invite-content">
+  <p class="invite-subtitle">同分類 AI 文章 PK，投下你的一票就完成參加！</p>
+
+  @if ($$loading()) {
+  <p class="invite-loading">對戰載入中...</p>
+  } @else if (!$$battle()) {
+  <p class="invite-empty">今天還沒有對戰，晚點再來看看吧！</p>
+  } @else {
+  @let battle = $$battle()!;
+
+  <div class="invite-stage">
+    <div class="fighter fighter-a"
+      [class.winner]="$$showResult() && battle.votesA > battle.votesB"
+      [class.voted]="battle.votedArticleId === battle.articleA.id">
+      <span class="corner corner-a">紅方</span>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleA.id, battle.articleA.title)">
+        {{ battle.articleA.title }}
+      </h3>
+      @if (battle.articleA.categoryName) {
+      <p class="fighter-category">🏷️ {{ battle.articleA.categoryName }}</p>
+      }
+      @if (battle.articleA.intro) {
+      <p class="fighter-intro">{{ battle.articleA.intro }}</p>
+      }
+      <div class="fighter-actions">
+        <button mat-stroked-button type="button" (click)="viewArticle(battle.articleA.id, battle.articleA.title)">
+          閱讀
+        </button>
+        @if (!$$showResult()) {
+        <button mat-flat-button color="warn" type="button" [disabled]="$$voting()" (click)="vote(battle.articleA.id)">
+          🔥 投給它
+        </button>
+        }
+      </div>
+      @if ($$showResult()) {
+      <div class="vote-result">
+        {{ battle.votesA }} 票（{{ $$percentA() }}%）
+        @if (battle.votedArticleId === battle.articleA.id) { <span class="my-vote">✅ 你投的</span> }
+      </div>
+      }
+    </div>
+
+    <div class="vs-badge">VS</div>
+
+    <div class="fighter fighter-b"
+      [class.winner]="$$showResult() && battle.votesB > battle.votesA"
+      [class.voted]="battle.votedArticleId === battle.articleB.id">
+      <span class="corner corner-b">藍方</span>
+      <h3 class="fighter-title" (click)="viewArticle(battle.articleB.id, battle.articleB.title)">
+        {{ battle.articleB.title }}
+      </h3>
+      @if (battle.articleB.categoryName) {
+      <p class="fighter-category">🏷️ {{ battle.articleB.categoryName }}</p>
+      }
+      @if (battle.articleB.intro) {
+      <p class="fighter-intro">{{ battle.articleB.intro }}</p>
+      }
+      <div class="fighter-actions">
+        <button mat-stroked-button type="button" (click)="viewArticle(battle.articleB.id, battle.articleB.title)">
+          閱讀
+        </button>
+        @if (!$$showResult()) {
+        <button mat-flat-button color="primary" type="button" [disabled]="$$voting()" (click)="vote(battle.articleB.id)">
+          💧 投給它
+        </button>
+        }
+      </div>
+      @if ($$showResult()) {
+      <div class="vote-result">
+        {{ battle.votesB }} 票（{{ $$percentB() }}%）
+        @if (battle.votedArticleId === battle.articleB.id) { <span class="my-vote">✅ 你投的</span> }
+      </div>
+      }
+    </div>
+  </div>
+
+  @if ($$showResult()) {
+  <div class="result-bar">
+    <div class="bar-a" [style.width.%]="$$percentA()"></div>
+    <div class="bar-b" [style.width.%]="$$percentB()"></div>
+  </div>
+  <p class="result-hint">共 {{ $$totalVotes() }} 票，感謝參加！明天有新的一場 🎉</p>
+  } @else {
+  <p class="result-hint">投票後即可看到目前戰況 👀</p>
+  }
+
+  @if ($$errorMsg()) {
+  <p class="error-msg">{{ $$errorMsg() }}</p>
+  }
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions class="invite-actions" align="end">
+  <button mat-stroked-button type="button" (click)="close()">稍後再說</button>
+  <button mat-flat-button color="primary" type="button" (click)="goToArena()">前往對戰擂台</button>
+</mat-dialog-actions>

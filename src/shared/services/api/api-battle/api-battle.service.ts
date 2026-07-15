@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IBattle, IBattleLeaderboardEntry, IBattleVoteDTO } from '../../../models/battle.models';
+import { IBattle, IBattleLeaderboardEntry, IBattleParticipation, IBattleVoteDTO } from '../../../models/battle.models';
 
 @Injectable({ providedIn: 'root' })
 export class ApiBattleService {
@@ -19,6 +19,16 @@ export class ApiBattleService {
       params = params.set('voterKey', voterKey);
     }
     return this.#http.get<IBattle | null>(`${this.apiUrl}/current`, { params });
+  }
+
+  /** 首頁邀請彈窗用：查詢今日是否有對戰、以及此訪客/IP 是否已投票 */
+  getParticipation(): Observable<IBattleParticipation> {
+    let params = new HttpParams();
+    const voterKey = this.getVoterKey();
+    if (voterKey) {
+      params = params.set('voterKey', voterKey);
+    }
+    return this.#http.get<IBattleParticipation>(`${this.apiUrl}/participation`, { params });
   }
 
   vote(battleId: number, articleId: number): Observable<IBattle> {

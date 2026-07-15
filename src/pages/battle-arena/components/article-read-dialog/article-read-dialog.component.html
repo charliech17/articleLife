@@ -1,0 +1,19 @@
+<div class="read-dialog-header">
+  <h2 class="read-dialog-title" mat-dialog-title>{{ $$title() }}</h2>
+  <button class="close-btn" type="button" aria-label="關閉" (click)="close()">✕</button>
+</div>
+
+<mat-dialog-content class="read-dialog-content">
+  @if ($$loading()) {
+  <p class="read-loading">文章載入中...</p>
+  } @else if ($$error()) {
+  <p class="read-error">文章載入失敗，請稍後再試。</p>
+  } @else {
+  <article class="ck ck-content read-article" [innerHTML]="$$contentHtml()"></article>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions class="read-dialog-actions" align="end">
+  <button mat-stroked-button type="button" (click)="openFullPage()">開啟完整頁面</button>
+  <button mat-flat-button color="primary" type="button" (click)="close()">關閉</button>
+</mat-dialog-actions>

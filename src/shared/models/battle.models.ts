@@ -24,6 +24,13 @@ export interface IBattleVoteDTO {
   voterKey?: string | null;
 }
 
+export interface IBattleParticipation {
+  /** 今日是否有對戰可參加 */
+  hasBattle: boolean;
+  /** 今日是否已投過票（voterKey 或同 IP 已投） */
+  participated: boolean;
+}
+
 export interface IBattleLeaderboardEntry {
   articleId: number;
   title: string;
