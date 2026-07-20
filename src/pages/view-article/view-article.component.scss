@@ -152,6 +152,38 @@
     }
   }
 
+  .al-sponsor-cta {
+    padding: 24px;
+    border-radius: 16px;
+    background: rgba(255, 165, 0, 0.06);
+    border: 1px dashed rgba(230, 145, 56, 0.4);
+
+    .al-sponsor-cta-text {
+      color: var(--al-muted, #6c757d);
+      font-size: 0.95rem;
+    }
+
+    .al-sponsor-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 24px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #fff;
+      background: linear-gradient(135deg, #f6a13c, #e07b39);
+      box-shadow: 0 2px 8px rgba(224, 123, 57, 0.35);
+      transition: all 0.2s ease;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(224, 123, 57, 0.45);
+      }
+    }
+  }
+
   .ck-content ::ng-deep pre {
     background-color: var(--al-surface);
     color: var(--al-ink);

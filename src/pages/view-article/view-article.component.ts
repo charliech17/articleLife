@@ -70,6 +70,10 @@ export class ViewArticleComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  goToSponsor(): void {
+    this.#router.navigate(['/sponsor']);
+  }
+
   askAi(): void {
     if (isPlatformBrowser(this.#platformId)) {
       const message = `請總結這篇文章：[當前文章]`;

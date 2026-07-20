@@ -112,7 +112,7 @@
   }
 }
 
-.al-ai-btn, .al-theme-btn {
+.al-ai-btn, .al-theme-btn, .al-sponsor-btn {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -148,6 +148,26 @@
 
     &:hover {
       background: rgba(var(--al-accent-rgb), 0.25);
+    }
+  }
+}
+
+.al-sponsor-btn {
+  background: rgba(255, 165, 0, 0.08);
+
+  i {
+    color: #e69138;
+  }
+
+  &:hover {
+    background: rgba(255, 165, 0, 0.16);
+  }
+
+  :host-context([data-bs-theme="dark"]) & {
+    background: rgba(255, 165, 0, 0.12);
+
+    &:hover {
+      background: rgba(255, 165, 0, 0.22);
     }
   }
 }

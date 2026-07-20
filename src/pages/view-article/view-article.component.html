@@ -23,6 +23,13 @@
 
   <div #contentContainer class="mt-5 ck ck-content cus-article-content" [innerHTML]="$articleContent()"></div>
   
+  <div class="mt-5 al-sponsor-cta text-center">
+    <p class="al-sponsor-cta-text mb-2">覺得這篇文章有幫助嗎？</p>
+    <button class="al-sponsor-cta-btn" (click)="goToSponsor()">
+      <i class="bi bi-cup-hot-fill me-1"></i> 請我喝杯咖啡
+    </button>
+  </div>
+
   <hr class="mt-5 mb-5 cus-divider">
   
   <app-article-response

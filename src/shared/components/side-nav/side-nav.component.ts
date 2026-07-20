@@ -45,6 +45,11 @@ export class SideNavComponent {
     }
   }
 
+  goToSponsor(): void {
+    this.#router.navigate(['/sponsor']);
+    this.isMobileMenuOpen.set(false);
+  }
+
   toggleTheme(): void {
     this.#themeService.toggleTheme();
   }
